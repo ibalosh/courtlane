@@ -4,3 +4,4 @@ coverage
 .nx
 .vite
 .DS_Store
+libs/db/src/generated
