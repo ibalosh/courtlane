@@ -11,6 +11,8 @@
     "format:check": "prettier . --check"
   },
   "dependencies": {
+    "@courtlane/contracts": "*",
+    "@courtlane/db": "*",
     "@nestjs/common": "^11.0.0",
     "@nestjs/core": "^11.0.0",
     "@nestjs/platform-express": "^11.0.0",
