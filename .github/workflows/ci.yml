@@ -33,8 +33,5 @@ jobs:
       - name: Test
         run: yarn test
 
-      - name: Generate Prisma client
-        run: yarn workspace @courtlane/db prisma:generate
-
       - name: Build
         run: yarn build
