@@ -1,0 +1,29 @@
+{
+  "name": "@courtlane/api",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "nx serve api",
+    "build": "webpack-cli build --node-env=production",
+    "test": "TS_NODE_COMPILER_OPTIONS='{\"moduleResolution\":\"node10\",\"module\":\"commonjs\",\"customConditions\":null}' jest --passWithNoTests=true",
+    "lint": "eslint .",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check"
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.0.0",
+    "@nestjs/core": "^11.0.0",
+    "@nestjs/platform-express": "^11.0.0",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.8.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@nestjs/testing": "^11.0.0",
+    "@types/jest": "^30.0.0",
+    "jest": "^30.0.2",
+    "jest-environment-node": "^30.0.2",
+    "ts-jest": "^29.4.0",
+    "webpack-cli": "^5.1.4"
+  }
+}
