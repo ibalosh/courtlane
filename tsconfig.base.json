@@ -8,6 +8,9 @@
     "module": "nodenext",
     "ignoreDeprecations": "6.0",
     "skipLibCheck": true,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "paths": {
+      "contracts": ["libs/contracts/src/index.ts"]
+    }
   }
 }
