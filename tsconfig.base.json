@@ -8,8 +8,8 @@
     "module": "nodenext",
     "skipLibCheck": true,
     "paths": {
-      "contracts": ["./libs/contracts/src/index.ts"],
-      "db": ["./libs/db/src/index.ts"]
+      "@courtlane/contracts": ["./libs/contracts/src/index.ts"],
+      "@courtlane/db": ["./libs/db/src/index.ts"]
     }
   }
 }
