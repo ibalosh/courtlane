@@ -1,0 +1,13 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "sourceMap": true,
+    "declaration": true,
+    "moduleResolution": "bundler",
+    "target": "esnext",
+    "module": "nodenext",
+    "ignoreDeprecations": "6.0",
+    "skipLibCheck": true,
+    "baseUrl": "."
+  }
+}
