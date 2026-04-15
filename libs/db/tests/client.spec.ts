@@ -28,7 +28,7 @@ describe('database client', () => {
   it('fails clearly when the database URL is missing', async () => {
     vi.stubEnv('DATABASE_URL', '');
 
-    expect(import('../src/client')).rejects.toThrow(
+    await expect(import('../src/client')).rejects.toThrow(
       'DATABASE_URL is required to create the Prisma client.',
     );
   });

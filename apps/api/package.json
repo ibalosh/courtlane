@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "start": "nx serve api",
-    "build": "webpack-cli build --node-env=production",
-    "test": "TS_NODE_COMPILER_OPTIONS='{\"moduleResolution\":\"node10\",\"module\":\"commonjs\",\"customConditions\":null}' jest --passWithNoTests=true",
+    "build": "nx run-many -t build --projects=api",
+    "test": "jest",
     "lint": "eslint .",
     "format": "prettier . --write",
     "format:check": "prettier . --check"

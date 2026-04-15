@@ -6,12 +6,10 @@
     "moduleResolution": "bundler",
     "target": "esnext",
     "module": "nodenext",
-    "ignoreDeprecations": "6.0",
     "skipLibCheck": true,
-    "baseUrl": ".",
     "paths": {
-      "contracts": ["libs/contracts/src/index.ts"],
-      "db": ["libs/db/src/index.ts"]
+      "contracts": ["./libs/contracts/src/index.ts"],
+      "db": ["./libs/db/src/index.ts"]
     }
   }
 }
