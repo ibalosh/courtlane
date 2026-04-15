@@ -7,7 +7,7 @@ vi.mock('@prisma/adapter-pg', () => ({
   PrismaPg: prismaPgMock,
 }));
 
-vi.mock('../src/generated/prisma/client', () => ({
+vi.mock('@prisma/client', () => ({
   PrismaClient: prismaClientMock,
 }));
 

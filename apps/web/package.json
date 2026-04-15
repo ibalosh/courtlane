@@ -6,7 +6,7 @@
     "start": "vite",
     "build": "vite build",
     "test": "vitest",
-    "lint": "eslint .",
+    "lint": "eslint . --fix",
     "format": "prettier . --write",
     "format:check": "prettier . --check"
   },

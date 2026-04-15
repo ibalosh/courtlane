@@ -3,13 +3,7 @@
   "compilerOptions": {
     "sourceMap": true,
     "declaration": true,
-    "moduleResolution": "bundler",
     "target": "esnext",
-    "module": "nodenext",
-    "skipLibCheck": true,
-    "paths": {
-      "@courtlane/contracts": ["./libs/contracts/src/index.ts"],
-      "@courtlane/db": ["./libs/db/src/index.ts"]
-    }
+    "skipLibCheck": true
   }
 }
