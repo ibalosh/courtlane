@@ -3,6 +3,7 @@ import { AuthService } from './auth.service';
 import { loginRequestSchema, signupRequestSchema } from '@courtlane/contracts';
 import { Request, Response } from 'express';
 import { SESSION_COOKIE_NAME } from './auth.constants';
+import { getSessionCookieOptions } from './auth.cookies';
 
 @Controller('auth')
 export class AuthController {
@@ -53,12 +54,7 @@ export class AuthController {
   }
 
   private clearSessionCookie(response: Response) {
-    response.clearCookie(SESSION_COOKIE_NAME, {
-      httpOnly: true,
-      sameSite: 'lax',
-      secure: process.env['NODE_ENV'] === 'production',
-      path: '/',
-    });
+    response.clearCookie(SESSION_COOKIE_NAME, getSessionCookieOptions());
   }
 
   private setSessionCookie(
@@ -66,13 +62,11 @@ export class AuthController {
     sessionId: string,
     expiresAt: Date,
   ) {
-    response.cookie(SESSION_COOKIE_NAME, sessionId, {
-      httpOnly: true,
-      sameSite: 'lax',
-      secure: process.env['NODE_ENV'] === 'production',
-      expires: expiresAt,
-      path: '/',
-    });
+    response.cookie(
+      SESSION_COOKIE_NAME,
+      sessionId,
+      getSessionCookieOptions({ expires: expiresAt }),
+    );
   }
 
   private getSessionId(request: Request): string | null {
