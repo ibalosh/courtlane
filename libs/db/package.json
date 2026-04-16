@@ -13,6 +13,7 @@
     "format:check": "prettier . --ignore-path ../../.prettierignore --check",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
+    "prisma:migrate:deploy": "prisma migrate deploy",
     "prisma:studio": "prisma studio",
     "prisma:validate": "prisma validate"
   },

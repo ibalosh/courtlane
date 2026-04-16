@@ -8,6 +8,7 @@
     "libs/*"
   ],
   "scripts": {
+    "db:prepare": "yarn workspace @courtlane/db prisma:migrate:deploy",
     "web:start": "yarn workspace @courtlane/web start",
     "web:build": "yarn workspace @courtlane/web build",
     "web:test": "yarn workspace @courtlane/web test",
