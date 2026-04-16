@@ -47,7 +47,7 @@ export class AuthService {
 
     return {
       user,
-      sessionId: session.id,
+      sessionId: session.token,
       sessionExpiresAt: session.expiresAt,
     };
   }
@@ -89,7 +89,7 @@ export class AuthService {
 
     return {
       user: authUser,
-      sessionId: session.id,
+      sessionId: session.token,
       sessionExpiresAt: session.expiresAt,
     };
   }

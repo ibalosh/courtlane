@@ -27,7 +27,7 @@ describe('Auth HTTP', () => {
 
     expect(response.status).toBe(201);
     expect(response.body.user).toEqual({
-      id: expect.any(String),
+      id: expect.any(Number),
       email,
       name: 'Test User',
     });
