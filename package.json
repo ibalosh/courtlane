@@ -21,7 +21,8 @@
     "test": "nx run-many -t test",
     "lint": "nx run-many -t lint",
     "format": "prettier . --write",
-    "format:check": "prettier . --check"
+    "format:check": "prettier . --check",
+    "all": "yarn build && yarn lint && yarn test && yarn format"
   },
   "repository": {
     "type": "git",

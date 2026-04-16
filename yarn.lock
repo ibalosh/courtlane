@@ -1201,6 +1201,11 @@
     "@eslint/core" "^0.17.0"
     levn "^0.4.1"
 
+"@faker-js/faker@^9.9.0":
+  version "9.9.0"
+  resolved "https://registry.yarnpkg.com/@faker-js/faker/-/faker-9.9.0.tgz#3ad015fbbaaae7af3149555e0f22b4b30134c69d"
+  integrity sha512-OEl393iCOoo/z8bMezRlJu+GlRGlsKbUAN7jKB6LhnKoqKve5DXRpalbItIIcwnCjs1k/FOPjFzcA6Qn+H+YbA==
+
 "@hono/node-server@1.19.11":
   version "1.19.11"
   resolved "https://registry.npmjs.org/@hono/node-server/-/node-server-1.19.11.tgz"
@@ -1955,7 +1960,7 @@
 
 "@nestjs/common@^11.0.0":
   version "11.1.19"
-  resolved "https://registry.yarnpkg.com/@nestjs/common/-/common-11.1.19.tgz#50ba93ae45ebaeda6163554b8e2ecec545a25c92"
+  resolved "https://registry.npmjs.org/@nestjs/common/-/common-11.1.19.tgz"
   integrity sha512-qeiTt2tv+e5QyDKqG8HlVZb2wx64FEaSGFJouqTSRs+kG44iTfl3xlz1XqVped+rihx4hmjWgL5gkhtdK3E6+Q==
   dependencies:
     uid "2.0.2"
@@ -1966,7 +1971,7 @@
 
 "@nestjs/core@^11.0.0":
   version "11.1.19"
-  resolved "https://registry.yarnpkg.com/@nestjs/core/-/core-11.1.19.tgz#d724f1afc0caac29e005464f0f659425fc80235b"
+  resolved "https://registry.npmjs.org/@nestjs/core/-/core-11.1.19.tgz"
   integrity sha512-6nJkWa2efrYi+XlU686J9y5L7OvxpLVjT0T/sxRKE7Jvpffiihelup4WSvLvRhdHDjj/5SuoWEwqReXAaaeHmw==
   dependencies:
     uid "2.0.2"
@@ -1978,7 +1983,7 @@
 
 "@nestjs/platform-express@^11.0.0":
   version "11.1.19"
-  resolved "https://registry.yarnpkg.com/@nestjs/platform-express/-/platform-express-11.1.19.tgz#e55f5078396b2285344f95f2b530b648e844cd4c"
+  resolved "https://registry.npmjs.org/@nestjs/platform-express/-/platform-express-11.1.19.tgz"
   integrity sha512-Vpdv8jyCQdThfoTx+UTn+DRYr6H6X02YUqcpZ3qP6G3ZUwtVp7eS+hoQPGd4UuCnlnFG8Wqr2J9bGEzQdi1rIg==
   dependencies:
     cors "2.8.6"
@@ -2000,7 +2005,7 @@
 
 "@nestjs/testing@^11.0.0":
   version "11.1.19"
-  resolved "https://registry.yarnpkg.com/@nestjs/testing/-/testing-11.1.19.tgz#1bb72dbeb4de6fee23d3f1efe310970e5c9b0cb7"
+  resolved "https://registry.npmjs.org/@nestjs/testing/-/testing-11.1.19.tgz"
   integrity sha512-/UFNWXvPEdu4v4DlC5oWLbGKmD27LehLK06b8oLzs6D6lf4vAQTdST8LRAXBadyMUQnVEQWMuBo3CtAVtlfXtQ==
   dependencies:
     tslib "2.8.1"
@@ -3562,7 +3567,7 @@
 
 "@types/supertest@^7.2.0":
   version "7.2.0"
-  resolved "https://registry.yarnpkg.com/@types/supertest/-/supertest-7.2.0.tgz#9620bc998d3e26bcbedba7d31da8fe4c82fc1620"
+  resolved "https://registry.npmjs.org/@types/supertest/-/supertest-7.2.0.tgz"
   integrity sha512-uh2Lv57xvggst6lCqNdFAmDSvoMG7M/HDtX4iUCquxQ5EGPtaPM5PL5Hmi7LCvOG8db7YaCPNJEeoI8s/WzIQw==
   dependencies:
     "@types/methods" "^1.1.4"
@@ -7470,7 +7475,7 @@ jest-worker@^27.4.5:
 
 jest@^30.0.2:
   version "30.3.0"
-  resolved "https://registry.yarnpkg.com/jest/-/jest-30.3.0.tgz#6460b889dd805e9677400505f16f1d9b14c285a3"
+  resolved "https://registry.npmjs.org/jest/-/jest-30.3.0.tgz"
   integrity sha512-AkXIIFcaazymvey2i/+F94XRnM6TsVLZDhBMLsd1Sf/W0wzsvvpjeyUrCZD6HGG4SDYPgDJDBKeiJTBb10WzMg==
   dependencies:
     "@jest/core" "30.3.0"
@@ -8995,7 +9000,7 @@ readdirp@^4.0.1:
 
 reflect-metadata@^0.1.13:
   version "0.1.14"
-  resolved "https://registry.yarnpkg.com/reflect-metadata/-/reflect-metadata-0.1.14.tgz#24cf721fe60677146bb77eeb0e1f9dece3d65859"
+  resolved "https://registry.npmjs.org/reflect-metadata/-/reflect-metadata-0.1.14.tgz"
   integrity sha512-ZhYeb6nRaXCfhnndflDK8qI6ZQ/YcWZCISRAWICW9XYqMUwjZM9Z0DveWX/ABN01oxSHwVxKQmxeYZSsm0jh5A==
 
 reflect.getprototypeof@^1.0.6, reflect.getprototypeof@^1.0.9:
@@ -9248,7 +9253,7 @@ rxjs@7.8.1:
 
 rxjs@^7.8.0:
   version "7.8.2"
-  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-7.8.2.tgz#955bc473ed8af11a002a2be52071bf475638607b"
+  resolved "https://registry.npmjs.org/rxjs/-/rxjs-7.8.2.tgz"
   integrity sha512-dhKf903U/PQZY6boNNtAGdWbG85WAbjT/1xYoZIC7FAY0yWapOBQVsVrDl58W86//e1VpMNBtRV4MaXfdMySFA==
   dependencies:
     tslib "^2.1.0"
@@ -9828,7 +9833,7 @@ superagent@^10.3.0:
 
 supertest@^7.2.2:
   version "7.2.2"
-  resolved "https://registry.yarnpkg.com/supertest/-/supertest-7.2.2.tgz#dac3ee25a2aa59942a7f641e50c838a7c8819204"
+  resolved "https://registry.npmjs.org/supertest/-/supertest-7.2.2.tgz"
   integrity sha512-oK8WG9diS3DlhdUkcFn4tkNIiIbBx9lI2ClF8K+b2/m8Eyv47LSawxUzZQSNKUrVb2KsqeTDCcjAAVPYaSLVTA==
   dependencies:
     cookie-signature "^1.2.2"
@@ -10035,7 +10040,7 @@ ts-api-utils@^2.5.0:
 
 ts-jest@^29.4.0:
   version "29.4.9"
-  resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-29.4.9.tgz#47dc33d0f5c36bddcedd16afefae285e0b049d2d"
+  resolved "https://registry.npmjs.org/ts-jest/-/ts-jest-29.4.9.tgz"
   integrity sha512-LTb9496gYPMCqjeDLdPrKuXtncudeV1yRZnF4Wo5l3SFi0RYEnYRNgMrFIdg+FHvfzjCyQk1cLncWVqiSX+EvQ==
   dependencies:
     bs-logger "^0.2.6"
@@ -10636,7 +10641,7 @@ wordwrap@^1.0.0:
 
 wrap-ansi@^6.2.0:
   version "6.2.0"
-  resolved "https://registry.npmjs.org/wrap-ansi/-/wrap-ansi-6.2.0.tgz"
+  resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-6.2.0.tgz#e9393ba07102e6c91a3b221478f0257cd2856e53"
   integrity sha512-r6lPcBGxZXlIcymEu7InxDMhdW0KDxpLgoFLcguasxCaJ/SOIZwINatK9KY/tf+ZrlywOKU0UDj3ATXUBfxJXA==
   dependencies:
     ansi-styles "^4.0.0"
