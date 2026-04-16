@@ -8,8 +8,27 @@ on:
 
 jobs:
   validate:
-    name: Validate
+    name: Checks
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgresql://courtlane:courtlane@localhost:5432/courtlane
+      API_PORT: 4400
+      API_BASE_URL: http://localhost:4400/api
+      WEB_APP_URL: http://localhost:4200
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_USER: courtlane
+          POSTGRES_PASSWORD: courtlane
+          POSTGRES_DB: courtlane
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U courtlane -d courtlane"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - name: Checkout
@@ -30,8 +49,11 @@ jobs:
       - name: Lint
         run: yarn lint
 
-      - name: Test
-        run: yarn test
-
       - name: Build
         run: yarn build
+
+      - name: Prepare database
+        run: yarn db:prepare
+
+      - name: Test
+        run: yarn test
