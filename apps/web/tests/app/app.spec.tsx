@@ -39,4 +39,27 @@ describe('App', () => {
       expect(window.location.pathname).toBe('/login');
     });
   });
+
+  it('renders the dashboard page for authenticated users', async () => {
+    vi.spyOn(global, 'fetch').mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        user: {
+          id: 'user_123',
+          name: 'Casey Player',
+          email: 'casey@example.com',
+        },
+      }),
+    } as Response);
+    setLocation('/account/dashboard-page');
+
+    renderApp();
+
+    await waitFor(() => {
+      expect(screen.getByText(/weekly court planner/i)).toBeTruthy();
+      expect(screen.getByRole('button', { name: /^Monday$/i })).toBeTruthy();
+      expect(screen.getByText(/12:00 am/i)).toBeTruthy();
+      expect(screen.getAllByText(/court 1/i).length).toBeGreaterThan(0);
+    });
+  });
 });
