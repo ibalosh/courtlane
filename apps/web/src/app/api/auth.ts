@@ -1,27 +1,27 @@
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3000/api';
 
-type AuthUser = {
+export type AuthUser = {
   id: string;
   email: string;
   name: string;
 };
 
-type AuthResponse = {
+export type AuthResponse = {
   user: AuthUser;
 };
 
-type MeResponse = {
+export type MeResponse = {
   user: AuthUser | null;
 };
 
-type SignupInput = {
+export type SignupInput = {
   email: string;
   name: string;
   password: string;
 };
 
-type LoginInput = {
+export type LoginInput = {
   email: string;
   password: string;
 };
@@ -41,7 +41,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     throw new Error(message || 'Request failed.');
   }
 
-  return response.json() as Promise<T>;
+  return (await response.json()) as Promise<T>;
 }
 
 export function signup(input: SignupInput): Promise<AuthResponse> {

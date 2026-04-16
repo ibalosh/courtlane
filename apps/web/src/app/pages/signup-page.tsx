@@ -1,33 +1,40 @@
-import { FormEvent, useState } from 'react';
+import { SubmitEvent, useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { signup } from '../api/auth';
+import { signup, type MeResponse } from '../api/auth';
 import { AuthLayout } from '../components/auth-layout';
+import { Button } from '@/app/components/ui/button';
+import { Input } from '@/app/components/ui/input';
+import { Label } from '@/app/components/ui/label';
 
 export function SignupPage() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setError('');
-    setIsSubmitting(true);
-
-    try {
-      await signup({ email, name, password });
-      navigate('/account');
-    } catch (submissionError) {
+  const signupMutation = useMutation({
+    mutationFn: signup,
+    onSuccess: async (response) => {
+      queryClient.setQueryData<MeResponse>(['auth', 'me'], {
+        user: response.user,
+      });
+      await navigate('/account');
+    },
+    onError: (submissionError) => {
       setError(
         submissionError instanceof Error
           ? submissionError.message
           : 'Signup failed.',
       );
-    } finally {
-      setIsSubmitting(false);
-    }
+    },
+  });
+
+  async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setError('');
+    await signupMutation.mutateAsync({ email, name, password });
   }
 
   return (
@@ -39,36 +46,39 @@ export function SignupPage() {
       altAction="Log in"
     >
       <form className="mt-7 grid gap-4" onSubmit={handleSubmit}>
-        <label className="grid gap-2">
-          <span className="text-[0.95rem] font-bold">Name</span>
-          <input
+        <div className="grid gap-2">
+          <Label htmlFor="name">Name</Label>
+          <Input
             autoComplete="name"
-            className="rounded-2xl border border-slate-900/16 bg-[#fffdf8] px-4 py-3"
+            aria-label="Name"
+            id="name"
             name="name"
             onChange={(event) => setName(event.target.value)}
             required
             value={name}
           />
-        </label>
+        </div>
 
-        <label className="grid gap-2">
-          <span className="text-[0.95rem] font-bold">Email</span>
-          <input
+        <div className="grid gap-2">
+          <Label htmlFor="email">Email</Label>
+          <Input
             autoComplete="email"
-            className="rounded-2xl border border-slate-900/16 bg-[#fffdf8] px-4 py-3"
+            aria-label="Email"
+            id="email"
             name="email"
             onChange={(event) => setEmail(event.target.value)}
             required
             type="email"
             value={email}
           />
-        </label>
+        </div>
 
-        <label className="grid gap-2">
-          <span className="text-[0.95rem] font-bold">Password</span>
-          <input
+        <div className="grid gap-2">
+          <Label htmlFor="password">Password</Label>
+          <Input
             autoComplete="new-password"
-            className="rounded-2xl border border-slate-900/16 bg-[#fffdf8] px-4 py-3"
+            aria-label="Password"
+            id="password"
             minLength={8}
             name="password"
             onChange={(event) => setPassword(event.target.value)}
@@ -76,19 +86,15 @@ export function SignupPage() {
             type="password"
             value={password}
           />
-        </label>
+        </div>
 
         {error ? (
           <p className="m-0 text-[0.95rem] text-red-700">{error}</p>
         ) : null}
 
-        <button
-          className="rounded-full bg-slate-900 px-5 py-4 text-[#fff8ea] disabled:cursor-default disabled:opacity-70"
-          disabled={isSubmitting}
-          type="submit"
-        >
-          {isSubmitting ? 'Creating account...' : 'Create account'}
-        </button>
+        <Button type="submit" disabled={signupMutation.isPending}>
+          {signupMutation.isPending ? 'Creating account...' : 'Create account'}
+        </Button>
       </form>
     </AuthLayout>
   );

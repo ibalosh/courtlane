@@ -1,71 +1,35 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link, useNavigate } from 'react-router-dom';
 import { logout, me } from '../api/auth';
 
-type AuthUser = {
-  id: string;
-  email: string;
-  name: string;
-};
-
 export function AccountPage() {
   const navigate = useNavigate();
-  const [user, setUser] = useState<AuthUser | null>(null);
+  const queryClient = useQueryClient();
   const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
-
-  useEffect(() => {
-    let isMounted = true;
-
-    async function loadUser() {
-      try {
-        const response = await me();
-
-        if (!isMounted) {
-          return;
-        }
-
-        setUser(response.user);
-      } catch (loadError) {
-        if (!isMounted) {
-          return;
-        }
-
-        setError(
-          loadError instanceof Error
-            ? loadError.message
-            : 'Could not load user.',
-        );
-      } finally {
-        if (isMounted) {
-          setIsLoading(false);
-        }
-      }
-    }
-
-    void loadUser();
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
-  async function handleLogout() {
-    setIsLoggingOut(true);
-
-    try {
-      await logout();
-      navigate('/login');
-    } catch (logoutError) {
+  const meQuery = useQuery({
+    queryKey: ['auth', 'me'],
+    queryFn: me,
+  });
+  const logoutMutation = useMutation({
+    mutationFn: logout,
+    onSuccess: async () => {
+      queryClient.setQueryData(['auth', 'me'], { user: null });
+      await navigate('/login');
+    },
+    onError: (logoutError) => {
       setError(
         logoutError instanceof Error ? logoutError.message : 'Logout failed.',
       );
-      setIsLoggingOut(false);
-    }
+    },
+  });
+
+  async function handleLogout() {
+    setError('');
+    await logoutMutation.mutateAsync();
   }
 
-  if (isLoading) {
+  if (meQuery.isLoading) {
     return (
       <main className="grid min-h-screen place-items-center bg-[radial-gradient(circle_at_top,_rgba(242,201,76,0.45),_transparent_32%),linear-gradient(180deg,_#f6f1e9_0%,_#ece5d9_100%)] px-4 py-8 text-slate-900">
         <section className="w-full max-w-[30rem] rounded-3xl border border-slate-900/12 bg-[#fffcf6]/92 p-8 shadow-[0_1.5rem_4rem_rgba(71,46,21,0.14)] backdrop-blur-[12px] sm:p-6">
@@ -74,6 +38,12 @@ export function AccountPage() {
       </main>
     );
   }
+
+  const user = meQuery.data?.user ?? null;
+  const queryError =
+    meQuery.error instanceof Error
+      ? meQuery.error.message
+      : 'Could not load user.';
 
   if (!user) {
     return (
@@ -89,8 +59,8 @@ export function AccountPage() {
             <Link to="/signup">Sign up</Link>
             <Link to="/login">Log in</Link>
           </div>
-          {error ? (
-            <p className="mt-4 text-[0.95rem] text-red-700">{error}</p>
+          {meQuery.isError ? (
+            <p className="mt-4 text-[0.95rem] text-red-700">{queryError}</p>
           ) : null}
         </section>
       </main>
@@ -123,11 +93,11 @@ export function AccountPage() {
         </dl>
         <button
           className="rounded-full bg-slate-900 px-5 py-4 text-[#fff8ea] disabled:cursor-default disabled:opacity-70"
-          disabled={isLoggingOut}
+          disabled={logoutMutation.isPending}
           onClick={handleLogout}
           type="button"
         >
-          {isLoggingOut ? 'Logging out...' : 'Log out'}
+          {logoutMutation.isPending ? 'Logging out...' : 'Log out'}
         </button>
         {error ? (
           <p className="mt-4 text-[0.95rem] text-red-700">{error}</p>

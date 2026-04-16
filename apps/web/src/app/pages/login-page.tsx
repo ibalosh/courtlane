@@ -1,32 +1,40 @@
 import { FormEvent, useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { login } from '../api/auth';
+import { login, type MeResponse } from '../api/auth';
 import { AuthLayout } from '../components/auth-layout';
+import { Button } from '@/app/components/ui/button';
+import { Input } from '@/app/components/ui/input';
+import { Label } from '@/app/components/ui/label';
 
 export function LoginPage() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setError('');
-    setIsSubmitting(true);
-
-    try {
-      await login({ email, password });
-      navigate('/account');
-    } catch (submissionError) {
+  const loginMutation = useMutation({
+    mutationFn: login,
+    onSuccess: async (response) => {
+      queryClient.setQueryData<MeResponse>(['auth', 'me'], {
+        user: response.user,
+      });
+      await navigate('/account');
+    },
+    onError: (submissionError) => {
       setError(
         submissionError instanceof Error
           ? submissionError.message
           : 'Login failed.',
       );
-    } finally {
-      setIsSubmitting(false);
-    }
+    },
+  });
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setError('');
+    await loginMutation.mutateAsync({ email, password });
   }
 
   return (
@@ -38,43 +46,41 @@ export function LoginPage() {
       altAction="Sign up"
     >
       <form className="mt-7 grid gap-4" onSubmit={handleSubmit}>
-        <label className="grid gap-2">
-          <span className="text-[0.95rem] font-bold">Email</span>
-          <input
+        <div className="grid gap-2">
+          <Label htmlFor="email">Email</Label>
+          <Input
             autoComplete="email"
-            className="rounded-2xl border border-slate-900/16 bg-[#fffdf8] px-4 py-3"
+            aria-label="Email"
+            id="email"
             name="email"
             onChange={(event) => setEmail(event.target.value)}
             required
             type="email"
             value={email}
           />
-        </label>
+        </div>
 
-        <label className="grid gap-2">
-          <span className="text-[0.95rem] font-bold">Password</span>
-          <input
+        <div className="grid gap-2">
+          <Label htmlFor="password">Password</Label>
+          <Input
             autoComplete="current-password"
-            className="rounded-2xl border border-slate-900/16 bg-[#fffdf8] px-4 py-3"
+            aria-label="Password"
+            id="password"
             name="password"
             onChange={(event) => setPassword(event.target.value)}
             required
             type="password"
             value={password}
           />
-        </label>
+        </div>
 
         {error ? (
           <p className="m-0 text-[0.95rem] text-red-700">{error}</p>
         ) : null}
 
-        <button
-          className="rounded-full bg-slate-900 px-5 py-4 text-[#fff8ea] disabled:cursor-default disabled:opacity-70"
-          disabled={isSubmitting}
-          type="submit"
-        >
-          {isSubmitting ? 'Logging in...' : 'Log in'}
-        </button>
+        <Button type="submit" disabled={loginMutation.isPending}>
+          {loginMutation.isPending ? 'Logging in...' : 'Log in'}
+        </Button>
       </form>
     </AuthLayout>
   );
