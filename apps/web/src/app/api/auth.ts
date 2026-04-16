@@ -8,7 +8,7 @@ import type {
 } from '@courtlane/contracts';
 
 const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3000/api';
+  import.meta.env.API_BASE_URL ?? 'http://localhost:3000/api';
 
 export type {
   AuthResponseDto as AuthResponse,

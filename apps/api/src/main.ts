@@ -1,23 +1,22 @@
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import cookieParser from 'cookie-parser';
+import { env } from './config/env';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const globalPrefix = 'api';
-  const webOrigin = process.env['WEB_ORIGIN'] || 'http://localhost:4200';
 
   app.setGlobalPrefix(globalPrefix);
   app.enableCors({
-    origin: webOrigin,
+    origin: env.webAppUrl,
     credentials: true,
   });
   app.use(cookieParser());
-  const port = process.env.PORT || 3000;
-  await app.listen(port);
+  await app.listen(env.apiPort);
   Logger.log(
-    `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`,
+    `🚀 Application is running on: http://localhost:${env.apiPort}/${globalPrefix}`,
   );
 }
 
