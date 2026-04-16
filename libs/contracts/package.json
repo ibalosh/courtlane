@@ -2,12 +2,12 @@
   "name": "@courtlane/contracts",
   "version": "0.0.1",
   "private": true,
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc -p tsconfig.lib.json",
     "test": "vitest",
-    "lint": "eslint .",
+    "lint": "eslint . --fix",
     "format": "prettier . --write",
     "format:check": "prettier . --check"
   },

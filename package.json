@@ -1,9 +1,8 @@
 {
-  "name": "courtlane",
+  "name": "courtlane-monorepo",
   "version": "0.0.1",
   "private": true,
   "description": "Court reservation system",
-  "main": "index.js",
   "workspaces": [
     "apps/*",
     "libs/*"
@@ -13,17 +12,14 @@
     "web:build": "yarn workspace @courtlane/web build",
     "web:test": "yarn workspace @courtlane/web test",
     "web:format": "yarn workspace @courtlane/web format",
-    "web:format:check": "yarn workspace @courtlane/web format:check",
     "api:start": "yarn workspace @courtlane/api start",
     "api:build": "yarn workspace @courtlane/api build",
     "api:test": "yarn workspace @courtlane/api test",
     "api:format": "yarn workspace @courtlane/api format",
-    "api:format:check": "yarn workspace @courtlane/api format:check",
-    "start": "nx run-many -t serve --projects=api,web",
-    "build": "nx run-many -t build --projects=api,web,contracts,db",
-    "compile": "nx run-many -t build --projects=api,web,contracts,db",
-    "test": "nx run-many -t test --projects=api,web,contracts,db",
-    "lint": "nx run-many -t lint --projects=api,web,contracts,db",
+    "start": "nx run-many -t start",
+    "build": "nx run-many -t build",
+    "test": "nx run-many -t test",
+    "lint": "nx run-many -t lint",
     "format": "prettier . --write",
     "format:check": "prettier . --check"
   },
@@ -55,12 +51,10 @@
     "@nx/vite": "22.6.5",
     "@nx/vitest": "22.6.5",
     "@nx/web": "22.6.5",
-    "@nx/webpack": "22.6.5",
     "@swc-node/register": "~1.11.1",
     "@swc/core": "~1.15.5",
     "@swc/helpers": "~0.5.18",
     "@types/node": "20.19.9",
-    "@vitest/coverage-v8": "~4.1.0",
     "eslint": "^9.8.0",
     "eslint-config-prettier": "^10.0.0",
     "eslint-plugin-import": "2.31.0",
@@ -74,6 +68,5 @@
     "vite": "^8.0.0",
     "vitest": "~4.1.0"
   },
-  "nx": {},
   "dependencies": {}
 }

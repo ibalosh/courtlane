@@ -150,3 +150,8 @@ vite.config.ts.timestamp-*
 vite.config.*.timestamp*
 vitest.config.*.timestamp*
 .vscode
+tmp
+.nx
+
+# Prisma generated files
+libs/db/src/generated/
