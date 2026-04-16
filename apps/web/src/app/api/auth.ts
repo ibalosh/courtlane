@@ -1,29 +1,21 @@
+import type {
+  AuthResponseDto,
+  AuthUserDto,
+  LoginDto,
+  LogoutResponseDto,
+  MeResponseDto,
+  SignupDto,
+} from '@courtlane/contracts';
+
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3000/api';
 
-export type AuthUser = {
-  id: number;
-  email: string;
-  name: string;
-};
-
-export type AuthResponse = {
-  user: AuthUser;
-};
-
-export type MeResponse = {
-  user: AuthUser | null;
-};
-
-export type SignupInput = {
-  email: string;
-  name: string;
-  password: string;
-};
-
-export type LoginInput = {
-  email: string;
-  password: string;
+export type {
+  AuthResponseDto as AuthResponse,
+  AuthUserDto as AuthUser,
+  LoginDto as LoginInput,
+  MeResponseDto as MeResponse,
+  SignupDto as SignupInput,
 };
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
@@ -44,26 +36,26 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   return (await response.json()) as Promise<T>;
 }
 
-export function signup(input: SignupInput): Promise<AuthResponse> {
-  return request<AuthResponse>('/auth/signup', {
+export function signup(input: SignupDto): Promise<AuthResponseDto> {
+  return request<AuthResponseDto>('/auth/signup', {
     method: 'POST',
     body: JSON.stringify(input),
   });
 }
 
-export function login(input: LoginInput): Promise<AuthResponse> {
-  return request<AuthResponse>('/auth/login', {
+export function login(input: LoginDto): Promise<AuthResponseDto> {
+  return request<AuthResponseDto>('/auth/login', {
     method: 'POST',
     body: JSON.stringify(input),
   });
 }
 
-export function logout(): Promise<{ ok: true }> {
-  return request<{ ok: true }>('/auth/logout', {
+export function logout(): Promise<LogoutResponseDto> {
+  return request<LogoutResponseDto>('/auth/logout', {
     method: 'POST',
   });
 }
 
-export function me(): Promise<MeResponse> {
-  return request<MeResponse>('/auth/me');
+export function me(): Promise<MeResponseDto> {
+  return request<MeResponseDto>('/auth/me');
 }

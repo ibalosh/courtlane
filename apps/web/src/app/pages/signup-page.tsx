@@ -1,26 +1,29 @@
 import { SubmitEvent, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { signup, type MeResponse } from '../api/auth';
 import { AuthLayout } from '../components/auth-layout';
+import { getAuthPageHref, getSafeRedirectPath } from '../utils/auth-redirect';
 import { Button } from '@/app/components/ui/button';
 import { Input } from '@/app/components/ui/input';
 import { Label } from '@/app/components/ui/label';
 
 export function SignupPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const queryClient = useQueryClient();
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const redirectPath = getSafeRedirectPath(searchParams.get('redirect'));
   const signupMutation = useMutation({
     mutationFn: signup,
     onSuccess: async (response) => {
       queryClient.setQueryData<MeResponse>(['auth', 'me'], {
         user: response.user,
       });
-      await navigate('/account');
+      await navigate(redirectPath, { replace: true });
     },
     onError: (submissionError) => {
       setError(
@@ -42,7 +45,7 @@ export function SignupPage() {
       title="Create your account"
       description="Start with email and password. Court reservations come next."
       altLabel="Already have an account?"
-      altHref="/login"
+      altHref={getAuthPageHref('/login', searchParams.get('redirect'))}
       altAction="Log in"
     >
       <form className="mt-7 grid gap-4" onSubmit={handleSubmit}>
