@@ -70,20 +70,6 @@ export class AuthController {
   }
 
   private getSessionId(request: Request): string | null {
-    const cookieHeader = request.headers.cookie;
-
-    if (!cookieHeader) {
-      return null;
-    }
-
-    for (const cookie of cookieHeader.split(';')) {
-      const [rawName, ...rawValueParts] = cookie.trim().split('=');
-
-      if (rawName === SESSION_COOKIE_NAME) {
-        return rawValueParts.join('=') || null;
-      }
-    }
-
-    return null;
+    return request.cookies?.[SESSION_COOKIE_NAME] ?? null;
   }
 }
