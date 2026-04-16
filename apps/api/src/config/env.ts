@@ -12,7 +12,6 @@ function getEnv(name: string, fallback?: string): string {
   return value;
 }
 
-
 export const env = {
   apiPort: getEnv('API_PORT'),
   webAppUrl: getEnv('WEB_APP_URL', 'http://localhost:4200'),
