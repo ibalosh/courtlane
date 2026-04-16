@@ -15,9 +15,7 @@ describe('Health HTTP', () => {
 
   describe('GET /', () => {
     it('returns the API health status', async () => {
-      const response = await request(app.getHttpAdapter().getInstance()).get(
-        '/',
-      );
+      const response = await request(app.getHttpServer()).get('/');
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual({ status: 'OK' });

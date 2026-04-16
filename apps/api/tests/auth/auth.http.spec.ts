@@ -17,7 +17,7 @@ describe('Auth HTTP', () => {
 
   it('creates a user and session cookie on signup', async () => {
     const email = faker.internet.email().toLowerCase();
-    const response = await request(app.getHttpAdapter().getInstance())
+    const response = await request(app.getHttpServer())
       .post('/auth/signup')
       .send({
         email,
