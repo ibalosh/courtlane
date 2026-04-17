@@ -39,6 +39,35 @@ describe('Auth HTTP', () => {
     );
   });
 
+  it('returns the authenticated user from /auth/me with a valid session', async () => {
+    const email = faker.internet.email().toLowerCase();
+    const signupResponse = await request(app.getHttpServer())
+      .post('/auth/signup')
+      .send({
+        email,
+        name: 'Session User',
+        password: 'password123',
+      });
+
+    const response = await request(app.getHttpServer())
+      .get('/auth/me')
+      .set('Cookie', signupResponse.headers['set-cookie']);
+
+    expect(response.status).toBe(200);
+    expect(response.body.user).toEqual({
+      id: expect.any(Number),
+      email,
+      name: 'Session User',
+    });
+  });
+
+  it('returns null from /auth/me without a session', async () => {
+    const response = await request(app.getHttpServer()).get('/auth/me');
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({ user: null });
+  });
+
   it('allows state-changing requests from the configured web origin', async () => {
     const email = faker.internet.email().toLowerCase();
 
