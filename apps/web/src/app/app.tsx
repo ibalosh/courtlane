@@ -6,6 +6,7 @@ import {
 import { ProtectedLayout } from './components/protected-layout';
 import { AccountPage } from './pages/account-page';
 import { DashboardPage } from './pages/dashboard-page';
+import { HomePage } from './pages/home-page';
 import { LoginPage } from './pages/login-page';
 import { RootPage } from './pages/root-page';
 import { SignupPage } from './pages/signup-page';
@@ -18,7 +19,7 @@ export function createAppRouter() {
       children: [
         {
           index: true,
-          element: <Navigate replace to="/login" />,
+          element: <HomePage />,
         },
         {
           path: '/signup',
