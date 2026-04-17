@@ -161,7 +161,10 @@ export class ReservationsService {
     return this.toReservationResponse(updatedReservation);
   }
 
-  async clearReservation(accountId: number, reservationId: number): Promise<void> {
+  async clearReservation(
+    accountId: number,
+    reservationId: number,
+  ): Promise<void> {
     const deleted = await prisma.reservation.deleteMany({
       where: {
         id: reservationId,

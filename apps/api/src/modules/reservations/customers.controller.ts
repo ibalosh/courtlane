@@ -22,7 +22,10 @@ export class CustomersController {
   ): Promise<CustomerSearchResponseDto> {
     const searchQuery = customerSearchQuerySchema.parse(query);
 
-    return this.customersService.searchCustomers(user.accountId, searchQuery.query);
+    return this.customersService.searchCustomers(
+      user.accountId,
+      searchQuery.query,
+    );
   }
 
   @Post()
@@ -32,6 +35,9 @@ export class CustomersController {
   ): Promise<CreateCustomerResponseDto> {
     const createCustomerDto = createCustomerRequestSchema.parse(body);
 
-    return this.customersService.createCustomer(user.accountId, createCustomerDto);
+    return this.customersService.createCustomer(
+      user.accountId,
+      createCustomerDto,
+    );
   }
 }
