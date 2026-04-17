@@ -12,7 +12,7 @@ export const loginRequestSchema = z.object({
 });
 
 export const authUserSchema = z.object({
-  id: z.string(),
+  id: z.number().int().positive(),
   email: z.email().trim().min(1).max(255),
   name: z.string(),
 });
@@ -29,9 +29,9 @@ export const meResponseSchema = z.object({
   user: authUserSchema.nullable(),
 });
 
-export type SignupRequest = z.infer<typeof signupRequestSchema>;
-export type LoginRequest = z.infer<typeof loginRequestSchema>;
-export type AuthUser = z.infer<typeof authUserSchema>;
-export type AuthResponse = z.infer<typeof authResponseSchema>;
-export type LogoutResponse = z.infer<typeof logoutResponseSchema>;
-export type MeResponse = z.infer<typeof meResponseSchema>;
+export type SignupDto = z.infer<typeof signupRequestSchema>;
+export type LoginDto = z.infer<typeof loginRequestSchema>;
+export type AuthUserDto = z.infer<typeof authUserSchema>;
+export type AuthResponseDto = z.infer<typeof authResponseSchema>;
+export type LogoutResponseDto = z.infer<typeof logoutResponseSchema>;
+export type MeResponseDto = z.infer<typeof meResponseSchema>;

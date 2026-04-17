@@ -8,6 +8,7 @@
     "libs/*"
   ],
   "scripts": {
+    "db:prepare": "yarn workspace @courtlane/db prisma:migrate:deploy",
     "web:start": "yarn workspace @courtlane/web start",
     "web:build": "yarn workspace @courtlane/web build",
     "web:test": "yarn workspace @courtlane/web test",
@@ -21,7 +22,8 @@
     "test": "nx run-many -t test",
     "lint": "nx run-many -t lint",
     "format": "prettier . --write",
-    "format:check": "prettier . --check"
+    "format:check": "prettier . --check",
+    "all": "yarn build && yarn lint && yarn test && yarn format"
   },
   "repository": {
     "type": "git",
