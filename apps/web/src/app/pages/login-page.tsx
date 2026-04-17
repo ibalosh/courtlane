@@ -4,9 +4,9 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { login, type MeResponse } from '../api/auth';
 import { AuthLayout } from '../components/auth-layout';
 import { getAuthPageHref, getSafeRedirectPath } from '../utils/auth-redirect';
-import { Button } from '@/app/components/ui/button';
-import { Input } from '@/app/components/ui/input';
-import { Label } from '@/app/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 export function LoginPage() {
   const navigate = useNavigate();
@@ -48,7 +48,7 @@ export function LoginPage() {
       altHref={getAuthPageHref('/signup', searchParams.get('redirect'))}
       altAction="Sign up"
     >
-      <form className="mt-7 grid gap-4" onSubmit={handleSubmit}>
+      <form className="grid gap-4" onSubmit={handleSubmit}>
         <div className="grid gap-2">
           <Label htmlFor="email">Email</Label>
           <Input
@@ -77,9 +77,7 @@ export function LoginPage() {
           />
         </div>
 
-        {error ? (
-          <p className="m-0 text-[0.95rem] text-red-700">{error}</p>
-        ) : null}
+        {error ? <p className="text-destructive text-sm">{error}</p> : null}
 
         <Button type="submit" disabled={loginMutation.isPending}>
           {loginMutation.isPending ? 'Logging in...' : 'Log in'}

@@ -4,9 +4,11 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
-} from '@/app/components/ui/card';
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 
 type AuthLayoutProps = {
   title: string;
@@ -26,27 +28,25 @@ export function AuthLayout({
   children,
 }: AuthLayoutProps) {
   return (
-    <main className="grid min-h-screen place-items-center bg-[radial-gradient(circle_at_top,_rgba(242,201,76,0.45),_transparent_32%),linear-gradient(180deg,_#f6f1e9_0%,_#ece5d9_100%)] px-4 py-8 text-slate-900">
-      <Card className="w-full max-w-[30rem]">
+    <main className="app-page-shell relative flex items-center justify-center overflow-hidden px-4 py-8">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0,_transparent_60%,_rgba(15,23,42,0.06)_100%)]" />
+      <Card className="relative z-10 w-full max-w-md bg-background/90 shadow-[0_1.5rem_4rem_rgba(71,46,21,0.14)] backdrop-blur-[12px]">
         <CardHeader>
-          <Link
-            className="mb-4 inline-flex w-fit text-sm font-medium text-slate-700 transition-colors hover:text-slate-950"
-            to="/"
-          >
-            ← Back to home
-          </Link>
-          <p className="mb-2 text-[0.85rem] font-bold uppercase tracking-[0.16em] text-amber-800">
-            Courtlane
-          </p>
+          <Button asChild className="w-fit px-0" variant="link">
+            <Link to="/">Back to home</Link>
+          </Button>
           <CardTitle>{title}</CardTitle>
           <CardDescription>{description}</CardDescription>
         </CardHeader>
-        <CardContent>
-          {children}
-          <p className="mt-5 text-slate-900/70">
-            {altLabel} <Link to={altHref}>{altAction}</Link>
+        <CardContent>{children}</CardContent>
+        <CardFooter>
+          <p className="text-muted-foreground text-sm">
+            {altLabel}{' '}
+            <Button asChild className="h-auto px-0" size={null} variant="link">
+              <Link to={altHref}>{altAction}</Link>
+            </Button>
           </p>
-        </CardContent>
+        </CardFooter>
       </Card>
     </main>
   );
