@@ -13,6 +13,7 @@ export const loginRequestSchema = z.object({
 
 export const authUserSchema = z.object({
   id: z.number().int().positive(),
+  accountId: z.number().int().positive(),
   email: z.email().trim().min(1).max(255),
   name: z.string(),
 });

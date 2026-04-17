@@ -8,12 +8,16 @@ datasource db {
 
 model User {
   id           Int       @id @default(autoincrement())
+  accountId    Int
+  account      Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
   email        String    @unique
   name         String
   passwordHash String
   sessions     Session[]
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
+
+  @@index([accountId])
 }
 
 model Session {
@@ -26,4 +30,67 @@ model Session {
 
   @@index([userId])
   @@index([expiresAt])
+}
+
+model Account {
+  id           Int           @id @default(autoincrement())
+  name         String
+  users        User[]
+  courts       Court[]
+  customers    Customer[]
+  reservations Reservation[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Court {
+  id           Int           @id @default(autoincrement())
+  accountId    Int
+  account      Account       @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  name         String
+  sortOrder    Int
+  isActive     Boolean       @default(true)
+  reservations Reservation[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([accountId])
+  @@unique([accountId, name])
+  @@unique([accountId, sortOrder])
+}
+
+model Customer {
+  id           Int           @id @default(autoincrement())
+  accountId    Int
+  account      Account       @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  name         String
+  email        String?
+  phone        String?
+  notes        String?
+  reservations Reservation[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([accountId])
+  @@index([accountId, name])
+  @@unique([accountId, email])
+}
+
+model Reservation {
+  id         Int      @id @default(autoincrement())
+  accountId  Int
+  account    Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  courtId    Int
+  court      Court    @relation(fields: [courtId], references: [id], onDelete: Cascade)
+  customerId Int
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Restrict)
+  startsAt   DateTime
+  endsAt     DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([accountId, startsAt])
+  @@index([courtId, startsAt])
+  @@index([customerId])
+  @@unique([courtId, startsAt])
 }

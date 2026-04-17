@@ -1,4 +1,5 @@
 import {
+  authUserSchema,
   loginRequestSchema,
   meResponseSchema,
   signupRequestSchema,
@@ -43,5 +44,21 @@ describe('auth contracts', () => {
 
   it('allows unauthenticated me responses', () => {
     expect(meResponseSchema.parse({ user: null })).toEqual({ user: null });
+  });
+
+  it('requires account ownership on authenticated users', () => {
+    expect(
+      authUserSchema.parse({
+        id: 1,
+        accountId: 10,
+        email: 'user@example.com',
+        name: 'User Name',
+      }),
+    ).toEqual({
+      id: 1,
+      accountId: 10,
+      email: 'user@example.com',
+      name: 'User Name',
+    });
   });
 });
