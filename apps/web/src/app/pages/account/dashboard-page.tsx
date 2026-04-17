@@ -184,7 +184,7 @@ export function DashboardPage() {
             </div>
           ) : schedule && selectedDay ? (
             <div className="overflow-hidden rounded-b-2xl">
-              <Table>
+              <Table className="table-fixed">
                 <TableHeader>
                   <TableRow className="border-b border-slate-900/10 bg-[#f6efe0]/80 hover:bg-[#f6efe0]/80">
                     <TableHead className="min-w-40 border-r border-slate-900/10 bg-[#f6efe0] px-6 text-slate-900">
