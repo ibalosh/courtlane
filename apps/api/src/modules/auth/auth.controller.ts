@@ -2,8 +2,10 @@ import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { loginRequestSchema, signupRequestSchema } from '@courtlane/contracts';
 import { Request, Response } from 'express';
-import { SESSION_COOKIE_NAME } from './auth.constants';
-import { getSessionCookieOptions } from './auth.cookies';
+import {
+  getSessionCookieOptions,
+  SESSION_COOKIE_NAME,
+} from './auth.cookies';
 
 @Controller('auth')
 export class AuthController {

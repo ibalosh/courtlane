@@ -1,6 +1,6 @@
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
-import { SESSION_COOKIE_NAME } from '../../src/modules/auth/auth.constants';
+import { SESSION_COOKIE_NAME } from '../../src/modules/auth/auth.cookies';
 import { faker } from '@faker-js/faker';
 import { closeTestApp, createTestApp } from '../support/test-app';
 
