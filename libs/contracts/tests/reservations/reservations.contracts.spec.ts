@@ -47,7 +47,7 @@ describe('reservation contracts', () => {
         ],
         slots: [
           {
-            key: '09:00',
+            startTime: '09:00',
             label: '9:00 AM',
             startMinutes: 540,
             endMinutes: 585,

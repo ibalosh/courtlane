@@ -43,17 +43,68 @@ describe('App', () => {
   });
 
   it('renders the dashboard page for authenticated users', async () => {
-    vi.spyOn(global, 'fetch').mockResolvedValue({
-      ok: true,
-      json: async () => ({
-        user: {
-          id: 1,
-          accountId: 1,
-          name: 'Casey Player',
-          email: 'casey@example.com',
-        },
-      }),
-    } as Response);
+    vi.spyOn(global, 'fetch').mockImplementation((input) => {
+      const url = String(input);
+
+      if (url.includes('/auth/me')) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({
+            user: {
+              id: 1,
+              accountId: 1,
+              name: 'Casey Player',
+              email: 'casey@example.com',
+            },
+          }),
+        } as Response);
+      }
+
+      if (url.includes('/reservations/week')) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({
+            week: {
+              start: '2026-04-20',
+              end: '2026-04-26',
+              days: [
+                { date: '2026-04-20', label: 'Monday' },
+                { date: '2026-04-21', label: 'Tuesday' },
+                { date: '2026-04-22', label: 'Wednesday' },
+                { date: '2026-04-23', label: 'Thursday' },
+                { date: '2026-04-24', label: 'Friday' },
+                { date: '2026-04-25', label: 'Saturday' },
+                { date: '2026-04-26', label: 'Sunday' },
+              ],
+            },
+            courts: [
+              {
+                id: 1,
+                name: 'Court 1',
+                sortOrder: 1,
+              },
+            ],
+            slots: [
+              {
+                startTime: '09:00',
+                label: '9:00 AM',
+                startMinutes: 540,
+                endMinutes: 585,
+              },
+              {
+                startTime: '23:15',
+                label: '11:15 PM',
+                startMinutes: 1395,
+                endMinutes: 1440,
+              },
+            ],
+            reservations: [],
+          }),
+        } as Response);
+      }
+
+      return Promise.reject(new Error(`Unhandled fetch request: ${url}`));
+    });
     setLocation('/account/dashboard-page');
 
     renderApp();

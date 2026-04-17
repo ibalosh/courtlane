@@ -183,7 +183,7 @@ export function DashboardPage() {
                     {schedule.slots.map((slot) => (
                       <TableRow
                         className="border-b border-slate-900/10 bg-[#fffaf1]/92 hover:bg-[#fff6ea]"
-                        key={slot.key}
+                        key={slot.startTime}
                       >
                         <TableCell className="border-r border-slate-900/10 bg-[#fcf5e8] px-5 py-3.5">
                           <div className="font-semibold text-slate-900">
@@ -198,7 +198,7 @@ export function DashboardPage() {
                         </TableCell>
                         {schedule.courts.map((court) => {
                           const reservation = reservationMap.get(
-                            `${selectedDay.date}:${slot.key}:${court.id}`,
+                            `${selectedDay.date}:${slot.startTime}:${court.id}`,
                           );
                           const cell = reservation
                             ? {
@@ -215,7 +215,7 @@ export function DashboardPage() {
                           return (
                             <TableCell
                               className="border-r border-slate-900/10 px-3 py-3 last:border-r-0"
-                              key={`${selectedDay.date}-${slot.key}-${court.id}`}
+                              key={`${selectedDay.date}-${slot.startTime}-${court.id}`}
                             >
                               <button
                                 className={`flex w-full items-center justify-between rounded-2xl border px-3 py-2 text-left transition-colors ${statusStyles[cell.status]}`}
