@@ -1,8 +1,19 @@
-import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
+import type { AuthUserDto } from '@courtlane/contracts';
 import { AuthService } from './auth.service';
 import { loginRequestSchema, signupRequestSchema } from '@courtlane/contracts';
 import { Request, Response } from 'express';
 import { getSessionCookieOptions, SESSION_COOKIE_NAME } from './auth.cookies';
+import { CurrentUser } from './current-user.decorator';
+import { OptionalAuthGuard } from './auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -56,10 +67,10 @@ export class AuthController {
     return logoutResponse;
   }
 
+  @UseGuards(OptionalAuthGuard)
   @Get('me')
-  async me(@Req() request: Request) {
-    const sessionId = this.getSessionId(request);
-    return this.authService.me(sessionId);
+  me(@CurrentUser() user: AuthUserDto | null) {
+    return { user };
   }
 
   private clearSessionCookie(response: Response) {

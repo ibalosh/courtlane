@@ -38,4 +38,105 @@ describe('Auth HTTP', () => {
       ]),
     );
   });
+
+  it('returns the authenticated user from /auth/me with a valid session', async () => {
+    const email = faker.internet.email().toLowerCase();
+    const signupResponse = await request(app.getHttpServer())
+      .post('/auth/signup')
+      .send({
+        email,
+        name: 'Session User',
+        password: 'password123',
+      });
+
+    const response = await request(app.getHttpServer())
+      .get('/auth/me')
+      .set('Cookie', signupResponse.headers['set-cookie']);
+
+    expect(response.status).toBe(200);
+    expect(response.body.user).toEqual({
+      id: expect.any(Number),
+      email,
+      name: 'Session User',
+    });
+  });
+
+  it('returns null from /auth/me without a session', async () => {
+    const response = await request(app.getHttpServer()).get('/auth/me');
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({ user: null });
+  });
+
+  it('allows state-changing requests from the configured web origin', async () => {
+    const email = faker.internet.email().toLowerCase();
+
+    const response = await request(app.getHttpServer())
+      .post('/auth/signup')
+      .set('Origin', 'http://localhost:4200')
+      .send({
+        email,
+        name: 'Allowed Origin',
+        password: 'password123',
+      });
+
+    expect(response.status).toBe(201);
+  });
+
+  it('rejects state-changing requests from a different origin', async () => {
+    const response = await request(app.getHttpServer())
+      .post('/auth/signup')
+      .set('Origin', 'https://evil.example')
+      .send({
+        email: faker.internet.email().toLowerCase(),
+        name: 'Blocked Origin',
+        password: 'password123',
+      });
+
+    expect(response.status).toBe(403);
+    expect(response.body).toEqual({ message: 'Invalid request origin' });
+  });
+
+  it('allows state-changing requests with an allowed referer', async () => {
+    const email = faker.internet.email().toLowerCase();
+
+    const response = await request(app.getHttpServer())
+      .post('/auth/signup')
+      .set('Referer', 'http://localhost:4200/signup')
+      .send({
+        email,
+        name: 'Allowed Referer',
+        password: 'password123',
+      });
+
+    expect(response.status).toBe(201);
+  });
+
+  it('rejects malformed referer headers', async () => {
+    const response = await request(app.getHttpServer())
+      .post('/auth/signup')
+      .set('Referer', 'not-a-valid-url')
+      .send({
+        email: faker.internet.email().toLowerCase(),
+        name: 'Bad Referer',
+        password: 'password123',
+      });
+
+    expect(response.status).toBe(403);
+    expect(response.body).toEqual({ message: 'Invalid referer header' });
+  });
+
+  it('allows state-changing requests without an origin header', async () => {
+    const email = faker.internet.email().toLowerCase();
+
+    const response = await request(app.getHttpServer())
+      .post('/auth/signup')
+      .send({
+        email,
+        name: 'No Origin',
+        password: 'password123',
+      });
+
+    expect(response.status).toBe(201);
+  });
 });

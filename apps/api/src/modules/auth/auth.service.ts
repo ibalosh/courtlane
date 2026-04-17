@@ -3,12 +3,7 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import {
-  LoginDto,
-  LogoutResponseDto,
-  MeResponseDto,
-  SignupDto,
-} from '@courtlane/contracts';
+import { LoginDto, LogoutResponseDto, SignupDto } from '@courtlane/contracts';
 import { prisma } from '@courtlane/db';
 import argon2 from 'argon2';
 import { SessionService } from './session.service';
@@ -92,16 +87,6 @@ export class AuthService {
       sessionId: session.token,
       sessionExpiresAt: session.expiresAt,
     };
-  }
-
-  async me(sessionId: string | null): Promise<MeResponseDto> {
-    if (!sessionId) {
-      return { user: null };
-    }
-
-    const user = await this.sessionService.getUser(sessionId);
-
-    return { user };
   }
 
   async logout(sessionId: string | null): Promise<LogoutResponseDto> {
