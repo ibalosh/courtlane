@@ -1,7 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import type { WeekScheduleResponse } from '../../api/reservations';
-import { getWeekSchedule } from '../../api/reservations';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { createCustomer, searchCustomers } from '../../api/customers';
+import {
+  clearReservation,
+  createReservation,
+  getWeekSchedule,
+  updateReservation,
+  type WeekScheduleResponse,
+} from '../../api/reservations';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -19,6 +25,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useAccountUser } from './account-page';
+import { EditableReservationCell } from './editable-reservation-cell';
 
 type ReservationStatus = 'free' | 'reserved';
 
@@ -29,13 +36,31 @@ const statusStyles: Record<ReservationStatus, string> = {
 
 export function DashboardPage() {
   const user = useAccountUser();
+  const queryClient = useQueryClient();
   const [weekStart, setWeekStart] = useState(getCurrentWeekStartDateString);
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const scheduleQuery = useQuery({
     queryKey: ['reservations', 'week', weekStart],
     queryFn: () => getWeekSchedule({ start: weekStart }),
   });
   const schedule = scheduleQuery.data;
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const reservationMap = useMemo(
+    () => createReservationMap(schedule),
+    [schedule],
+  );
+  const createCustomerMutation = useMutation({
+    mutationFn: createCustomer,
+  });
+  const createReservationMutation = useMutation({
+    mutationFn: createReservation,
+  });
+  const updateReservationMutation = useMutation({
+    mutationFn: ({ id, customerId }: { id: number; customerId: number }) =>
+      updateReservation(id, { customerId }),
+  });
+  const clearReservationMutation = useMutation({
+    mutationFn: clearReservation,
+  });
 
   useEffect(() => {
     if (!schedule) {
@@ -53,10 +78,6 @@ export function DashboardPage() {
 
   const selectedDay =
     schedule?.week.days.find((day) => day.date === selectedDate) ?? null;
-  const reservationMap = useMemo(() => {
-    return createReservationMap(schedule);
-  }, [schedule]);
-
   const reservedSlotCount = schedule?.reservations.length ?? 0;
   const freeSlotCount = schedule
     ? schedule.courts.length *
@@ -64,6 +85,17 @@ export function DashboardPage() {
         schedule.slots.length -
       reservedSlotCount
     : 0;
+  const isSaving =
+    createCustomerMutation.isPending ||
+    createReservationMutation.isPending ||
+    updateReservationMutation.isPending ||
+    clearReservationMutation.isPending;
+
+  async function refreshWeek() {
+    await queryClient.invalidateQueries({
+      queryKey: ['reservations', 'week'],
+    });
+  }
 
   return (
     <section className="grid gap-6">
@@ -78,8 +110,8 @@ export function DashboardPage() {
                 Weekly Court Planner
               </CardTitle>
               <CardDescription className="mt-2 max-w-2xl text-sm leading-6 text-slate-900/68">
-                View the live weekly schedule for your account. Slots run in
-                45-minute intervals from 9:00 AM through midnight.
+                View the live weekly schedule for your account. Click a slot to
+                edit it directly.
               </CardDescription>
             </div>
             <div className="grid gap-3 sm:grid-cols-3">
@@ -104,7 +136,7 @@ export function DashboardPage() {
                 </p>
                 <p className="mt-1 text-sm text-slate-900/65">
                   {schedule
-                    ? `${formatWeekLabel(schedule.week.start, schedule.week.end)}`
+                    ? formatWeekLabel(schedule.week.start, schedule.week.end)
                     : 'Loading weekly schedule...'}
                 </p>
               </div>
@@ -200,54 +232,91 @@ export function DashboardPage() {
                           const reservation = reservationMap.get(
                             `${selectedDay.date}:${slot.startTime}:${court.id}`,
                           );
-                          const cell = reservation
+                          const cellReservation = reservation
                             ? {
-                                id: String(reservation.id),
-                                status: 'reserved' as const,
-                                customerName: reservation.customer.name,
+                                id: reservation.id,
                                 customerEmail: reservation.customer.email,
+                                customerName: reservation.customer.name,
                               }
-                            : {
-                                id: `${selectedDay.date}:${slot.key}:${court.id}`,
-                                status: 'free' as const,
-                              };
+                            : null;
 
                           return (
                             <TableCell
                               className="border-r border-slate-900/10 px-3 py-3 last:border-r-0"
                               key={`${selectedDay.date}-${slot.startTime}-${court.id}`}
                             >
-                              <button
-                                className={`flex w-full items-center justify-between rounded-2xl border px-3 py-2 text-left transition-colors ${statusStyles[cell.status]}`}
-                                disabled
-                                type="button"
-                              >
-                                <span>
-                                  <span className="block text-xs font-bold uppercase tracking-[0.12em] opacity-70">
-                                    {selectedDay.label}
-                                  </span>
-                                  <span className="mt-1 block text-sm font-medium">
-                                    {cell.status === 'free'
-                                      ? 'Available'
-                                      : 'Reserved'}
-                                  </span>
-                                </span>
-                                <span className="text-right text-xs font-medium">
-                                  {cell.status === 'free' ? (
-                                    'Open'
-                                  ) : (
-                                    <span className="block max-w-28 truncate">
-                                      {cell.customerName}
-                                    </span>
-                                  )}
-                                </span>
-                              </button>
-                              {cell.status === 'reserved' &&
-                              cell.customerEmail ? (
-                                <p className="mt-2 truncate text-xs text-slate-900/55">
-                                  {cell.customerEmail}
-                                </p>
-                              ) : null}
+                              <EditableReservationCell
+                                customerEmail={
+                                  cellReservation?.customerEmail ?? null
+                                }
+                                customerName={
+                                  cellReservation?.customerName ?? null
+                                }
+                                dayLabel={selectedDay.label}
+                                isSaving={isSaving}
+                                onSubmit={async (customerName) => {
+                                  if (!customerName) {
+                                    if (cellReservation) {
+                                      await clearReservationMutation.mutateAsync(
+                                        cellReservation.id,
+                                      );
+                                      await refreshWeek();
+                                    }
+
+                                    return;
+                                  }
+
+                                  const searchResponse = await searchCustomers({
+                                    query: customerName,
+                                  });
+                                  const exactMatches =
+                                    searchResponse.customers.filter(
+                                      (customer) =>
+                                        customer.name.toLowerCase() ===
+                                        customerName.toLowerCase(),
+                                    );
+
+                                  if (exactMatches.length > 1) {
+                                    throw new Error(
+                                      'Multiple customers share that name. Use a more specific customer name.',
+                                    );
+                                  }
+
+                                  const matchedCustomer = exactMatches[0];
+                                  const customerId = matchedCustomer
+                                    ? matchedCustomer.id
+                                    : (
+                                        await createCustomerMutation.mutateAsync(
+                                          {
+                                            name: customerName,
+                                          },
+                                        )
+                                      ).customer.id;
+
+                                  if (cellReservation) {
+                                    await updateReservationMutation.mutateAsync(
+                                      {
+                                        id: cellReservation.id,
+                                        customerId,
+                                      },
+                                    );
+                                  } else {
+                                    await createReservationMutation.mutateAsync(
+                                      {
+                                        courtId: court.id,
+                                        customerId,
+                                        startsAt: createSlotDateTime(
+                                          selectedDay.date,
+                                          slot.startTime,
+                                        ),
+                                      },
+                                    );
+                                  }
+
+                                  await refreshWeek();
+                                }}
+                                status={reservation ? 'reserved' : 'free'}
+                              />
                             </TableCell>
                           );
                         })}
@@ -273,24 +342,16 @@ export function DashboardPage() {
         </CardContent>
       </Card>
       <Card className="border border-slate-900/10 bg-[#fffaf1]/88 py-0 shadow-[0_1rem_3rem_rgba(71,46,21,0.1)]">
-        <CardContent className="flex flex-col gap-4 px-6 py-6 lg:flex-row lg:items-center lg:justify-between">
+        <CardContent className="px-6 py-6">
           <div>
             <p className="text-sm font-semibold text-slate-900">
               Live schedule for {user.name}
             </p>
             <p className="mt-1 text-sm text-slate-900/65">
-              This screen now reads reservation data from the API. Editing,
-              customer search, and clearing slots are the next step.
+              Click a slot to edit in place. Press Enter to save, Escape to
+              cancel, and clear the field to remove an existing reservation.
             </p>
           </div>
-          <Button
-            className="rounded-full"
-            onClick={() => scheduleQuery.refetch()}
-            type="button"
-            variant="outline"
-          >
-            Refresh week
-          </Button>
         </CardContent>
       </Card>
     </section>
@@ -304,6 +365,10 @@ function createReservationMap(schedule?: WeekScheduleResponse) {
   ]);
 
   return new Map(entries);
+}
+
+function createSlotDateTime(date: string, startTime: string) {
+  return `${date}T${startTime}:00.000Z`;
 }
 
 function getCurrentWeekStartDateString() {
