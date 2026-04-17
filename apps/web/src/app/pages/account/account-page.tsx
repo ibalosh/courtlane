@@ -14,10 +14,10 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { logout } from '../api/auth';
+import { logout } from '../../api/auth';
 import { cn } from '@/lib/utils';
-import type { AuthUser } from '../api/auth';
-import { useAuthenticatedUser } from '../components/protected-layout';
+import type { AuthUser } from '../../api/auth';
+import { useAuthenticatedUser } from './account-layout';
 
 type AccountOutletContext = {
   user: AuthUser;
