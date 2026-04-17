@@ -21,7 +21,6 @@ const statusStyles: Record<ReservationStatus, string> = {
 export function EditableReservationCell({
   customerEmail,
   customerName,
-  dayLabel,
   isSaving = false,
   onSubmit,
   status,
@@ -105,9 +104,6 @@ export function EditableReservationCell({
         type="button"
       >
         <span>
-          <span className="block text-xs font-bold uppercase tracking-[0.12em] opacity-70">
-            {dayLabel}
-          </span>
           <span className="mt-1 block text-sm font-medium">
             {status === 'free' ? 'Available' : 'Reserved'}
           </span>

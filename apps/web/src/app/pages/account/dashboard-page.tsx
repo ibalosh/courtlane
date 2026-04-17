@@ -27,13 +27,6 @@ import {
 import { useAccountUser } from './account-page';
 import { EditableReservationCell } from './editable-reservation-cell';
 
-type ReservationStatus = 'free' | 'reserved';
-
-const statusStyles: Record<ReservationStatus, string> = {
-  free: 'border-emerald-200 bg-emerald-50/90 text-emerald-900 hover:border-emerald-400 hover:bg-emerald-100',
-  reserved: 'border-slate-200 bg-slate-100/85 text-slate-700',
-};
-
 export function DashboardPage() {
   const user = useAccountUser();
   const queryClient = useQueryClient();
@@ -121,7 +114,7 @@ export function DashboardPage() {
               />
               <Metric label="Free slots" value={String(freeSlotCount)} />
               <Metric
-                label="Visible courts"
+                label="Active Courts"
                 value={String(schedule?.courts.length ?? 0)}
               />
             </div>
@@ -131,10 +124,7 @@ export function DashboardPage() {
           <div className="flex flex-col gap-4 px-6 pt-6">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <p className="text-sm font-semibold text-slate-900">
-                  Signed in as {user.name}
-                </p>
-                <p className="mt-1 text-sm text-slate-900/65">
+                <p className="text-sm text-slate-900/65">
                   {schedule
                     ? formatWeekLabel(schedule.week.start, schedule.week.end)
                     : 'Loading weekly schedule...'}
@@ -193,8 +183,7 @@ export function DashboardPage() {
               </p>
             </div>
           ) : schedule && selectedDay ? (
-            <>
-              <div className="overflow-hidden rounded-b-2xl">
+            <div className="overflow-hidden rounded-b-2xl">
                 <Table>
                   <TableHeader>
                     <TableRow className="border-b border-slate-900/10 bg-[#f6efe0]/80 hover:bg-[#f6efe0]/80">
@@ -246,13 +235,8 @@ export function DashboardPage() {
                               key={`${selectedDay.date}-${slot.startTime}-${court.id}`}
                             >
                               <EditableReservationCell
-                                customerEmail={
-                                  cellReservation?.customerEmail ?? null
-                                }
-                                customerName={
-                                  cellReservation?.customerName ?? null
-                                }
-                                dayLabel={selectedDay.label}
+                                customerEmail={cellReservation?.customerEmail ?? null}
+                                customerName={cellReservation?.customerName ?? null}
                                 isSaving={isSaving}
                                 onSubmit={async (customerName) => {
                                   if (!customerName) {
@@ -325,19 +309,6 @@ export function DashboardPage() {
                   </TableBody>
                 </Table>
               </div>
-              <div className="grid gap-3 px-6 pb-6 sm:grid-cols-2">
-                <LegendChip
-                  description="Open slot with no reservation for the selected court and time."
-                  label="Free"
-                  tone="free"
-                />
-                <LegendChip
-                  description="Reserved slot with a customer already assigned."
-                  label="Reserved"
-                  tone="reserved"
-                />
-              </div>
-            </>
           ) : null}
         </CardContent>
       </Card>
@@ -436,27 +407,6 @@ function Metric({ label, value }: { label: string; value: string }) {
         {label}
       </p>
       <p className="mt-2 font-heading text-2xl text-slate-900">{value}</p>
-    </div>
-  );
-}
-
-function LegendChip({
-  description,
-  label,
-  tone,
-}: {
-  description: string;
-  label: string;
-  tone: ReservationStatus;
-}) {
-  return (
-    <div className="rounded-3xl border border-slate-900/10 bg-white/60 p-4">
-      <div
-        className={`inline-flex rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] ${statusStyles[tone]}`}
-      >
-        {label}
-      </div>
-      <p className="mt-3 text-sm text-slate-900/65">{description}</p>
     </div>
   );
 }
