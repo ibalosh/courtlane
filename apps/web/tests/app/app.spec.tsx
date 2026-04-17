@@ -47,7 +47,8 @@ describe('App', () => {
       ok: true,
       json: async () => ({
         user: {
-          id: 'user_123',
+          id: 1,
+          accountId: 1,
           name: 'Casey Player',
           email: 'casey@example.com',
         },

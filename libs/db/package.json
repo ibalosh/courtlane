@@ -14,17 +14,20 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:migrate:deploy": "prisma migrate deploy",
+    "prisma:seed": "tsx prisma/seed.ts",
     "prisma:studio": "prisma studio",
     "prisma:validate": "prisma validate"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.7.0",
     "@prisma/client": "^7.7.0",
+    "argon2": "^0.44.0",
     "dotenv": "^17.4.2",
     "pg": "^8.20.0"
   },
   "devDependencies": {
     "@types/pg": "^8.20.0",
-    "prisma": "^7.7.0"
+    "prisma": "^7.7.0",
+    "tsx": "^4.20.6"
   }
 }

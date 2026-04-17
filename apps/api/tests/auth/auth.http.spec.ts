@@ -28,6 +28,7 @@ describe('Auth HTTP', () => {
     expect(response.status).toBe(201);
     expect(response.body.user).toEqual({
       id: expect.any(Number),
+      accountId: expect.any(Number),
       email,
       name: 'Test User',
     });
@@ -56,6 +57,7 @@ describe('Auth HTTP', () => {
     expect(response.status).toBe(200);
     expect(response.body.user).toEqual({
       id: expect.any(Number),
+      accountId: expect.any(Number),
       email,
       name: 'Session User',
     });

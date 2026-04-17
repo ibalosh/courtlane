@@ -46,6 +46,7 @@ export class SessionService {
         user: {
           select: {
             id: true,
+            accountId: true,
             email: true,
             name: true,
           },

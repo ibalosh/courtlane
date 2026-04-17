@@ -8,12 +8,16 @@ datasource db {
 
 model User {
   id           Int       @id @default(autoincrement())
+  accountId    Int
+  account      Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
   email        String    @unique
   name         String
   passwordHash String
   sessions     Session[]
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
+
+  @@index([accountId])
 }
 
 model Session {
@@ -26,4 +30,28 @@ model Session {
 
   @@index([userId])
   @@index([expiresAt])
+}
+
+model Account {
+  id        Int      @id @default(autoincrement())
+  name      String
+  users     User[]
+  courts    Court[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Court {
+  id           Int       @id @default(autoincrement())
+  accountId    Int
+  account      Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  name         String
+  sortOrder    Int
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([accountId])
+  @@unique([accountId, name])
+  @@unique([accountId, sortOrder])
 }

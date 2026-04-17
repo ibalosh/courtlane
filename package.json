@@ -9,6 +9,8 @@
   ],
   "scripts": {
     "db:prepare": "yarn workspace @courtlane/db prisma:migrate:deploy",
+    "db:reset": "yarn workspace @courtlane/db prisma migrate reset --force",
+    "db:seed": "yarn workspace @courtlane/db prisma:seed",
     "web:start": "yarn workspace @courtlane/web start",
     "web:build": "yarn workspace @courtlane/web build",
     "web:test": "yarn workspace @courtlane/web test",

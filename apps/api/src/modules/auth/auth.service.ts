@@ -25,17 +25,32 @@ export class AuthService {
 
     const passwordHash = await argon2.hash(input.password);
 
-    const user = await prisma.user.create({
-      data: {
-        email: input.email,
-        name: input.name,
-        passwordHash,
-      },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-      },
+    const user = await prisma.$transaction(async (tx) => {
+      const account = await tx.account.create({
+        data: {
+          name: this.createDefaultAccountName(input.name),
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      const createdUser = await tx.user.create({
+        data: {
+          accountId: account.id,
+          email: input.email,
+          name: input.name,
+          passwordHash,
+        },
+        select: {
+          id: true,
+          accountId: true,
+          email: true,
+          name: true,
+        },
+      });
+
+      return createdUser;
     });
 
     const session = await this.sessionService.create(user.id);
@@ -54,6 +69,7 @@ export class AuthService {
       },
       select: {
         id: true,
+        accountId: true,
         email: true,
         name: true,
         passwordHash: true,
@@ -78,6 +94,7 @@ export class AuthService {
     const session = await this.sessionService.create(user.id);
     const authUser = {
       id: user.id,
+      accountId: user.accountId,
       email: user.email,
       name: user.name,
     };
@@ -95,5 +112,9 @@ export class AuthService {
     }
 
     return { ok: true };
+  }
+
+  private createDefaultAccountName(name: string) {
+    return `${name}'s Account`;
   }
 }
