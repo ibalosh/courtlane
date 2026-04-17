@@ -2,10 +2,7 @@ import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { loginRequestSchema, signupRequestSchema } from '@courtlane/contracts';
 import { Request, Response } from 'express';
-import {
-  getSessionCookieOptions,
-  SESSION_COOKIE_NAME,
-} from './auth.cookies';
+import { getSessionCookieOptions, SESSION_COOKIE_NAME } from './auth.cookies';
 
 @Controller('auth')
 export class AuthController {
@@ -16,12 +13,16 @@ export class AuthController {
     @Body() body: unknown,
     @Res({ passthrough: true }) response: Response,
   ) {
-    const input = signupRequestSchema.parse(body);
-    const result = await this.authService.signup(input);
+    const signupDto = signupRequestSchema.parse(body);
+    const signupResult = await this.authService.signup(signupDto);
 
-    this.setSessionCookie(response, result.sessionId, result.sessionExpiresAt);
+    this.setSessionCookie(
+      response,
+      signupResult.sessionId,
+      signupResult.sessionExpiresAt,
+    );
 
-    return { user: result.user };
+    return { user: signupResult.user };
   }
 
   @Post('login')
@@ -29,12 +30,16 @@ export class AuthController {
     @Body() body: unknown,
     @Res({ passthrough: true }) response: Response,
   ) {
-    const input = loginRequestSchema.parse(body);
-    const result = await this.authService.login(input);
+    const loginDto = loginRequestSchema.parse(body);
+    const loginResult = await this.authService.login(loginDto);
 
-    this.setSessionCookie(response, result.sessionId, result.sessionExpiresAt);
+    this.setSessionCookie(
+      response,
+      loginResult.sessionId,
+      loginResult.sessionExpiresAt,
+    );
 
-    return { user: result.user };
+    return { user: loginResult.user };
   }
 
   @Post('logout')
@@ -42,11 +47,13 @@ export class AuthController {
     @Req() request: Request,
     @Res({ passthrough: true }) response: Response,
   ) {
-    const result = await this.authService.logout(this.getSessionId(request));
+    const logoutResponse = await this.authService.logout(
+      this.getSessionId(request),
+    );
 
     this.clearSessionCookie(response);
 
-    return result;
+    return logoutResponse;
   }
 
   @Get('me')
