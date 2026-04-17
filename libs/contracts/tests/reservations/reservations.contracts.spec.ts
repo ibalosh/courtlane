@@ -1,4 +1,13 @@
 import {
+  clearReservationResponseSchema,
+  createCustomerRequestSchema,
+  createCustomerResponseSchema,
+  createReservationRequestSchema,
+  customerSearchQuerySchema,
+  customerSearchResponseSchema,
+  reservationIdParamsSchema,
+  reservationResponseSchema,
+  updateReservationRequestSchema,
   weekScheduleQuerySchema,
   weekScheduleResponseSchema,
 } from '../../src/reservations/reservations.contracts';
@@ -72,6 +81,123 @@ describe('reservation contracts', () => {
         start: '2026-04-20',
         end: '2026-04-26',
       },
+    });
+  });
+
+  it('validates customer lookup and create shapes', () => {
+    expect(
+      customerSearchQuerySchema.parse({
+        query: 'john',
+      }),
+    ).toEqual({
+      query: 'john',
+    });
+
+    expect(
+      createCustomerRequestSchema.parse({
+        name: 'John Smith',
+        email: 'john@example.com',
+        phone: '+381600000000',
+      }),
+    ).toEqual({
+      name: 'John Smith',
+      email: 'john@example.com',
+      phone: '+381600000000',
+    });
+
+    expect(
+      customerSearchResponseSchema.parse({
+        customers: [
+          {
+            id: 1,
+            name: 'John Smith',
+            email: 'john@example.com',
+            phone: '+381600000000',
+          },
+        ],
+      }),
+    ).toMatchObject({
+      customers: [
+        {
+          id: 1,
+          name: 'John Smith',
+        },
+      ],
+    });
+
+    expect(
+      createCustomerResponseSchema.parse({
+        customer: {
+          id: 1,
+          name: 'John Smith',
+          email: 'john@example.com',
+          phone: '+381600000000',
+        },
+      }),
+    ).toMatchObject({
+      customer: {
+        id: 1,
+        name: 'John Smith',
+      },
+    });
+  });
+
+  it('validates reservation mutation shapes', () => {
+    expect(
+      createReservationRequestSchema.parse({
+        courtId: 1,
+        customerId: 10,
+        startsAt: '2026-04-20T09:00:00.000Z',
+      }),
+    ).toEqual({
+      courtId: 1,
+      customerId: 10,
+      startsAt: '2026-04-20T09:00:00.000Z',
+    });
+
+    expect(
+      reservationIdParamsSchema.parse({
+        reservationId: '25',
+      }),
+    ).toEqual({
+      reservationId: 25,
+    });
+
+    expect(
+      updateReservationRequestSchema.parse({
+        customerId: 12,
+      }),
+    ).toEqual({
+      customerId: 12,
+    });
+
+    expect(
+      reservationResponseSchema.parse({
+        reservation: {
+          id: 25,
+          courtId: 1,
+          customer: {
+            id: 12,
+            name: 'Jane Smith',
+            email: 'jane@example.com',
+          },
+          startsAt: '2026-04-20T09:00:00.000Z',
+          endsAt: '2026-04-20T09:45:00.000Z',
+        },
+      }),
+    ).toMatchObject({
+      reservation: {
+        id: 25,
+        courtId: 1,
+      },
+    });
+
+    expect(
+      clearReservationResponseSchema.parse({
+        ok: true,
+      }),
+    ).toEqual({
+      ok: true,
     });
   });
 });
