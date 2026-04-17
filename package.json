@@ -18,7 +18,7 @@
     "api:test": "yarn workspace @courtlane/api test",
     "api:format": "yarn workspace @courtlane/api format",
     "start": "nx run-many -t start",
-    "clean:dist": "find apps libs -type d -name dist -prune -exec rm -rf '{}' +",
+    "clean:dist": "rm -rf apps/api/dist apps/web/dist libs/contracts/dist libs/db/dist",
     "build": "yarn clean:dist && nx run-many -t build",
     "test": "nx run-many -t test",
     "lint": "nx run-many -t lint",
