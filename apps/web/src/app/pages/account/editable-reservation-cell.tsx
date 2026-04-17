@@ -13,9 +13,9 @@ type EditableReservationCellProps = {
 };
 
 const statusStyles: Record<ReservationStatus, string> = {
-  free: 'border-emerald-200 bg-emerald-50/90 text-emerald-900 hover:border-emerald-400 hover:bg-emerald-100',
+  free: 'border-emerald-400/50 bg-emerald-100/90 text-emerald-950 hover:border-emerald-600 hover:bg-emerald-200',
   reserved:
-    'border-slate-200 bg-slate-100/85 text-slate-700 hover:border-slate-400 hover:bg-slate-200/75',
+    'border-amber-500/60 bg-amber-200/95 text-amber-950 hover:border-amber-700 hover:bg-amber-300',
 };
 
 export function EditableReservationCell({
@@ -108,11 +108,13 @@ export function EditableReservationCell({
             {status === 'free' ? 'Available' : 'Reserved'}
           </span>
         </span>
-        <span className="text-right text-xs font-medium">
+        <span className="text-right text-sm font-medium">
           {status === 'free' ? (
             'Assign'
           ) : (
-            <span className="block max-w-28 truncate">{customerName}</span>
+            <span className="block max-w-34 truncate font-bold">
+              {customerName}
+            </span>
           )}
         </span>
       </button>
