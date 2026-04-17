@@ -35,6 +35,14 @@ export class AuthService {
         },
       });
 
+      await tx.court.create({
+        data: {
+          accountId: account.id,
+          name: 'Court',
+          sortOrder: 1,
+        },
+      });
+
       const createdUser = await tx.user.create({
         data: {
           accountId: account.id,
