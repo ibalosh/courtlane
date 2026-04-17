@@ -2,6 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { SESSION_COOKIE_NAME } from '../../src/modules/auth/auth.cookies';
 import { faker } from '@faker-js/faker';
+import { env } from '../../src/config/env';
 import { closeTestApp, createTestApp } from '../support/test-app';
 
 describe('Auth HTTP', () => {
@@ -75,7 +76,7 @@ describe('Auth HTTP', () => {
 
     const response = await request(app.getHttpServer())
       .post('/auth/signup')
-      .set('Origin', 'http://localhost:4200')
+      .set('Origin', env.webAppUrl)
       .send({
         email,
         name: 'Allowed Origin',
@@ -104,7 +105,7 @@ describe('Auth HTTP', () => {
 
     const response = await request(app.getHttpServer())
       .post('/auth/signup')
-      .set('Referer', 'http://localhost:4200/signup')
+      .set('Referer', `${env.webAppUrl}/signup`)
       .send({
         email,
         name: 'Allowed Referer',

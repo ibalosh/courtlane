@@ -1,21 +1,12 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { SquashBallMark } from '../components/squash-ball-mark';
 
 const courtSlots = [
   { time: '06:30', label: 'First serve', status: 'Open courts' },
   { time: '12:15', label: 'Lunch ladder', status: 'Fast 45-min blocks' },
   { time: '19:40', label: 'Prime time', status: 'League-ready' },
 ];
-
-function SquashBallMark() {
-  return (
-    <div className="relative flex size-13 shrink-0 items-center justify-center">
-      <div className="absolute inset-[0.2rem] -rotate-[24deg] rounded-full bg-[#171717] shadow-[0_10px_20px_rgba(15,23,42,0.5)]" />
-      <span className="absolute left-[1rem] top-[1.46rem] size-2.5 rounded-full bg-[#ffd84d] shadow-[0_0_0_1px_rgba(0,0,0,0.12)]" />
-      <span className="absolute left-[1.78rem] top-[1.1rem] size-2.5 rounded-full bg-[#ffd84d] shadow-[0_0_0_1px_rgba(0,0,0,0.12)]" />
-    </div>
-  );
-}
 
 export function HomePage() {
   return (
@@ -36,17 +27,16 @@ export function HomePage() {
 
           <nav className="flex items-center gap-2 sm:gap-3">
             <Button
-              asChild
-              className="border-slate-950/15 bg-white/70 text-slate-900 hover:bg-white"
+              className="border-border bg-background/70 text-foreground shadow-[0_8px_24px_rgba(15,23,42,0.08)] hover:bg-background"
               size="sm"
               variant="outline"
             >
               <Link to="/login">Log in</Link>
             </Button>
             <Button
-              asChild
-              className="bg-[linear-gradient(135deg,_#1d4d37,_#102a22)] text-white shadow-[0_14px_35px_rgba(16,42,34,0.22)] hover:bg-[linear-gradient(135deg,_#245f45,_#15352b)]"
+              className="border-border bg-background/70 text-foreground shadow-[0_8px_24px_rgba(15,23,42,0.08)] hover:bg-background"
               size="sm"
+              variant="outline"
             >
               <Link to="/signup">Sign up</Link>
             </Button>
@@ -74,14 +64,15 @@ export function HomePage() {
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Button
                   asChild
-                  className="bg-[linear-gradient(135deg,_#1d4d37,_#102a22)] text-white shadow-[0_18px_40px_rgba(16,42,34,0.22)] hover:bg-[linear-gradient(135deg,_#245f45,_#15352b)]"
+                  className="border-border bg-background/70 text-foreground shadow-[0_12px_28px_rgba(15,23,42,0.08)] hover:bg-background"
                   size="lg"
+                  variant="outline"
                 >
                   <Link to="/signup">Create an account</Link>
                 </Button>
                 <Button
                   asChild
-                  className="border-slate-950/15 bg-white/70 text-slate-900 hover:bg-white"
+                  className="border-border bg-background/70 text-foreground shadow-[0_12px_28px_rgba(15,23,42,0.08)] hover:bg-background"
                   size="lg"
                   variant="outline"
                 >

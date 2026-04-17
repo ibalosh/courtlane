@@ -27,13 +27,6 @@ import {
 import { useAccountUser } from './account-page';
 import { EditableReservationCell } from './editable-reservation-cell';
 
-type ReservationStatus = 'free' | 'reserved';
-
-const statusStyles: Record<ReservationStatus, string> = {
-  free: 'border-emerald-200 bg-emerald-50/90 text-emerald-900 hover:border-emerald-400 hover:bg-emerald-100',
-  reserved: 'border-slate-200 bg-slate-100/85 text-slate-700',
-};
-
 export function DashboardPage() {
   const user = useAccountUser();
   const queryClient = useQueryClient();
@@ -121,7 +114,7 @@ export function DashboardPage() {
               />
               <Metric label="Free slots" value={String(freeSlotCount)} />
               <Metric
-                label="Visible courts"
+                label="Active Courts"
                 value={String(schedule?.courts.length ?? 0)}
               />
             </div>
@@ -131,10 +124,7 @@ export function DashboardPage() {
           <div className="flex flex-col gap-4 px-6 pt-6">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <p className="text-sm font-semibold text-slate-900">
-                  Signed in as {user.name}
-                </p>
-                <p className="mt-1 text-sm text-slate-900/65">
+                <p className="text-sm text-slate-900/65">
                   {schedule
                     ? formatWeekLabel(schedule.week.start, schedule.week.end)
                     : 'Loading weekly schedule...'}
@@ -193,151 +183,127 @@ export function DashboardPage() {
               </p>
             </div>
           ) : schedule && selectedDay ? (
-            <>
-              <div className="overflow-hidden rounded-b-2xl">
-                <Table>
-                  <TableHeader>
-                    <TableRow className="border-b border-slate-900/10 bg-[#f6efe0]/80 hover:bg-[#f6efe0]/80">
-                      <TableHead className="min-w-40 border-r border-slate-900/10 bg-[#f6efe0] px-6 text-slate-900">
-                        Time
-                      </TableHead>
-                      {schedule.courts.map((court) => (
-                        <TableHead
-                          className="min-w-52 border-r border-slate-900/10 px-4 text-center text-slate-900 last:border-r-0"
-                          key={court.id}
-                        >
-                          {court.name}
-                        </TableHead>
-                      ))}
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {schedule.slots.map((slot) => (
-                      <TableRow
-                        className="border-b border-slate-900/10 bg-[#fffaf1]/92 hover:bg-[#fff6ea]"
-                        key={slot.startTime}
+            <div className="overflow-hidden rounded-b-2xl">
+              <Table className="table-fixed">
+                <TableHeader>
+                  <TableRow className="border-b border-slate-900/10 bg-[#f6efe0]/80 hover:bg-[#f6efe0]/80">
+                    <TableHead className="min-w-40 border-r border-slate-900/10 bg-[#f6efe0] px-6 text-slate-900">
+                      Time
+                    </TableHead>
+                    {schedule.courts.map((court) => (
+                      <TableHead
+                        className="min-w-52 border-r border-slate-900/10 px-4 text-center text-slate-900 last:border-r-0"
+                        key={court.id}
                       >
-                        <TableCell className="border-r border-slate-900/10 bg-[#fcf5e8] px-5 py-3.5">
-                          <div className="font-semibold text-slate-900">
-                            {slot.label}
-                          </div>
-                          <div className="mt-1 text-xs uppercase tracking-[0.08em] text-slate-900/55">
-                            {formatSlotRange(
-                              slot.startMinutes,
-                              slot.endMinutes,
-                            )}
-                          </div>
-                        </TableCell>
-                        {schedule.courts.map((court) => {
-                          const reservation = reservationMap.get(
-                            `${selectedDay.date}:${slot.startTime}:${court.id}`,
-                          );
-                          const cellReservation = reservation
-                            ? {
-                                id: reservation.id,
-                                customerEmail: reservation.customer.email,
-                                customerName: reservation.customer.name,
-                              }
-                            : null;
-
-                          return (
-                            <TableCell
-                              className="border-r border-slate-900/10 px-3 py-3 last:border-r-0"
-                              key={`${selectedDay.date}-${slot.startTime}-${court.id}`}
-                            >
-                              <EditableReservationCell
-                                customerEmail={
-                                  cellReservation?.customerEmail ?? null
-                                }
-                                customerName={
-                                  cellReservation?.customerName ?? null
-                                }
-                                dayLabel={selectedDay.label}
-                                isSaving={isSaving}
-                                onSubmit={async (customerName) => {
-                                  if (!customerName) {
-                                    if (cellReservation) {
-                                      await clearReservationMutation.mutateAsync(
-                                        cellReservation.id,
-                                      );
-                                      await refreshWeek();
-                                    }
-
-                                    return;
-                                  }
-
-                                  const searchResponse = await searchCustomers({
-                                    query: customerName,
-                                  });
-                                  const exactMatches =
-                                    searchResponse.customers.filter(
-                                      (customer) =>
-                                        customer.name.toLowerCase() ===
-                                        customerName.toLowerCase(),
-                                    );
-
-                                  if (exactMatches.length > 1) {
-                                    throw new Error(
-                                      'Multiple customers share that name. Use a more specific customer name.',
-                                    );
-                                  }
-
-                                  const matchedCustomer = exactMatches[0];
-                                  const customerId = matchedCustomer
-                                    ? matchedCustomer.id
-                                    : (
-                                        await createCustomerMutation.mutateAsync(
-                                          {
-                                            name: customerName,
-                                          },
-                                        )
-                                      ).customer.id;
-
-                                  if (cellReservation) {
-                                    await updateReservationMutation.mutateAsync(
-                                      {
-                                        id: cellReservation.id,
-                                        customerId,
-                                      },
-                                    );
-                                  } else {
-                                    await createReservationMutation.mutateAsync(
-                                      {
-                                        courtId: court.id,
-                                        customerId,
-                                        startsAt: createSlotDateTime(
-                                          selectedDay.date,
-                                          slot.startTime,
-                                        ),
-                                      },
-                                    );
-                                  }
-
-                                  await refreshWeek();
-                                }}
-                                status={reservation ? 'reserved' : 'free'}
-                              />
-                            </TableCell>
-                          );
-                        })}
-                      </TableRow>
+                        {court.name}
+                      </TableHead>
                     ))}
-                  </TableBody>
-                </Table>
-              </div>
-              <div className="grid gap-3 px-6 pb-6 sm:grid-cols-2">
-                <LegendChip
-                  description="Open slot with no reservation for the selected court and time."
-                  label="Free"
-                  tone="free"
-                />
-                <LegendChip
-                  description="Reserved slot with a customer already assigned."
-                  label="Reserved"
-                  tone="reserved"
-                />
-              </div>
-            </>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {schedule.slots.map((slot) => (
+                    <TableRow
+                      className="border-b border-slate-900/10 bg-[#fffaf1]/92 hover:bg-[#fff6ea]"
+                      key={slot.startTime}
+                    >
+                      <TableCell className="border-r border-slate-900/10 bg-[#fcf5e8] px-5 py-3.5">
+                        <div className="font-semibold text-slate-900">
+                          {slot.label}
+                        </div>
+                        <div className="mt-1 text-xs uppercase tracking-[0.08em] text-slate-900/55">
+                          {formatSlotRange(slot.startMinutes, slot.endMinutes)}
+                        </div>
+                      </TableCell>
+                      {schedule.courts.map((court) => {
+                        const reservation = reservationMap.get(
+                          `${selectedDay.date}:${slot.startTime}:${court.id}`,
+                        );
+                        const cellReservation = reservation
+                          ? {
+                              id: reservation.id,
+                              customerEmail: reservation.customer.email,
+                              customerName: reservation.customer.name,
+                            }
+                          : null;
+
+                        return (
+                          <TableCell
+                            className="border-r border-slate-900/10 px-3 py-3 last:border-r-0"
+                            key={`${selectedDay.date}-${slot.startTime}-${court.id}`}
+                          >
+                            <EditableReservationCell
+                              customerEmail={
+                                cellReservation?.customerEmail ?? null
+                              }
+                              customerName={
+                                cellReservation?.customerName ?? null
+                              }
+                              isSaving={isSaving}
+                              onSubmit={async (customerName) => {
+                                if (!customerName) {
+                                  if (cellReservation) {
+                                    await clearReservationMutation.mutateAsync(
+                                      cellReservation.id,
+                                    );
+                                    await refreshWeek();
+                                  }
+
+                                  return;
+                                }
+
+                                const searchResponse = await searchCustomers({
+                                  query: customerName,
+                                });
+                                const exactMatches =
+                                  searchResponse.customers.filter(
+                                    (customer) =>
+                                      customer.name.toLowerCase() ===
+                                      customerName.toLowerCase(),
+                                  );
+
+                                if (exactMatches.length > 1) {
+                                  throw new Error(
+                                    'Multiple customers share that name. Use a more specific customer name.',
+                                  );
+                                }
+
+                                const matchedCustomer = exactMatches[0];
+                                const customerId = matchedCustomer
+                                  ? matchedCustomer.id
+                                  : (
+                                      await createCustomerMutation.mutateAsync({
+                                        name: customerName,
+                                      })
+                                    ).customer.id;
+
+                                if (cellReservation) {
+                                  await updateReservationMutation.mutateAsync({
+                                    id: cellReservation.id,
+                                    customerId,
+                                  });
+                                } else {
+                                  await createReservationMutation.mutateAsync({
+                                    courtId: court.id,
+                                    customerId,
+                                    startsAt: createSlotDateTime(
+                                      selectedDay.date,
+                                      slot.startTime,
+                                    ),
+                                  });
+                                }
+
+                                await refreshWeek();
+                              }}
+                              status={reservation ? 'reserved' : 'free'}
+                            />
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           ) : null}
         </CardContent>
       </Card>
@@ -436,27 +402,6 @@ function Metric({ label, value }: { label: string; value: string }) {
         {label}
       </p>
       <p className="mt-2 font-heading text-2xl text-slate-900">{value}</p>
-    </div>
-  );
-}
-
-function LegendChip({
-  description,
-  label,
-  tone,
-}: {
-  description: string;
-  label: string;
-  tone: ReservationStatus;
-}) {
-  return (
-    <div className="rounded-3xl border border-slate-900/10 bg-white/60 p-4">
-      <div
-        className={`inline-flex rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] ${statusStyles[tone]}`}
-      >
-        {label}
-      </div>
-      <p className="mt-3 text-sm text-slate-900/65">{description}</p>
     </div>
   );
 }

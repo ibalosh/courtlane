@@ -13,15 +13,19 @@ type EditableReservationCellProps = {
 };
 
 const statusStyles: Record<ReservationStatus, string> = {
-  free: 'border-emerald-200 bg-emerald-50/90 text-emerald-900 hover:border-emerald-400 hover:bg-emerald-100',
+  free: 'border-emerald-400/50 bg-emerald-100/90 text-emerald-950 hover:border-emerald-600 hover:bg-emerald-200',
   reserved:
-    'border-slate-200 bg-slate-100/85 text-slate-700 hover:border-slate-400 hover:bg-slate-200/75',
+    'border-amber-500/60 bg-amber-200/95 text-amber-950 hover:border-amber-700 hover:bg-amber-300',
+};
+
+const editingStyles: Record<ReservationStatus, string> = {
+  free: 'border-emerald-600/60 bg-emerald-200 text-emerald-950',
+  reserved: 'border-amber-700/60 bg-amber-300 text-amber-950',
 };
 
 export function EditableReservationCell({
   customerEmail,
   customerName,
-  dayLabel,
   isSaving = false,
   onSubmit,
   status,
@@ -68,55 +72,60 @@ export function EditableReservationCell({
     setIsEditing(false);
   }
 
+  const shellClassName = `grid h-14 w-full min-w-0 grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-center gap-3 rounded-2xl border px-3 py-2 text-left transition-colors ${statusStyles[status]}`;
+
   if (isEditing) {
     return (
-      <div className="grid gap-2">
-        <Input
-          onChange={(event) => setValue(event.target.value)}
-          onKeyDown={(event) => {
-            if (event.key === 'Enter') {
-              event.preventDefault();
-              void handleSubmit();
-            }
+      <div>
+        <div>
+          <div>
+            <Input
+              onChange={(event) => setValue(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') {
+                  event.preventDefault();
+                  void handleSubmit();
+                }
 
-            if (event.key === 'Escape') {
-              event.preventDefault();
-              handleCancel();
-            }
-          }}
-          placeholder="Type customer"
-          ref={inputRef}
-          value={value}
-        />
+                if (event.key === 'Escape') {
+                  event.preventDefault();
+                  handleCancel();
+                }
+              }}
+              placeholder="Type customer"
+              ref={inputRef}
+              value={value}
+            />
+          </div>
+        </div>
         {error ? <p className="text-xs text-red-700">{error}</p> : null}
-        <p className="text-xs text-slate-900/50">
-          Enter saves. Escape cancels. Empty clears.
-        </p>
+        {customerEmail ? (
+          <p className="truncate text-xs text-slate-900/55">{customerEmail}</p>
+        ) : null}
       </div>
     );
   }
 
   return (
-    <div className="grid gap-2">
+    <div className="grid w-full min-w-0 gap-2">
       <button
-        className={`flex w-full items-center justify-between rounded-2xl border px-3 py-2 text-left transition-colors ${statusStyles[status]}`}
+        className={shellClassName}
         disabled={isSaving}
         onClick={() => setIsEditing(true)}
         type="button"
       >
-        <span>
-          <span className="block text-xs font-bold uppercase tracking-[0.12em] opacity-70">
-            {dayLabel}
-          </span>
-          <span className="mt-1 block text-sm font-medium">
+        <span className="min-w-0">
+          <span className="block text-sm font-medium">
             {status === 'free' ? 'Available' : 'Reserved'}
           </span>
         </span>
-        <span className="text-right text-xs font-medium">
+        <span className="min-w-0 text-right text-sm font-medium">
           {status === 'free' ? (
             'Assign'
           ) : (
-            <span className="block max-w-28 truncate">{customerName}</span>
+            <span className="block max-w-34 truncate font-bold">
+              {customerName}
+            </span>
           )}
         </span>
       </button>
