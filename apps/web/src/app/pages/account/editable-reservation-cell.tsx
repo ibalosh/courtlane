@@ -99,7 +99,9 @@ export function EditableReservationCell({
           </div>
         </div>
         {error ? <p className="text-xs text-red-700">{error}</p> : null}
-        {customerEmail ? (<p className="truncate text-xs text-slate-900/55">{customerEmail}</p>) : null}
+        {customerEmail ? (
+          <p className="truncate text-xs text-slate-900/55">{customerEmail}</p>
+        ) : null}
       </div>
     );
   }
