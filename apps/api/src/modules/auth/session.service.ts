@@ -53,7 +53,16 @@ export class SessionService {
       },
     });
 
-    if (!session || session.expiresAt <= new Date()) {
+    if (!session) {
+      return null;
+    }
+
+    if (session.expiresAt <= new Date()) {
+      // TODO: Replace this opportunistic cleanup with a scheduled job later.
+      // For now, we only clean up when a stale session is actually
+      // encountered during session-backed requests such as /auth/me, which
+      // keeps valid requests and login/signup off the extra delete path.
+      await this.deleteExpired();
       return null;
     }
 
@@ -64,6 +73,16 @@ export class SessionService {
     await prisma.session.deleteMany({
       where: {
         tokenHash: hashSessionToken(sessionToken),
+      },
+    });
+  }
+
+  async deleteExpired(): Promise<void> {
+    await prisma.session.deleteMany({
+      where: {
+        expiresAt: {
+          lte: new Date(),
+        },
       },
     });
   }
