@@ -184,131 +184,126 @@ export function DashboardPage() {
             </div>
           ) : schedule && selectedDay ? (
             <div className="overflow-hidden rounded-b-2xl">
-                <Table>
-                  <TableHeader>
-                    <TableRow className="border-b border-slate-900/10 bg-[#f6efe0]/80 hover:bg-[#f6efe0]/80">
-                      <TableHead className="min-w-40 border-r border-slate-900/10 bg-[#f6efe0] px-6 text-slate-900">
-                        Time
-                      </TableHead>
-                      {schedule.courts.map((court) => (
-                        <TableHead
-                          className="min-w-52 border-r border-slate-900/10 px-4 text-center text-slate-900 last:border-r-0"
-                          key={court.id}
-                        >
-                          {court.name}
-                        </TableHead>
-                      ))}
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {schedule.slots.map((slot) => (
-                      <TableRow
-                        className="border-b border-slate-900/10 bg-[#fffaf1]/92 hover:bg-[#fff6ea]"
-                        key={slot.startTime}
+              <Table>
+                <TableHeader>
+                  <TableRow className="border-b border-slate-900/10 bg-[#f6efe0]/80 hover:bg-[#f6efe0]/80">
+                    <TableHead className="min-w-40 border-r border-slate-900/10 bg-[#f6efe0] px-6 text-slate-900">
+                      Time
+                    </TableHead>
+                    {schedule.courts.map((court) => (
+                      <TableHead
+                        className="min-w-52 border-r border-slate-900/10 px-4 text-center text-slate-900 last:border-r-0"
+                        key={court.id}
                       >
-                        <TableCell className="border-r border-slate-900/10 bg-[#fcf5e8] px-5 py-3.5">
-                          <div className="font-semibold text-slate-900">
-                            {slot.label}
-                          </div>
-                          <div className="mt-1 text-xs uppercase tracking-[0.08em] text-slate-900/55">
-                            {formatSlotRange(
-                              slot.startMinutes,
-                              slot.endMinutes,
-                            )}
-                          </div>
-                        </TableCell>
-                        {schedule.courts.map((court) => {
-                          const reservation = reservationMap.get(
-                            `${selectedDay.date}:${slot.startTime}:${court.id}`,
-                          );
-                          const cellReservation = reservation
-                            ? {
-                                id: reservation.id,
-                                customerEmail: reservation.customer.email,
-                                customerName: reservation.customer.name,
-                              }
-                            : null;
-
-                          return (
-                            <TableCell
-                              className="border-r border-slate-900/10 px-3 py-3 last:border-r-0"
-                              key={`${selectedDay.date}-${slot.startTime}-${court.id}`}
-                            >
-                              <EditableReservationCell
-                                customerEmail={cellReservation?.customerEmail ?? null}
-                                customerName={cellReservation?.customerName ?? null}
-                                isSaving={isSaving}
-                                onSubmit={async (customerName) => {
-                                  if (!customerName) {
-                                    if (cellReservation) {
-                                      await clearReservationMutation.mutateAsync(
-                                        cellReservation.id,
-                                      );
-                                      await refreshWeek();
-                                    }
-
-                                    return;
-                                  }
-
-                                  const searchResponse = await searchCustomers({
-                                    query: customerName,
-                                  });
-                                  const exactMatches =
-                                    searchResponse.customers.filter(
-                                      (customer) =>
-                                        customer.name.toLowerCase() ===
-                                        customerName.toLowerCase(),
-                                    );
-
-                                  if (exactMatches.length > 1) {
-                                    throw new Error(
-                                      'Multiple customers share that name. Use a more specific customer name.',
-                                    );
-                                  }
-
-                                  const matchedCustomer = exactMatches[0];
-                                  const customerId = matchedCustomer
-                                    ? matchedCustomer.id
-                                    : (
-                                        await createCustomerMutation.mutateAsync(
-                                          {
-                                            name: customerName,
-                                          },
-                                        )
-                                      ).customer.id;
-
-                                  if (cellReservation) {
-                                    await updateReservationMutation.mutateAsync(
-                                      {
-                                        id: cellReservation.id,
-                                        customerId,
-                                      },
-                                    );
-                                  } else {
-                                    await createReservationMutation.mutateAsync(
-                                      {
-                                        courtId: court.id,
-                                        customerId,
-                                        startsAt: createSlotDateTime(
-                                          selectedDay.date,
-                                          slot.startTime,
-                                        ),
-                                      },
-                                    );
-                                  }
-
-                                  await refreshWeek();
-                                }}
-                                status={reservation ? 'reserved' : 'free'}
-                              />
-                            </TableCell>
-                          );
-                        })}
-                      </TableRow>
+                        {court.name}
+                      </TableHead>
                     ))}
-                  </TableBody>
-                </Table>
-              </div>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {schedule.slots.map((slot) => (
+                    <TableRow
+                      className="border-b border-slate-900/10 bg-[#fffaf1]/92 hover:bg-[#fff6ea]"
+                      key={slot.startTime}
+                    >
+                      <TableCell className="border-r border-slate-900/10 bg-[#fcf5e8] px-5 py-3.5">
+                        <div className="font-semibold text-slate-900">
+                          {slot.label}
+                        </div>
+                        <div className="mt-1 text-xs uppercase tracking-[0.08em] text-slate-900/55">
+                          {formatSlotRange(slot.startMinutes, slot.endMinutes)}
+                        </div>
+                      </TableCell>
+                      {schedule.courts.map((court) => {
+                        const reservation = reservationMap.get(
+                          `${selectedDay.date}:${slot.startTime}:${court.id}`,
+                        );
+                        const cellReservation = reservation
+                          ? {
+                              id: reservation.id,
+                              customerEmail: reservation.customer.email,
+                              customerName: reservation.customer.name,
+                            }
+                          : null;
+
+                        return (
+                          <TableCell
+                            className="border-r border-slate-900/10 px-3 py-3 last:border-r-0"
+                            key={`${selectedDay.date}-${slot.startTime}-${court.id}`}
+                          >
+                            <EditableReservationCell
+                              customerEmail={
+                                cellReservation?.customerEmail ?? null
+                              }
+                              customerName={
+                                cellReservation?.customerName ?? null
+                              }
+                              isSaving={isSaving}
+                              onSubmit={async (customerName) => {
+                                if (!customerName) {
+                                  if (cellReservation) {
+                                    await clearReservationMutation.mutateAsync(
+                                      cellReservation.id,
+                                    );
+                                    await refreshWeek();
+                                  }
+
+                                  return;
+                                }
+
+                                const searchResponse = await searchCustomers({
+                                  query: customerName,
+                                });
+                                const exactMatches =
+                                  searchResponse.customers.filter(
+                                    (customer) =>
+                                      customer.name.toLowerCase() ===
+                                      customerName.toLowerCase(),
+                                  );
+
+                                if (exactMatches.length > 1) {
+                                  throw new Error(
+                                    'Multiple customers share that name. Use a more specific customer name.',
+                                  );
+                                }
+
+                                const matchedCustomer = exactMatches[0];
+                                const customerId = matchedCustomer
+                                  ? matchedCustomer.id
+                                  : (
+                                      await createCustomerMutation.mutateAsync({
+                                        name: customerName,
+                                      })
+                                    ).customer.id;
+
+                                if (cellReservation) {
+                                  await updateReservationMutation.mutateAsync({
+                                    id: cellReservation.id,
+                                    customerId,
+                                  });
+                                } else {
+                                  await createReservationMutation.mutateAsync({
+                                    courtId: court.id,
+                                    customerId,
+                                    startsAt: createSlotDateTime(
+                                      selectedDay.date,
+                                      slot.startTime,
+                                    ),
+                                  });
+                                }
+
+                                await refreshWeek();
+                              }}
+                              status={reservation ? 'reserved' : 'free'}
+                            />
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           ) : null}
         </CardContent>
       </Card>
