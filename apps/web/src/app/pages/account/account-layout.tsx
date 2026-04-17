@@ -5,14 +5,14 @@ import {
   useLocation,
   useOutletContext,
 } from 'react-router-dom';
-import { me, type AuthUser } from '../api/auth';
-import { getRedirectSearch } from '../utils/auth-redirect';
+import { me, type AuthUser } from '../../api/auth';
+import { getRedirectSearch } from '../../utils/auth-redirect';
 
 type AuthenticatedOutletContext = {
   user: AuthUser;
 };
 
-export function ProtectedLayout() {
+export function AccountLayout() {
   const location = useLocation();
   const meQuery = useQuery({
     queryKey: ['auth', 'me'],

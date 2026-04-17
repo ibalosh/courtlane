@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Button } from '@/app/components/ui/button';
+import { Button } from '@/components/ui/button';
 
 const courtSlots = [
   { time: '06:30', label: 'First serve', status: 'Open courts' },

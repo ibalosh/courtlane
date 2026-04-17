@@ -3,13 +3,14 @@ import {
   Navigate,
   RouterProvider,
 } from 'react-router-dom';
-import { ProtectedLayout } from './components/protected-layout';
-import { AccountPage } from './pages/account-page';
-import { DashboardPage } from './pages/dashboard-page';
 import { HomePage } from './pages/home-page';
-import { LoginPage } from './pages/login-page';
+import { AuthLayout } from './pages/public/auth-layout';
+import { AccountLayout } from './pages/account/account-layout';
+import { AccountPage } from './pages/account/account-page';
+import { DashboardPage } from './pages/account/dashboard-page';
+import { LoginPage } from './pages/public/login-page';
+import { SignupPage } from './pages/public/signup-page';
 import { RootPage } from './pages/root-page';
-import { SignupPage } from './pages/signup-page';
 
 export function createAppRouter() {
   return createBrowserRouter([
@@ -22,15 +23,20 @@ export function createAppRouter() {
           element: <HomePage />,
         },
         {
-          path: '/signup',
-          element: <SignupPage />,
+          element: <AuthLayout />,
+          children: [
+            {
+              path: '/signup',
+              element: <SignupPage />,
+            },
+            {
+              path: '/login',
+              element: <LoginPage />,
+            },
+          ],
         },
         {
-          path: '/login',
-          element: <LoginPage />,
-        },
-        {
-          element: <ProtectedLayout />,
+          element: <AccountLayout />,
           children: [
             {
               path: '/account',
