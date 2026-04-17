@@ -8,12 +8,12 @@ import {
 } from '@courtlane/contracts';
 import { AuthGuard } from '../auth/auth.guard';
 import { CurrentUser } from '../auth/current-user.decorator';
-import { ReservationsService } from './reservations.service';
+import { CustomersService } from './customers.service';
 
 @Controller('customers')
 @UseGuards(AuthGuard)
 export class CustomersController {
-  constructor(private readonly reservationsService: ReservationsService) {}
+  constructor(private readonly customersService: CustomersService) {}
 
   @Get()
   searchCustomers(
@@ -22,10 +22,7 @@ export class CustomersController {
   ): Promise<CustomerSearchResponseDto> {
     const searchQuery = customerSearchQuerySchema.parse(query);
 
-    return this.reservationsService.searchCustomers(
-      user.accountId,
-      searchQuery.query,
-    );
+    return this.customersService.searchCustomers(user.accountId, searchQuery.query);
   }
 
   @Post()
@@ -35,9 +32,6 @@ export class CustomersController {
   ): Promise<CreateCustomerResponseDto> {
     const createCustomerDto = createCustomerRequestSchema.parse(body);
 
-    return this.reservationsService.createCustomer(
-      user.accountId,
-      createCustomerDto,
-    );
+    return this.customersService.createCustomer(user.accountId, createCustomerDto);
   }
 }

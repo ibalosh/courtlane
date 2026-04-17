@@ -157,10 +157,10 @@ describe('reservation contracts', () => {
 
     expect(
       reservationIdParamsSchema.parse({
-        reservationId: '25',
+        id: '25',
       }),
     ).toEqual({
-      reservationId: 25,
+      id: 25,
     });
 
     expect(

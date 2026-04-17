@@ -86,7 +86,7 @@ export const createReservationRequestSchema = z.object({
 });
 
 export const reservationIdParamsSchema = z.object({
-  reservationId: z.coerce.number().int().positive(),
+  id: z.coerce.number().int().positive(),
 });
 
 export const updateReservationRequestSchema = z.object({
