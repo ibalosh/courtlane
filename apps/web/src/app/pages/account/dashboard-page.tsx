@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createCustomer, searchCustomers } from '../../api/customers';
+import { createCustomer } from '../../api/customers';
 import {
   clearReservation,
   createReservation,
@@ -239,7 +239,10 @@ export function DashboardPage() {
                                 cellReservation?.customerName ?? null
                               }
                               isSaving={isSaving}
-                              onSubmit={async (customerName) => {
+                              onSubmit={async (
+                                selectedCustomer,
+                                customerName,
+                              ) => {
                                 if (!customerName) {
                                   if (cellReservation) {
                                     await clearReservationMutation.mutateAsync(
@@ -251,30 +254,13 @@ export function DashboardPage() {
                                   return;
                                 }
 
-                                const searchResponse = await searchCustomers({
-                                  query: customerName,
-                                });
-                                const exactMatches =
-                                  searchResponse.customers.filter(
-                                    (customer) =>
-                                      customer.name.toLowerCase() ===
-                                      customerName.toLowerCase(),
-                                  );
-
-                                if (exactMatches.length > 1) {
-                                  throw new Error(
-                                    'Multiple customers share that name. Use a more specific customer name.',
-                                  );
-                                }
-
-                                const matchedCustomer = exactMatches[0];
-                                const customerId = matchedCustomer
-                                  ? matchedCustomer.id
-                                  : (
-                                      await createCustomerMutation.mutateAsync({
-                                        name: customerName,
-                                      })
-                                    ).customer.id;
+                                const customerId =
+                                  selectedCustomer?.id ??
+                                  (
+                                    await createCustomerMutation.mutateAsync({
+                                      name: customerName,
+                                    })
+                                  ).customer.id;
 
                                 if (cellReservation) {
                                   await updateReservationMutation.mutateAsync({
