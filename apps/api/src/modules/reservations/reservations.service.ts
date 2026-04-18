@@ -9,8 +9,6 @@ import type {
   UpdateReservationRequestDto,
   WeekScheduleResponseDto,
 } from '@courtlane/contracts';
-import { prisma } from '@courtlane/db';
-import { Prisma } from '@prisma/client';
 import {
   createReservationWeekDays,
   createReservationWeekRange,
@@ -21,6 +19,16 @@ import {
   getReservationSlotEndDate,
   isValidReservationSlotStart,
 } from './reservation-slot.utils';
+import {
+  createReservation,
+  deleteReservationForAccount,
+  findCourtForAccount,
+  findCustomerForAccount,
+  findReservationForAccount,
+  listCourtsForWeek,
+  listReservationsForWeek,
+  updateReservationCustomer,
+} from './reservations.db';
 
 @Injectable()
 export class ReservationsService {
@@ -35,25 +43,8 @@ export class ReservationsService {
     }
 
     const [court, customer] = await Promise.all([
-      prisma.court.findFirst({
-        where: {
-          id: input.courtId,
-          accountId,
-          isActive: true,
-        },
-        select: {
-          id: true,
-        },
-      }),
-      prisma.customer.findFirst({
-        where: {
-          id: input.customerId,
-          accountId,
-        },
-        select: {
-          id: true,
-        },
-      }),
+      findCourtForAccount(accountId, input.courtId),
+      findCustomerForAccount(accountId, input.customerId),
     ]);
 
     if (!court) {
@@ -64,41 +55,15 @@ export class ReservationsService {
       throw new NotFoundException('Customer not found.');
     }
 
-    try {
-      const reservation = await prisma.reservation.create({
-        data: {
-          accountId,
-          courtId: input.courtId,
-          customerId: input.customerId,
-          startsAt,
-          endsAt: getReservationSlotEndDate(startsAt),
-        },
-        select: {
-          id: true,
-          courtId: true,
-          startsAt: true,
-          endsAt: true,
-          customer: {
-            select: {
-              id: true,
-              name: true,
-              email: true,
-            },
-          },
-        },
-      });
+    const reservation = await createReservation({
+      accountId,
+      courtId: input.courtId,
+      customerId: input.customerId,
+      startsAt,
+      endsAt: getReservationSlotEndDate(startsAt),
+    });
 
-      return this.toReservationResponse(reservation);
-    } catch (error) {
-      if (
-        error instanceof Prisma.PrismaClientKnownRequestError &&
-        error.code === 'P2002'
-      ) {
-        throw new ConflictException('That court slot is already reserved.');
-      }
-
-      throw error;
-    }
+    return this.toReservationResponse(reservation);
   }
 
   async updateReservation(
@@ -107,24 +72,8 @@ export class ReservationsService {
     input: UpdateReservationRequestDto,
   ): Promise<ReservationResponseDto['reservation']> {
     const [reservation, customer] = await Promise.all([
-      prisma.reservation.findFirst({
-        where: {
-          id: reservationId,
-          accountId,
-        },
-        select: {
-          id: true,
-        },
-      }),
-      prisma.customer.findFirst({
-        where: {
-          id: input.customerId,
-          accountId,
-        },
-        select: {
-          id: true,
-        },
-      }),
+      findReservationForAccount(accountId, reservationId),
+      findCustomerForAccount(accountId, input.customerId),
     ]);
 
     if (!reservation) {
@@ -135,27 +84,10 @@ export class ReservationsService {
       throw new NotFoundException('Customer not found.');
     }
 
-    const updatedReservation = await prisma.reservation.update({
-      where: {
-        id: reservationId,
-      },
-      data: {
-        customerId: input.customerId,
-      },
-      select: {
-        id: true,
-        courtId: true,
-        startsAt: true,
-        endsAt: true,
-        customer: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-          },
-        },
-      },
-    });
+    const updatedReservation = await updateReservationCustomer(
+      reservationId,
+      input.customerId,
+    );
 
     return this.toReservationResponse(updatedReservation);
   }
@@ -164,12 +96,7 @@ export class ReservationsService {
     accountId: number,
     reservationId: number,
   ): Promise<void> {
-    const deleted = await prisma.reservation.deleteMany({
-      where: {
-        id: reservationId,
-        accountId,
-      },
-    });
+    const deleted = await deleteReservationForAccount(accountId, reservationId);
 
     if (deleted.count === 0) {
       throw new NotFoundException('Reservation not found.');
@@ -184,48 +111,8 @@ export class ReservationsService {
       createReservationWeekRange(startDate);
 
     const [courts, reservations] = await Promise.all([
-      prisma.court.findMany({
-        where: {
-          accountId,
-          isActive: true,
-        },
-        orderBy: {
-          sortOrder: 'asc',
-        },
-        select: {
-          id: true,
-          name: true,
-          sortOrder: true,
-        },
-      }),
-      prisma.reservation.findMany({
-        where: {
-          accountId,
-          startsAt: {
-            gte: weekStart,
-            lt: nextWeekStart,
-          },
-          court: {
-            isActive: true,
-          },
-        },
-        orderBy: {
-          startsAt: 'asc',
-        },
-        select: {
-          id: true,
-          courtId: true,
-          startsAt: true,
-          endsAt: true,
-          customer: {
-            select: {
-              id: true,
-              name: true,
-              email: true,
-            },
-          },
-        },
-      }),
+      listCourtsForWeek(accountId),
+      listReservationsForWeek(accountId, weekStart, nextWeekStart),
     ]);
 
     return {
