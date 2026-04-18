@@ -9,7 +9,6 @@ import type {
   UpdateReservationRequestDto,
   WeekScheduleResponseDto,
 } from '@courtlane/contracts';
-import { weekScheduleResponseSchema } from '@courtlane/contracts';
 import { prisma } from '@courtlane/db';
 import { Prisma } from '@prisma/client';
 import {
@@ -229,7 +228,7 @@ export class ReservationsService {
       }),
     ]);
 
-    return weekScheduleResponseSchema.parse({
+    return {
       week: {
         start: formatReservationDate(weekStart),
         end: formatReservationDate(weekEnd),
@@ -240,7 +239,7 @@ export class ReservationsService {
       reservations: reservations.map((reservation) =>
         this.toReservationResponse(reservation),
       ),
-    });
+    };
   }
 
   private toReservationResponse(reservation: {

@@ -15,12 +15,18 @@ export class OptionalAuthGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<AuthenticatedRequest>();
     const sessionToken = request.cookies?.[SESSION_COOKIE_NAME] ?? null;
+    await this.attachUserToTheRequest(request, sessionToken);
 
+    return true;
+  }
+
+  private async attachUserToTheRequest(
+    request: AuthenticatedRequest,
+    sessionToken: string,
+  ) {
     request.user = sessionToken
       ? await this.sessionService.getUser(sessionToken)
       : null;
-
-    return true;
   }
 }
 

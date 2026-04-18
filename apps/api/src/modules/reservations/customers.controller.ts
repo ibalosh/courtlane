@@ -1,14 +1,28 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
+import {
+  createCustomerResponseSchema,
   createCustomerRequestSchema,
+  type CreateCustomerRequestDto,
   type CreateCustomerResponseDto,
+  customerSearchResponseSchema,
   customerSearchQuerySchema,
+  type CustomerSearchQueryDto,
   type CustomerSearchResponseDto,
   type AuthUserDto,
 } from '@courtlane/contracts';
 import { AuthGuard } from '../auth/auth.guard';
 import { CurrentUser } from '../auth/current-user.decorator';
 import { CustomersService } from './customers.service';
+import { ValidateBySchemaPipe } from '../../common/pipes';
+import { ValidateResponseBySchemaInterceptor } from '../../common/interceptors';
 
 @Controller('customers')
 @UseGuards(AuthGuard)
@@ -16,12 +30,14 @@ export class CustomersController {
   constructor(private readonly customersService: CustomersService) {}
 
   @Get()
+  @UseInterceptors(
+    new ValidateResponseBySchemaInterceptor(customerSearchResponseSchema),
+  )
   searchCustomers(
-    @Query() query: unknown,
+    @Query(new ValidateBySchemaPipe(customerSearchQuerySchema))
+    searchQuery: CustomerSearchQueryDto,
     @CurrentUser() user: AuthUserDto,
   ): Promise<CustomerSearchResponseDto> {
-    const searchQuery = customerSearchQuerySchema.parse(query);
-
     return this.customersService.searchCustomers(
       user.accountId,
       searchQuery.query,
@@ -29,12 +45,14 @@ export class CustomersController {
   }
 
   @Post()
+  @UseInterceptors(
+    new ValidateResponseBySchemaInterceptor(createCustomerResponseSchema),
+  )
   createCustomer(
-    @Body() body: unknown,
+    @Body(new ValidateBySchemaPipe(createCustomerRequestSchema))
+    createCustomerDto: CreateCustomerRequestDto,
     @CurrentUser() user: AuthUserDto,
   ): Promise<CreateCustomerResponseDto> {
-    const createCustomerDto = createCustomerRequestSchema.parse(body);
-
     return this.customersService.createCustomer(
       user.accountId,
       createCustomerDto,
