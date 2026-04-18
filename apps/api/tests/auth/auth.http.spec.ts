@@ -96,7 +96,11 @@ describe('Auth HTTP', () => {
       });
 
     expect(response.status).toBe(403);
-    expect(response.body).toEqual({ message: 'Invalid request origin' });
+    expect(response.body).toEqual({
+      message: 'Invalid request origin',
+      error: 'Forbidden',
+      statusCode: 403,
+    });
   });
 
   it('allows state-changing requests with an allowed referer', async () => {
@@ -125,7 +129,11 @@ describe('Auth HTTP', () => {
       });
 
     expect(response.status).toBe(403);
-    expect(response.body).toEqual({ message: 'Invalid referer header' });
+    expect(response.body).toEqual({
+      message: 'Invalid referer header',
+      error: 'Forbidden',
+      statusCode: 403,
+    });
   });
 
   it('rejects state-changing requests without origin headers', async () => {
@@ -140,6 +148,10 @@ describe('Auth HTTP', () => {
       });
 
     expect(response.status).toBe(403);
-    expect(response.body).toEqual({ message: 'Missing request origin' });
+    expect(response.body).toEqual({
+      message: 'Missing request origin',
+      error: 'Forbidden',
+      statusCode: 403,
+    });
   });
 });

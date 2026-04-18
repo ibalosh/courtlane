@@ -155,3 +155,4 @@ tmp
 
 # Prisma generated files
 libs/db/src/generated/
+package-lock.json

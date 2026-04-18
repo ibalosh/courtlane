@@ -1,3 +1,5 @@
+import type { HttpErrorResponseDto } from '@courtlane/contracts';
+
 const API_BASE_URL =
   import.meta.env.API_BASE_URL ?? 'http://localhost:3000/api';
 
@@ -12,8 +14,11 @@ export async function request<T>(path: string, init?: RequestInit): Promise<T> {
   });
 
   if (!response.ok) {
-    const message = await response.text();
-    throw new Error(message || 'Request failed.');
+    const error = (await response
+      .json()
+      .catch(() => null)) as HttpErrorResponseDto | null;
+
+    throw new Error(error?.message ?? 'Request failed.');
   }
 
   return (await response.json()) as Promise<T>;

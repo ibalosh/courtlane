@@ -131,17 +131,3 @@
     @apply font-sans;
   }
 }
-
-@layer components {
-  .app-page-shell {
-    @apply min-h-screen;
-    background-image:
-      radial-gradient(circle at top, rgba(242, 201, 76, 0.45), transparent 28%),
-      radial-gradient(
-        circle at bottom right,
-        rgba(125, 211, 252, 0.2),
-        transparent 24%
-      ),
-      linear-gradient(180deg, #f7f1e7 0%, #efe5d1 52%, #ddd9c7 100%);
-  }
-}

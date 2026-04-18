@@ -1,79 +1,57 @@
-import { FormEvent, useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { login, type MeResponse } from '../../api/auth';
-import { getSafeRedirectPath } from '../../utils/auth-redirect';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { type SubmitEventHandler, useState } from 'react';
+import { login } from '../../api/auth';
+import { AuthForm } from '../../components/public/auth-form';
+import { AuthField } from '../../components/public/auth-field';
+import { useAuthMutation } from '../../hooks/use-auth-mutation';
+import { AuthPage } from './auth-page';
 
 export function LoginPage() {
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const queryClient = useQueryClient();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const redirectPath = getSafeRedirectPath(searchParams.get('redirect'));
 
-  const loginMutation = useMutation({
+  const { clearError, error, isPending, submit } = useAuthMutation({
     mutationFn: login,
-    onSuccess: async (response) => {
-      queryClient.setQueryData<MeResponse>(['auth', 'me'], {
-        user: response.user,
-      });
-      await navigate(redirectPath, { replace: true });
-    },
-    onError: (submissionError) => {
-      setError(
-        submissionError instanceof Error
-          ? submissionError.message
-          : 'Login failed.',
-      );
-    },
+    submitErrorMessage: 'Login failed.',
   });
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  const handleSubmit: SubmitEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
-    setError('');
-    await loginMutation.mutateAsync({ email, password });
-  }
+    clearError();
+    await submit({ email, password });
+  };
 
   return (
-    <form className="grid gap-4" onSubmit={handleSubmit}>
-      <div className="grid gap-2">
-        <Label htmlFor="email">Email</Label>
-        <Input
+    <AuthPage
+      altAction="Sign up"
+      altLabel="Need an account?"
+      altPath="/signup"
+      description="Log in to manage your bookings and account."
+      title="Welcome back"
+    >
+      <AuthForm
+        error={error}
+        isSubmitting={isPending}
+        onSubmit={handleSubmit}
+        submitLabel="Log in"
+        submittingLabel="Logging in..."
+      >
+        <AuthField
           autoComplete="email"
-          aria-label="Email"
           id="email"
-          name="email"
+          label="Email"
           onChange={(event) => setEmail(event.target.value)}
-          required
           type="email"
           value={email}
         />
-      </div>
-
-      <div className="grid gap-2">
-        <Label htmlFor="password">Password</Label>
-        <Input
+        <AuthField
           autoComplete="current-password"
-          aria-label="Password"
           id="password"
-          name="password"
+          label="Password"
           onChange={(event) => setPassword(event.target.value)}
-          required
           type="password"
           value={password}
         />
-      </div>
-
-      {error ? <p className="text-destructive text-sm">{error}</p> : null}
-
-      <Button type="submit" disabled={loginMutation.isPending}>
-        {loginMutation.isPending ? 'Logging in...' : 'Log in'}
-      </Button>
-    </form>
+      </AuthForm>
+    </AuthPage>
   );
 }
