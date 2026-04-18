@@ -44,6 +44,12 @@ export function useAuthMutation<TInput>({
     clearError,
     error,
     isPending: mutation.isPending,
-    submit: mutation.mutateAsync,
+    submit: async (input: TInput) => {
+      try {
+        await mutation.mutateAsync(input);
+      } catch {
+        // Keep the rejection local: onError already updates the UI state.
+      }
+    },
   };
 }

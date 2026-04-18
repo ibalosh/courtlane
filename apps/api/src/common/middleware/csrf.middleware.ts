@@ -1,5 +1,5 @@
-import { Injectable, NestMiddleware } from '@nestjs/common';
-import type { NextFunction, Request, Response } from 'express';
+import { ForbiddenException, Injectable, NestMiddleware } from '@nestjs/common';
+import type { NextFunction, Request } from 'express';
 import { env } from '../../config/env';
 
 const SAFE_METHODS = new Set(['GET', 'HEAD', 'OPTIONS']);
@@ -7,7 +7,7 @@ const ALLOWED_ORIGINS = new Set([env.webAppUrl]);
 
 @Injectable()
 export class CsrfMiddleware implements NestMiddleware {
-  use(request: Request, response: Response, next: NextFunction) {
+  use(request: Request, next: NextFunction) {
     if (SAFE_METHODS.has(request.method)) {
       next();
       return;
@@ -29,24 +29,16 @@ export class CsrfMiddleware implements NestMiddleware {
           return;
         }
       } catch {
-        response.status(403).json({
-          message: 'Invalid referer header',
-        });
-        return;
+        throw new ForbiddenException('Invalid referer header');
       }
     }
 
     // API clients without Origin or Referer are not supported for unsafe
     // cookie-authenticated requests.
     if (!origin && !referer) {
-      response.status(403).json({
-        message: 'Missing request origin',
-      });
-      return;
+      throw new ForbiddenException('Missing request origin');
     }
 
-    response.status(403).json({
-      message: 'Invalid request origin',
-    });
+    throw new ForbiddenException('Invalid request origin');
   }
 }
