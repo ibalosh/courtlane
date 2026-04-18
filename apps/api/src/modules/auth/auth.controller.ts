@@ -7,13 +7,14 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import type { AuthUserDto } from '@courtlane/contracts';
+import type { AuthUserDto, LoginDto, SignupDto } from '@courtlane/contracts';
 import { AuthService } from './auth.service';
 import { loginRequestSchema, signupRequestSchema } from '@courtlane/contracts';
 import { Request, Response } from 'express';
 import { getSessionCookieOptions, SESSION_COOKIE_NAME } from './auth.cookies';
 import { CurrentUser } from './current-user.decorator';
 import { OptionalAuthGuard } from './auth.guard';
+import { ValidateBySchemaPipe } from '../../common/pipes';
 
 @Controller('auth')
 export class AuthController {
@@ -21,10 +22,9 @@ export class AuthController {
 
   @Post('signup')
   async signup(
-    @Body() body: unknown,
+    @Body(new ValidateBySchemaPipe(signupRequestSchema)) signupDto: SignupDto,
     @Res({ passthrough: true }) response: Response,
   ) {
-    const signupDto = signupRequestSchema.parse(body);
     const signupResult = await this.authService.signup(signupDto);
 
     this.setSessionCookie(
@@ -38,10 +38,9 @@ export class AuthController {
 
   @Post('login')
   async login(
-    @Body() body: unknown,
+    @Body(new ValidateBySchemaPipe(loginRequestSchema)) loginDto: LoginDto,
     @Res({ passthrough: true }) response: Response,
   ) {
-    const loginDto = loginRequestSchema.parse(body);
     const loginResult = await this.authService.login(loginDto);
 
     this.setSessionCookie(
@@ -61,7 +60,6 @@ export class AuthController {
     const logoutResponse = await this.authService.logout(
       this.getSessionId(request),
     );
-
     this.clearSessionCookie(response);
 
     return logoutResponse;

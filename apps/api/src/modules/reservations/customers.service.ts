@@ -4,10 +4,6 @@ import type {
   CreateCustomerResponseDto,
   CustomerSearchResponseDto,
 } from '@courtlane/contracts';
-import {
-  createCustomerResponseSchema,
-  customerSearchResponseSchema,
-} from '@courtlane/contracts';
 import { prisma } from '@courtlane/db';
 import { Prisma } from '@prisma/client';
 
@@ -47,9 +43,7 @@ export class CustomersService {
       },
     });
 
-    return customerSearchResponseSchema.parse({
-      customers,
-    });
+    return { customers };
   }
 
   async createCustomer(
@@ -72,9 +66,7 @@ export class CustomersService {
         },
       });
 
-      return createCustomerResponseSchema.parse({
-        customer,
-      });
+      return { customer };
     } catch (error) {
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&
