@@ -7,13 +7,13 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import type { SafeParseSchema } from '../schema.types';
+import type { ParseSchema } from '../schema.types';
 
 @Injectable()
 export class ValidateResponseBySchemaInterceptor<T>
   implements NestInterceptor<unknown, T>
 {
-  constructor(private readonly schema: SafeParseSchema<T>) {}
+  constructor(private readonly schema: ParseSchema<T>) {}
 
   intercept(
     _context: ExecutionContext,
