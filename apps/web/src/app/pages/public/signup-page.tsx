@@ -1,93 +1,57 @@
-import { SubmitEvent, useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { signup, type MeResponse } from '../../api/auth';
-import { getSafeRedirectPath } from '../../utils/auth-redirect';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { type SubmitEventHandler, useState } from 'react';
+import { signup } from '../../api/auth';
+import { AuthForm } from '../../components/public/auth-form';
+import { AuthField } from '../../components/public/auth-field';
+import { useAuthMutation } from '../../hooks/use-auth-mutation';
 
 export function SignupPage() {
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const queryClient = useQueryClient();
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const redirectPath = getSafeRedirectPath(searchParams.get('redirect'));
-  const signupMutation = useMutation({
+
+  const { clearError, error, isPending, submit } = useAuthMutation({
     mutationFn: signup,
-    onSuccess: async (response) => {
-      queryClient.setQueryData<MeResponse>(['auth', 'me'], {
-        user: response.user,
-      });
-      await navigate(redirectPath, { replace: true });
-    },
-    onError: (submissionError) => {
-      setError(
-        submissionError instanceof Error
-          ? submissionError.message
-          : 'Signup failed.',
-      );
-    },
+    submitErrorMessage: 'Signup failed.',
   });
 
-  async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
+  const handleSubmit: SubmitEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
-    setError('');
-    await signupMutation.mutateAsync({ email, name, password });
-  }
+    clearError();
+    await submit({ email, name, password });
+  };
 
   return (
-    <form className="grid gap-4" onSubmit={handleSubmit}>
-      <div className="grid gap-2">
-        <Label htmlFor="name">Name</Label>
-        <Input
-          autoComplete="name"
-          aria-label="Name"
-          id="name"
-          name="name"
-          onChange={(event) => setName(event.target.value)}
-          required
-          value={name}
-        />
-      </div>
-
-      <div className="grid gap-2">
-        <Label htmlFor="email">Email</Label>
-        <Input
-          autoComplete="email"
-          aria-label="Email"
-          id="email"
-          name="email"
-          onChange={(event) => setEmail(event.target.value)}
-          required
-          type="email"
-          value={email}
-        />
-      </div>
-
-      <div className="grid gap-2">
-        <Label htmlFor="password">Password</Label>
-        <Input
-          autoComplete="new-password"
-          aria-label="Password"
-          id="password"
-          minLength={8}
-          name="password"
-          onChange={(event) => setPassword(event.target.value)}
-          required
-          type="password"
-          value={password}
-        />
-      </div>
-
-      {error ? <p className="text-destructive text-sm">{error}</p> : null}
-
-      <Button type="submit" disabled={signupMutation.isPending}>
-        {signupMutation.isPending ? 'Creating account...' : 'Create account'}
-      </Button>
-    </form>
+    <AuthForm
+      error={error}
+      isSubmitting={isPending}
+      onSubmit={handleSubmit}
+      submitLabel="Create account"
+      submittingLabel="Creating account..."
+    >
+      <AuthField
+        autoComplete="name"
+        id="name"
+        onChange={(event) => setName(event.target.value)}
+        label="Name"
+        value={name}
+      />
+      <AuthField
+        autoComplete="email"
+        id="email"
+        onChange={(event) => setEmail(event.target.value)}
+        label="Email"
+        type="email"
+        value={email}
+      />
+      <AuthField
+        autoComplete="new-password"
+        id="password"
+        minLength={8}
+        onChange={(event) => setPassword(event.target.value)}
+        label="Password"
+        type="password"
+        value={password}
+      />
+    </AuthForm>
   );
 }
