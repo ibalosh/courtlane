@@ -10,47 +10,40 @@ import { AccountPage } from './pages/account/account-page';
 import { DashboardPage } from './pages/account/dashboard-page';
 import { LoginPage } from './pages/public/login-page';
 import { SignupPage } from './pages/public/signup-page';
-import { RootPage } from './pages/root-page';
 
 export function createAppRouter() {
   return createBrowserRouter([
     {
       path: '/',
-      element: <RootPage />,
+      element: <HomePage />,
+    },
+    {
+      element: <AuthLayout />,
       children: [
         {
-          index: true,
-          element: <HomePage />,
+          path: '/signup',
+          element: <SignupPage />,
         },
         {
-          element: <AuthLayout />,
-          children: [
-            {
-              path: '/signup',
-              element: <SignupPage />,
-            },
-            {
-              path: '/login',
-              element: <LoginPage />,
-            },
-          ],
+          path: '/login',
+          element: <LoginPage />,
         },
+      ],
+    },
+    {
+      path: '/account',
+      element: <AccountLayout />,
+      children: [
         {
-          element: <AccountLayout />,
+          element: <AccountPage />,
           children: [
             {
-              path: '/account',
-              element: <AccountPage />,
-              children: [
-                {
-                  index: true,
-                  element: <Navigate replace to="/account/dashboard-page" />,
-                },
-                {
-                  path: 'dashboard-page',
-                  element: <DashboardPage />,
-                },
-              ],
+              index: true,
+              element: <Navigate replace to="/account/dashboard-page" />,
+            },
+            {
+              path: 'dashboard-page',
+              element: <DashboardPage />,
             },
           ],
         },
