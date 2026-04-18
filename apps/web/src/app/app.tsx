@@ -4,7 +4,6 @@ import {
   RouterProvider,
 } from 'react-router-dom';
 import { HomePage } from './pages/home-page';
-import { AuthLayout } from './pages/public/auth-layout';
 import { AccountLayout } from './pages/account/account-layout';
 import { AccountPage } from './pages/account/account-page';
 import { DashboardPage } from './pages/account/dashboard-page';
@@ -18,17 +17,12 @@ export function createAppRouter() {
       element: <HomePage />,
     },
     {
-      element: <AuthLayout />,
-      children: [
-        {
-          path: '/signup',
-          element: <SignupPage />,
-        },
-        {
-          path: '/login',
-          element: <LoginPage />,
-        },
-      ],
+      path: '/signup',
+      element: <SignupPage />,
+    },
+    {
+      path: '/login',
+      element: <LoginPage />,
     },
     {
       path: '/account',

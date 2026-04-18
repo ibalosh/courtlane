@@ -18,17 +18,3 @@ export function getRedirectSearch(pathname: string, search = '', hash = '') {
 
   return `?${params.toString()}`;
 }
-
-export function getAuthPageHref(
-  pathname: string,
-  redirect: string | null | undefined,
-) {
-  const safeRedirect = getSafeRedirectPath(redirect, '');
-
-  if (!safeRedirect) {
-    return pathname;
-  }
-
-  const params = new URLSearchParams({ redirect: safeRedirect });
-  return `${pathname}?${params.toString()}`;
-}
