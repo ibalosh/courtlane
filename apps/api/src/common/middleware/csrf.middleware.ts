@@ -7,7 +7,7 @@ const ALLOWED_ORIGINS = new Set([env.webAppUrl]);
 
 @Injectable()
 export class CsrfMiddleware implements NestMiddleware {
-  use(request: Request, next: NextFunction) {
+  use(request: Request, _response: unknown, next: NextFunction) {
     if (SAFE_METHODS.has(request.method)) {
       next();
       return;
