@@ -36,10 +36,12 @@ export class CsrfMiddleware implements NestMiddleware {
       }
     }
 
-    // Non-browser clients may omit both headers entirely, so only reject
-    // requests that present an explicit cross-site Origin/Referer.
+    // API clients without Origin or Referer are not supported for unsafe
+    // cookie-authenticated requests.
     if (!origin && !referer) {
-      next();
+      response.status(403).json({
+        message: 'Missing request origin',
+      });
       return;
     }
 

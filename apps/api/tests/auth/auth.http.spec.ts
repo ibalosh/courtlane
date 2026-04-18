@@ -5,6 +5,12 @@ import { faker } from '@faker-js/faker';
 import { env } from '../../src/config/env';
 import { closeTestApp, createTestApp } from '../support/test-app';
 
+function signupRequest(app: INestApplication) {
+  return request(app.getHttpServer())
+    .post('/auth/signup')
+    .set('Origin', env.webAppUrl);
+}
+
 describe('Auth HTTP', () => {
   let app: INestApplication;
 
@@ -18,13 +24,11 @@ describe('Auth HTTP', () => {
 
   it('creates a user and session cookie on signup', async () => {
     const email = faker.internet.email().toLowerCase();
-    const response = await request(app.getHttpServer())
-      .post('/auth/signup')
-      .send({
-        email,
-        name: 'Test User',
-        password: 'password123',
-      });
+    const response = await signupRequest(app).send({
+      email,
+      name: 'Test User',
+      password: 'password123',
+    });
 
     expect(response.status).toBe(201);
     expect(response.body.user).toEqual({
@@ -43,13 +47,11 @@ describe('Auth HTTP', () => {
 
   it('returns the authenticated user from /auth/me with a valid session', async () => {
     const email = faker.internet.email().toLowerCase();
-    const signupResponse = await request(app.getHttpServer())
-      .post('/auth/signup')
-      .send({
-        email,
-        name: 'Session User',
-        password: 'password123',
-      });
+    const signupResponse = await signupRequest(app).send({
+      email,
+      name: 'Session User',
+      password: 'password123',
+    });
 
     const response = await request(app.getHttpServer())
       .get('/auth/me')
@@ -74,14 +76,11 @@ describe('Auth HTTP', () => {
   it('allows state-changing requests from the configured web origin', async () => {
     const email = faker.internet.email().toLowerCase();
 
-    const response = await request(app.getHttpServer())
-      .post('/auth/signup')
-      .set('Origin', env.webAppUrl)
-      .send({
-        email,
-        name: 'Allowed Origin',
-        password: 'password123',
-      });
+    const response = await signupRequest(app).send({
+      email,
+      name: 'Allowed Origin',
+      password: 'password123',
+    });
 
     expect(response.status).toBe(201);
   });
@@ -129,7 +128,7 @@ describe('Auth HTTP', () => {
     expect(response.body).toEqual({ message: 'Invalid referer header' });
   });
 
-  it('allows state-changing requests without an origin header', async () => {
+  it('rejects state-changing requests without origin headers', async () => {
     const email = faker.internet.email().toLowerCase();
 
     const response = await request(app.getHttpServer())
@@ -140,6 +139,7 @@ describe('Auth HTTP', () => {
         password: 'password123',
       });
 
-    expect(response.status).toBe(201);
+    expect(response.status).toBe(403);
+    expect(response.body).toEqual({ message: 'Missing request origin' });
   });
 });
