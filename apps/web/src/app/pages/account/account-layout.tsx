@@ -12,6 +12,10 @@ type AuthenticatedOutletContext = {
   user: AuthUser;
 };
 
+export function useAuthenticatedUser() {
+  return useOutletContext<AuthenticatedOutletContext>().user;
+}
+
 export function AccountLayout() {
   const location = useLocation();
   const meQuery = useQuery({
@@ -48,8 +52,4 @@ export function AccountLayout() {
   }
 
   return <Outlet context={{ user }} />;
-}
-
-export function useAuthenticatedUser() {
-  return useOutletContext<AuthenticatedOutletContext>().user;
 }
