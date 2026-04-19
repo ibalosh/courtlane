@@ -1,4 +1,4 @@
-import { EditableReservationCell } from '../../../pages/account/editable-reservation-cell';
+import { ReservationAssignmentCell } from '../reservation-cell/reservation-assignment-cell';
 import { formatSlotRange } from '../../../pages/account/dashboard-page.utils';
 import type {
   DashboardReservationMap,
@@ -69,7 +69,7 @@ export function DashboardScheduleTable({
                     className="border-r last:border-r-0"
                     key={`${selectedDay.date}-${slot.startTime}-${court.id}`}
                   >
-                    <EditableReservationCell
+                    <ReservationAssignmentCell
                       customerEmail={reservation?.customer.email ?? null}
                       customerName={reservation?.customer.name ?? null}
                       dayLabel={`${selectedDay.label} ${slot.label}`}

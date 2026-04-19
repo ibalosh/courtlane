@@ -10,10 +10,7 @@ export function DashboardMetricCard({
   value,
 }: DashboardMetricCardProps) {
   return (
-    <Card
-      className="gap-2 py-4 shadow-none bg-amber-50"
-      size="sm"
-    >
+    <Card className="gap-2 py-4 shadow-none bg-amber-50" size="sm">
       <CardContent className="space-y-1">
         <p className="text-muted-foreground text-xs font-semibold uppercase tracking-[0.16em]">
           {label}

@@ -44,10 +44,14 @@ export function DashboardScheduleState({
   return (
     <div
       className={cn(
-        'transition-all duration-200',
+        'grid gap-3 transition-all duration-200',
         isWeekTransitioning && 'translate-y-1 opacity-70',
       )}
     >
+      <p className="text-muted-foreground text-sm">
+        Click a slot to edit it in place. Press Enter to save, Escape to cancel,
+        and clear the field to remove an existing reservation.
+      </p>
       <DashboardScheduleTable
         isSaving={isSaving}
         reservationMap={reservationMap}

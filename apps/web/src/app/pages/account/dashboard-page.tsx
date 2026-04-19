@@ -1,13 +1,10 @@
-import { DashboardFooter } from '../../components/account/dashboard/dashboard-footer';
 import { DashboardHeader } from '../../components/account/dashboard/dashboard-header';
 import { DashboardScheduleState } from '../../components/account/dashboard/dashboard-schedule-state';
 import { DashboardWeekPicker } from '../../components/account/dashboard/dashboard-week-picker';
 import { useDashboardPage } from '../../hooks/use-dashboard-page';
-import { useAccountUser } from './account-page';
 import { Card, CardContent } from '@/components/ui/card';
 
 export function DashboardPage() {
-  const user = useAccountUser();
   const {
     goToNextWeek,
     goToPreviousWeek,
@@ -25,24 +22,21 @@ export function DashboardPage() {
   } = useDashboardPage();
 
   return (
-    <section className="grid gap-6">
-      <DashboardScheduleCard
-        isSaving={isSaving}
-        isWeekTransitioning={isWeekTransitioning}
-        metrics={metrics}
-        onNextWeek={goToNextWeek}
-        onPreviousWeek={goToPreviousWeek}
-        onSelectDate={selectDate}
-        reservationMap={reservationMap}
-        schedule={schedule}
-        scheduleQuery={scheduleQuery}
-        selectedDate={selectedDate}
-        selectedDay={selectedDay}
-        submitReservation={submitReservation}
-        weekLabel={weekLabel}
-      />
-      <DashboardFooter userName={user.name} />
-    </section>
+    <DashboardScheduleCard
+      isSaving={isSaving}
+      isWeekTransitioning={isWeekTransitioning}
+      metrics={metrics}
+      onNextWeek={goToNextWeek}
+      onPreviousWeek={goToPreviousWeek}
+      onSelectDate={selectDate}
+      reservationMap={reservationMap}
+      schedule={schedule}
+      scheduleQuery={scheduleQuery}
+      selectedDate={selectedDate}
+      selectedDay={selectedDay}
+      submitReservation={submitReservation}
+      weekLabel={weekLabel}
+    />
   );
 }
 
