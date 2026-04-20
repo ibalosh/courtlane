@@ -32,11 +32,7 @@ export function DashboardScheduleState({
   }
 
   if (scheduleQuery.isError) {
-    return (
-      <p className="text-sm text-destructive">
-        {scheduleQuery.error instanceof Error ? scheduleQuery.error.message : 'Failed to load weekly schedule.'}
-      </p>
-    );
+    return <p className="text-sm text-destructive">{scheduleQuery.error.message}</p>
   }
 
   return (
