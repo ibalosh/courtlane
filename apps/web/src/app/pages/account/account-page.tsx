@@ -28,11 +28,11 @@ export function AccountPage() {
   }
 
   return (
-      <div className="mx-auto grid w-full max-w-448 gap-6">
-        <AccountHeader isLoggingOut={logoutMutation.isPending} onLogout={handleLogout} userName={user.name} />
-        {logoutError ? <p className="text-[0.95rem] text-red-700">{logoutError}</p> : null}
-        <Outlet context={{ user }} />
-        <AccountFooter />
-      </div>
+    <div className="mx-auto grid w-full max-w-448 gap-6">
+      <AccountHeader isLoggingOut={logoutMutation.isPending} onLogout={handleLogout} userName={user.name} />
+      {logoutError ? <p className="text-[0.95rem] text-red-700">{logoutError}</p> : null}
+      <Outlet context={{ user }} />
+      <AccountFooter />
+    </div>
   );
 }
