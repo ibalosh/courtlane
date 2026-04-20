@@ -1,5 +1,5 @@
 import { DashboardHeader } from '../../components/account/dashboard/dashboard-header';
-import { DashboardScheduleState } from '../../components/account/dashboard/dashboard-schedule-state';
+import { DashboardSchedulePanel } from '../../components/account/dashboard/dashboard-schedule-panel';
 import { DashboardWeekPicker } from '../../components/account/dashboard/dashboard-week-picker';
 import { useDashboardPage } from '../../hooks/use-dashboard-page';
 import { Card, CardContent } from '@/components/ui/card';
@@ -34,7 +34,7 @@ export function DashboardPage() {
           selectedDate={selectedDate}
           weekLabel={weekLabel}
         />
-        <DashboardScheduleState
+        <DashboardSchedulePanel
           isSaving={isSaving}
           isWeekTransitioning={isWeekTransitioning}
           reservationMap={reservationMap}
