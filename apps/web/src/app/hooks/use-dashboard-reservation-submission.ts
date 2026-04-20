@@ -18,7 +18,7 @@ export function useDashboardReservationSubmission({ weekStart }: UseDashboardRes
 
   const queryClient = useQueryClient();
   async function refreshWeek() {
-    await queryClient.invalidateQueries({ queryKey: getWeekScheduleQueryKey(weekStart)});
+    await queryClient.invalidateQueries({ queryKey: getWeekScheduleQueryKey(weekStart) });
   }
 
   async function resolveCustomerId(customerId: number | null, customerName: string) {
@@ -26,7 +26,7 @@ export function useDashboardReservationSubmission({ weekStart }: UseDashboardRes
       return customerId;
     }
 
-    const response = await createCustomerMutation.mutateAsync({ name: customerName});
+    const response = await createCustomerMutation.mutateAsync({ name: customerName });
     return response.customer.id;
   }
 
@@ -45,14 +45,21 @@ export function useDashboardReservationSubmission({ weekStart }: UseDashboardRes
     customerId: number;
   }) {
     if (reservationId) {
-      await updateReservationMutation.mutateAsync({ customerId,id: reservationId});
+      await updateReservationMutation.mutateAsync({ customerId, id: reservationId });
       return;
     }
 
-    await createReservationMutation.mutateAsync({ courtId, customerId, startsAt: createSlotDateTime(date, startTime)});
+    await createReservationMutation.mutateAsync({ courtId, customerId, startsAt: createSlotDateTime(date, startTime) });
   }
 
-  async function submitReservation({ courtId, customer, customerName, date, reservationId, startTime}: DashboardSubmitReservationInput) {
+  async function submitReservation({
+    courtId,
+    customer,
+    customerName,
+    date,
+    reservationId,
+    startTime,
+  }: DashboardSubmitReservationInput) {
     const normalizedCustomerName = customerName?.trim() ?? '';
 
     if (!normalizedCustomerName) {

@@ -140,7 +140,7 @@ export function ReservationAssignmentCell({
   }
 
   return (
-    <div>
+    <div className="relative z-30">
       <div className="relative">
         <Input
           aria-label={customerEmail || ''}

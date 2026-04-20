@@ -19,7 +19,7 @@ export function ReservationAssignmentCellSuggestions({
   trimmedValue,
 }: ReservationAssignmentCellSuggestionsProps) {
   return (
-    <div className="absolute left-0 right-0  z-20 overflow-hidden rounded-3xl border border-slate-900/10 bg-white shadow-[0_18px_40px_rgba(15,23,42,0.14)]">
+    <div className="absolute top-full right-0 left-0 z-50 mt-2 overflow-hidden rounded-3xl border border-slate-900/10 bg-white shadow-[0_24px_56px_rgba(15,23,42,0.18)]">
       <div className="border-b border-slate-900/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
         Top matches
       </div>

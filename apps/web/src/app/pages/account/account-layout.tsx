@@ -37,7 +37,7 @@ export function AccountLayout() {
   }
 
   return (
-    <main className="grid min-h-screen place-items-center bg-[radial-gradient(circle_at_top,rgba(242,201,76,0.45),transparent_32%),linear-gradient(180deg,#f6f1e9_0%,#ece5d9_100%)] px-4 py-8 text-slate-900">
+    <main className="grid min-h-screen justify-items-center bg-[radial-gradient(circle_at_top,rgba(242,201,76,0.45),transparent_32%),linear-gradient(180deg,#f6f1e9_0%,#ece5d9_100%)] px-4 py-8 text-slate-900">
       <div className="mx-auto grid w-full max-w-448 gap-6">
         <AccountHeader isLoggingOut={isPending} onLogout={handleLogout} userName={user.name} />
         <AccountErrorMessage error={error} />

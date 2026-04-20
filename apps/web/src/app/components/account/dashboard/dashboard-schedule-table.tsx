@@ -28,7 +28,7 @@ export function DashboardScheduleTable({
   }
 
   return (
-    <div className="overflow-hidden rounded-2xl border">
+    <div className="overflow-visible rounded-2xl border bg-background">
       <Table className="table-fixed">
         <TableHeader>
           <TableRow className="bg-muted/50 hover:bg-muted/50">

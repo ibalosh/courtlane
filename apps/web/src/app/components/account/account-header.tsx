@@ -68,7 +68,7 @@ export function AccountHeader({ isLoggingOut, onLogout, userName }: AccountHeade
     <header className="flex flex-col lg:flex-row lg:justify-between">
       <BrandSection />
       <Nav>
-        <NavItem to="/account/dashboard-page">
+        <NavItem to="/account/dashboard">
           Signed in: <span className="font-semibold">{userName}</span>
         </NavItem>
         <NavLink
@@ -80,11 +80,23 @@ export function AccountHeader({ isLoggingOut, onLogout, userName }: AccountHeade
                 : 'text-slate-700 hover:bg-white/45 hover:text-slate-950',
             )
           }
-          to="/account/dashboard-page"
+          to="/account/dashboard"
         >
           Dashboard
         </NavLink>
-        <NavItem to="/account/dashboard-page">Courts</NavItem>
+        <NavLink
+          className={({ isActive }) =>
+            cn(
+              'rounded-full px-4 py-2 transition-all',
+              isActive
+                ? 'bg-slate-900 text-[#fff8ea] shadow-[0_12px_24px_rgba(15,23,42,0.14)]'
+                : 'text-slate-700 hover:bg-white/45 hover:text-slate-950',
+            )
+          }
+          to="/account/customers"
+        >
+          Customers
+        </NavLink>
         <NavButton
           className={cn(navItemStyle, isLoggingOut ? 'pointer-events-none text-slate-400' : undefined)}
           disabled={isLoggingOut}
