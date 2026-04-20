@@ -1,9 +1,6 @@
 const DEFAULT_AUTH_REDIRECT_PATH = '/account';
 
-export function getSafeRedirectPath(
-  redirect: string | null | undefined,
-  fallback = DEFAULT_AUTH_REDIRECT_PATH,
-) {
+export function getSafeRedirectPath(redirect: string | null | undefined, fallback = DEFAULT_AUTH_REDIRECT_PATH) {
   if (!redirect || !redirect.startsWith('/') || redirect.startsWith('//')) {
     return fallback;
   }

@@ -13,9 +13,7 @@ export type {
   CustomerSearchResponseDto as CustomerSearchResponse,
 };
 
-export function searchCustomers(
-  query: CustomerSearchQueryDto,
-): Promise<CustomerSearchResponseDto> {
+export function searchCustomers(query: CustomerSearchQueryDto): Promise<CustomerSearchResponseDto> {
   const search = new URLSearchParams({
     query: query.query,
   });
@@ -23,9 +21,7 @@ export function searchCustomers(
   return request<CustomerSearchResponseDto>(`/customers?${search.toString()}`);
 }
 
-export function createCustomer(
-  input: CreateCustomerRequestDto,
-): Promise<CreateCustomerResponseDto> {
+export function createCustomer(input: CreateCustomerRequestDto): Promise<CreateCustomerResponseDto> {
   return request<CreateCustomerResponseDto>('/customers', {
     method: 'POST',
     body: JSON.stringify(input),

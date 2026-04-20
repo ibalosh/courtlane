@@ -10,14 +10,7 @@ type AuthFormProps = {
   submittingLabel: string;
 };
 
-export function AuthForm({
-  children,
-  error,
-  isSubmitting,
-  onSubmit,
-  submitLabel,
-  submittingLabel,
-}: AuthFormProps) {
+export function AuthForm({ children, error, isSubmitting, onSubmit, submitLabel, submittingLabel }: AuthFormProps) {
   return (
     <form className="flex flex-col gap-4" onSubmit={onSubmit}>
       <div className="flex flex-col gap-2">{children}</div>

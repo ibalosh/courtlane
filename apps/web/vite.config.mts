@@ -24,12 +24,7 @@ export default defineConfig(({ mode }) => {
       port: webAppPort,
       host: webAppUrl.hostname,
     },
-    plugins: [
-      react(),
-      tailwindcss(),
-      nxViteTsPaths(),
-      nxCopyAssetsPlugin(['*.md']),
-    ],
+    plugins: [react(), tailwindcss(), nxViteTsPaths(), nxCopyAssetsPlugin(['*.md'])],
     resolve: {
       alias: {
         '@': path.resolve(import.meta.dirname, './src'),

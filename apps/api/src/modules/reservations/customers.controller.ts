@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Post,
-  Query,
-  UseGuards,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards, UseInterceptors } from '@nestjs/common';
 import {
   createCustomerResponseSchema,
   createCustomerRequestSchema,
@@ -30,32 +22,22 @@ export class CustomersController {
   constructor(private readonly customersService: CustomersService) {}
 
   @Get()
-  @UseInterceptors(
-    new ValidateResponseBySchemaInterceptor(customerSearchResponseSchema),
-  )
+  @UseInterceptors(new ValidateResponseBySchemaInterceptor(customerSearchResponseSchema))
   searchCustomers(
     @Query(new ValidateBySchemaPipe(customerSearchQuerySchema))
     searchQuery: CustomerSearchQueryDto,
     @CurrentUser() user: AuthUserDto,
   ): Promise<CustomerSearchResponseDto> {
-    return this.customersService.searchCustomers(
-      user.accountId,
-      searchQuery.query,
-    );
+    return this.customersService.searchCustomers(user.accountId, searchQuery.query);
   }
 
   @Post()
-  @UseInterceptors(
-    new ValidateResponseBySchemaInterceptor(createCustomerResponseSchema),
-  )
+  @UseInterceptors(new ValidateResponseBySchemaInterceptor(createCustomerResponseSchema))
   createCustomer(
     @Body(new ValidateBySchemaPipe(createCustomerRequestSchema))
     createCustomerDto: CreateCustomerRequestDto,
     @CurrentUser() user: AuthUserDto,
   ): Promise<CreateCustomerResponseDto> {
-    return this.customersService.createCustomer(
-      user.accountId,
-      createCustomerDto,
-    );
+    return this.customersService.createCustomer(user.accountId, createCustomerDto);
   }
 }

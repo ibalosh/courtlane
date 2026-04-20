@@ -1,9 +1,4 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import type { AuthenticatedRequest } from './auth.types';
 import { SESSION_COOKIE_NAME } from './auth.cookies';
 import { SessionService } from './session.service';
@@ -20,13 +15,8 @@ export class OptionalAuthGuard implements CanActivate {
     return true;
   }
 
-  private async attachUserToTheRequest(
-    request: AuthenticatedRequest,
-    sessionToken: string,
-  ) {
-    request.user = sessionToken
-      ? await this.sessionService.getUser(sessionToken)
-      : null;
+  private async attachUserToTheRequest(request: AuthenticatedRequest, sessionToken: string) {
+    request.user = sessionToken ? await this.sessionService.getUser(sessionToken) : null;
   }
 }
 

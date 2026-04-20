@@ -35,10 +35,7 @@ export function searchCustomers(accountId: number, query: string) {
   });
 }
 
-export function createCustomer(
-  accountId: number,
-  input: CreateCustomerRequestDto,
-) {
+export function createCustomer(accountId: number, input: CreateCustomerRequestDto) {
   return prisma.customer
     .create({
       data: {
@@ -55,13 +52,8 @@ export function createCustomer(
       },
     })
     .catch((error) => {
-      if (
-        error instanceof Prisma.PrismaClientKnownRequestError &&
-        error.code === 'P2002'
-      ) {
-        throw new ConflictException(
-          'A customer with that email already exists in this account.',
-        );
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+        throw new ConflictException('A customer with that email already exists in this account.');
       }
 
       throw error;

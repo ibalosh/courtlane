@@ -1,13 +1,7 @@
 import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 type AuthPageProps = {
   altAction: string;
@@ -18,14 +12,7 @@ type AuthPageProps = {
   altPath: '/login' | '/signup';
 };
 
-export function AuthPage({
-  altAction,
-  altLabel,
-  altPath,
-  children,
-  description,
-  title,
-}: AuthPageProps) {
+export function AuthPage({ altAction, altLabel, altPath, children, description, title }: AuthPageProps) {
   return (
     <main className="min-h-screen bg-[linear-gradient(180deg,_#f7f1e7_0%,_#efe5d1_52%,_#d7e0c8_100%)] flex items-center justify-center px-4 py-8 text-slate-950">
       <Card className="w-full max-w-md border-border/70 bg-background/90 shadow-[0_16px_40px_rgba(15,23,42,0.12)]">

@@ -88,9 +88,7 @@ async function main() {
     ),
   );
 
-  console.log(
-    `Seeded demo account for ${TEST_USER.email} with ${DEFAULT_COURTS.length} courts.`,
-  );
+  console.log(`Seeded demo account for ${TEST_USER.email} with ${DEFAULT_COURTS.length} courts.`);
 }
 
 main()

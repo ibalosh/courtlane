@@ -6,9 +6,7 @@ import { env } from '../../src/config/env';
 import { closeTestApp, createTestApp } from '../support/test-app';
 
 function signupRequest(app: INestApplication) {
-  return request(app.getHttpServer())
-    .post('/auth/signup')
-    .set('Origin', env.webAppUrl);
+  return request(app.getHttpServer()).post('/auth/signup').set('Origin', env.webAppUrl);
 }
 
 describe('Auth HTTP', () => {
@@ -38,10 +36,7 @@ describe('Auth HTTP', () => {
       name: 'Test User',
     });
     expect(response.headers['set-cookie']).toEqual(
-      expect.arrayContaining([
-        expect.stringContaining(`${SESSION_COOKIE_NAME}=`),
-        expect.stringContaining('HttpOnly'),
-      ]),
+      expect.arrayContaining([expect.stringContaining(`${SESSION_COOKIE_NAME}=`), expect.stringContaining('HttpOnly')]),
     );
   });
 
@@ -119,14 +114,11 @@ describe('Auth HTTP', () => {
   });
 
   it('rejects malformed referer headers', async () => {
-    const response = await request(app.getHttpServer())
-      .post('/auth/signup')
-      .set('Referer', 'not-a-valid-url')
-      .send({
-        email: faker.internet.email().toLowerCase(),
-        name: 'Bad Referer',
-        password: 'password123',
-      });
+    const response = await request(app.getHttpServer()).post('/auth/signup').set('Referer', 'not-a-valid-url').send({
+      email: faker.internet.email().toLowerCase(),
+      name: 'Bad Referer',
+      password: 'password123',
+    });
 
     expect(response.status).toBe(403);
     expect(response.body).toEqual({
@@ -139,13 +131,11 @@ describe('Auth HTTP', () => {
   it('rejects state-changing requests without origin headers', async () => {
     const email = faker.internet.email().toLowerCase();
 
-    const response = await request(app.getHttpServer())
-      .post('/auth/signup')
-      .send({
-        email,
-        name: 'No Origin',
-        password: 'password123',
-      });
+    const response = await request(app.getHttpServer()).post('/auth/signup').send({
+      email,
+      name: 'No Origin',
+      password: 'password123',
+    });
 
     expect(response.status).toBe(403);
     expect(response.body).toEqual({
