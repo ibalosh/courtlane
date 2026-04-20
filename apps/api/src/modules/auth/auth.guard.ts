@@ -10,6 +10,9 @@ export class OptionalAuthGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<AuthenticatedRequest>();
     const sessionToken = request.cookies?.[SESSION_COOKIE_NAME] ?? null;
+
+    // Some endpoints need to know who the caller is when a session exists, but should still work for guests.
+    // This guard was added so controllers can always read `request.user` without duplicating cookie/session lookup.
     await this.attachUserToTheRequest(request, sessionToken);
 
     return true;
@@ -23,6 +26,7 @@ export class OptionalAuthGuard implements CanActivate {
 @Injectable()
 export class AuthGuard extends OptionalAuthGuard {
   override async canActivate(context: ExecutionContext): Promise<boolean> {
+    // Reuse the optional guard's request hydration first, then enforce authentication only on protected routes.
     await super.canActivate(context);
 
     const request = context.switchToHttp().getRequest<AuthenticatedRequest>();
