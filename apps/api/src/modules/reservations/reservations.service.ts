@@ -5,12 +5,7 @@ import type {
   UpdateReservationRequestDto,
   WeekScheduleResponseDto,
 } from '@courtlane/contracts';
-import { createReservationWeekDays, createReservationWeekRange, formatReservationDate } from './reservation-week.utils';
-import {
-  createReservationSlots,
-  getReservationSlotEndDate,
-  isValidReservationSlotStart,
-} from './reservation-slot.utils';
+import { reservationSchedule } from './reservation-schedule';
 import {
   createReservation,
   deleteReservationForAccount,
@@ -30,7 +25,7 @@ export class ReservationsService {
   ): Promise<ReservationResponseDto['reservation']> {
     const startsAt = new Date(input.startsAt);
 
-    if (!isValidReservationSlotStart(startsAt)) {
+    if (!reservationSchedule.isBookableSlotStart(startsAt)) {
       throw new ConflictException('Invalid reservation slot start time.');
     }
 
@@ -52,7 +47,7 @@ export class ReservationsService {
       courtId: input.courtId,
       customerId: input.customerId,
       startsAt,
-      endsAt: getReservationSlotEndDate(startsAt),
+      endsAt: reservationSchedule.getSlotEndTime(startsAt),
     });
 
     return this.toReservationResponse(reservation);
@@ -90,7 +85,7 @@ export class ReservationsService {
   }
 
   async getWeekSchedule(accountId: number, startDate: string): Promise<WeekScheduleResponseDto> {
-    const { weekStart, weekEnd, nextWeekStart } = createReservationWeekRange(startDate);
+    const { weekStart, weekEnd, nextWeekStart } = reservationSchedule.getWeekRangeForDate(startDate);
 
     const [courts, reservations] = await Promise.all([
       listCourtsForWeek(accountId),
@@ -99,12 +94,12 @@ export class ReservationsService {
 
     return {
       week: {
-        start: formatReservationDate(weekStart),
-        end: formatReservationDate(weekEnd),
-        days: createReservationWeekDays(weekStart),
+        start: reservationSchedule.formatDate(weekStart),
+        end: reservationSchedule.formatDate(weekEnd),
+        days: reservationSchedule.getWeekDays(weekStart),
       },
       courts,
-      slots: createReservationSlots(),
+      slots: reservationSchedule.listDailySlots(),
       reservations: reservations.map((reservation) => this.toReservationResponse(reservation)),
     };
   }

@@ -1,15 +1,13 @@
 import {
-  createReservationWeekDays,
-  createReservationWeekRange,
   DAY_END_MINUTES,
   DAY_START_MINUTES,
+  reservationSchedule,
   SLOT_DURATION_MINUTES,
-} from '../../src/modules/reservations/reservation-week.utils';
-import { createReservationSlots } from '../../src/modules/reservations/reservation-slot.utils';
+} from '../../src/modules/reservations/reservation-schedule';
 
 describe('reservation schedule utils', () => {
   it('normalizes a date to the monday week range', () => {
-    const { weekStart, weekEnd, nextWeekStart } = createReservationWeekRange('2026-04-22');
+    const { weekStart, weekEnd, nextWeekStart } = reservationSchedule.getWeekRangeForDate('2026-04-22');
 
     expect(weekStart.toISOString()).toBe('2026-04-20T00:00:00.000Z');
     expect(weekEnd.toISOString()).toBe('2026-04-26T00:00:00.000Z');
@@ -17,7 +15,7 @@ describe('reservation schedule utils', () => {
   });
 
   it('creates monday to sunday labels', () => {
-    expect(createReservationWeekDays(new Date('2026-04-20T00:00:00.000Z'))).toEqual([
+    expect(reservationSchedule.getWeekDays(new Date('2026-04-20T00:00:00.000Z'))).toEqual([
       { date: '2026-04-20', label: 'Monday' },
       { date: '2026-04-21', label: 'Tuesday' },
       { date: '2026-04-22', label: 'Wednesday' },
@@ -29,7 +27,7 @@ describe('reservation schedule utils', () => {
   });
 
   it('creates 45 minute slots for the configured business day', () => {
-    const slots = createReservationSlots();
+    const slots = reservationSchedule.listDailySlots();
 
     expect(slots[0]).toEqual({
       startTime: '09:00',
