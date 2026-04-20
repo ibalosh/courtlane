@@ -1,14 +1,17 @@
 import type { WeekScheduleResponse } from '../../api/reservations';
 
+type ReservationMapEntry = [key: string, reservation: WeekScheduleResponse['reservations'][number]];
+
 export function getWeekScheduleQueryKey(weekStart: string) {
   return ['reservations', 'week', weekStart] as const;
 }
 
 export function createReservationMap(schedule?: WeekScheduleResponse) {
-  const entries = schedule?.reservations.map((reservation) => [
-    `${getReservationDayKey(reservation.startsAt)}:${getReservationSlotKey(reservation.startsAt)}:${reservation.courtId}`,
-    reservation,
-  ]);
+  const entries: ReservationMapEntry[] =
+    schedule?.reservations.map((reservation) => [
+      `${getReservationDayKey(reservation.startsAt)}:${getReservationSlotKey(reservation.startsAt)}:${reservation.courtId}`,
+      reservation,
+    ]) ?? [];
 
   return new Map(entries);
 }

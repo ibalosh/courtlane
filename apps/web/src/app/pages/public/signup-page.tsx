@@ -2,7 +2,7 @@ import { type SubmitEventHandler, useState } from 'react';
 import { signup } from '../../api/auth';
 import { AuthForm } from '../../components/public/auth-form';
 import { AuthField } from '../../components/public/auth-field';
-import { useAuthMutation } from '../../hooks/use-auth-mutation';
+import { useAuthMutation } from '../../hooks/use-auth';
 import { AuthPage } from './auth-page';
 
 export function SignupPage() {
@@ -10,14 +10,13 @@ export function SignupPage() {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
 
-  const { clearError, error, isPending, submit } = useAuthMutation({
+  const { error, isPending, submit } = useAuthMutation({
     mutationFn: signup,
     submitErrorMessage: 'Signup failed.',
   });
 
   const handleSubmit: SubmitEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
-    clearError();
     await submit({ email, name, password });
   };
 

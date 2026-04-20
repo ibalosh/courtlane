@@ -1,5 +1,5 @@
 import { useRouteError } from 'react-router-dom';
-import { ErrorPageShell } from '../../../components/error/error-page-shell';
+import { ErrorPageShell } from '../../../components/error-page-shell';
 import { getRouteErrorDetails } from '../../../utils/route-error';
 
 export function ErrorPage() {

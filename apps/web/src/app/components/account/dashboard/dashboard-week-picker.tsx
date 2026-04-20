@@ -11,6 +11,43 @@ type DashboardWeekPickerProps = {
   weekLabel: string | null;
 };
 
+type DashboardWeekDayButtonsProps = Pick<
+  DashboardWeekPickerProps,
+  'isWeekTransitioning' | 'onSelectDate' | 'schedule' | 'selectedDate'
+>;
+
+function DashboardWeekDayButtons({
+  isWeekTransitioning,
+  onSelectDate,
+  schedule,
+  selectedDate,
+}: DashboardWeekDayButtonsProps) {
+  if (!schedule) {
+    return null;
+  }
+
+  return (
+    <div
+      className={`flex gap-2 overflow-x-auto pb-1 transition-opacity duration-200 ${
+        isWeekTransitioning ? 'opacity-70' : 'opacity-100'
+      }`}
+    >
+      {schedule.week.days.map((day) => (
+        <Button
+          className="whitespace-nowrap"
+          key={day.date}
+          onClick={() => onSelectDate(day.date)}
+          size="sm"
+          type="button"
+          variant={selectedDate === day.date ? 'default' : 'outline'}
+        >
+          {day.label}
+        </Button>
+      ))}
+    </div>
+  );
+}
+
 export function DashboardWeekPicker({
   isWeekTransitioning,
   onNextWeek,
@@ -33,26 +70,12 @@ export function DashboardWeekPicker({
           </Button>
         </div>
       </div>
-      {schedule ? (
-        <div
-          className={`flex gap-2 overflow-x-auto pb-1 transition-opacity duration-200 ${
-            isWeekTransitioning ? 'opacity-70' : 'opacity-100'
-          }`}
-        >
-          {schedule.week.days.map((day) => (
-            <Button
-              className="whitespace-nowrap"
-              key={day.date}
-              onClick={() => onSelectDate(day.date)}
-              size="sm"
-              type="button"
-              variant={selectedDate === day.date ? 'default' : 'outline'}
-            >
-              {day.label}
-            </Button>
-          ))}
-        </div>
-      ) : null}
+      <DashboardWeekDayButtons
+        isWeekTransitioning={isWeekTransitioning}
+        onSelectDate={onSelectDate}
+        schedule={schedule}
+        selectedDate={selectedDate}
+      />
     </div>
   );
 }

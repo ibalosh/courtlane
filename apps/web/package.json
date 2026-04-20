@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "vite",
-    "build": "vite build",
+    "build": "yarn typecheck && vite build",
+    "typecheck": "tsc --noEmit -p tsconfig.app.json",
     "test": "vitest",
     "lint": "eslint . --fix",
     "format": "prettier . --write",

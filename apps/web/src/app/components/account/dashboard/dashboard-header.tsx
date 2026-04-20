@@ -1,10 +1,25 @@
-import { DashboardMetrics } from './dashboard-metrics';
 import type { DashboardMetrics as DashboardMetricsType } from './dashboard-types';
-import { CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 type DashboardHeaderProps = {
   metrics: DashboardMetricsType;
 };
+
+type DashboardMetricCardProps = {
+  label: string;
+  value: string;
+};
+
+export function DashboardMetricCard({ label, value }: DashboardMetricCardProps) {
+  return (
+    <Card className="gap-2 py-4 shadow-none bg-amber-50" size="sm">
+      <CardContent className="space-y-1">
+        <p className="text-muted-foreground text-xs font-semibold uppercase tracking-[0.16em]">{label}</p>
+        <p className="font-heading text-2xl text-foreground">{value}</p>
+      </CardContent>
+    </Card>
+  );
+}
 
 export function DashboardHeader({ metrics }: DashboardHeaderProps) {
   return (
@@ -18,7 +33,11 @@ export function DashboardHeader({ metrics }: DashboardHeaderProps) {
           </CardDescription>
         </div>
         <div className="shrink-0">
-          <DashboardMetrics metrics={metrics} />
+          <div className="grid gap-3 sm:grid-cols-3">
+            <DashboardMetricCard label="Reserved slots" value={String(metrics.reservedSlots)} />
+            <DashboardMetricCard label="Free slots" value={String(metrics.freeSlots)} />
+            <DashboardMetricCard label="Active courts" value={String(metrics.activeCourts)} />
+          </div>
         </div>
       </div>
     </CardHeader>

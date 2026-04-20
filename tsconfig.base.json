@@ -4,6 +4,7 @@
     "sourceMap": true,
     "declaration": true,
     "target": "esnext",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "ignoreDeprecations": "6.0"
   }
 }

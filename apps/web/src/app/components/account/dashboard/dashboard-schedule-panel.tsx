@@ -8,7 +8,7 @@ import type {
 } from './dashboard-types';
 import { cn } from '@/lib/utils';
 
-type DashboardScheduleStateProps = {
+type DashboardSchedulePanelProps = {
   isSaving: boolean;
   isWeekTransitioning: boolean;
   reservationMap: DashboardReservationMap;
@@ -18,7 +18,7 @@ type DashboardScheduleStateProps = {
   submitReservation: DashboardSubmitReservation;
 };
 
-export function DashboardScheduleState({
+export function DashboardSchedulePanel({
   isSaving,
   isWeekTransitioning,
   reservationMap,
@@ -26,17 +26,13 @@ export function DashboardScheduleState({
   scheduleQuery,
   selectedDay,
   submitReservation,
-}: DashboardScheduleStateProps) {
+}: DashboardSchedulePanelProps) {
   if (scheduleQuery.isLoading) {
     return <p className="text-muted-foreground text-sm">Loading schedule...</p>;
   }
 
   if (scheduleQuery.isError) {
-    return (
-      <p className="text-sm text-destructive">
-        {scheduleQuery.error instanceof Error ? scheduleQuery.error.message : 'Failed to load weekly schedule.'}
-      </p>
-    );
+    return <p className="text-sm text-destructive">{scheduleQuery.error.message}</p>;
   }
 
   return (

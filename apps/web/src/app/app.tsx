@@ -1,7 +1,6 @@
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 import { HomePage } from './pages/home-page';
 import { AccountLayout } from './pages/account/account-layout';
-import { AccountPage } from './pages/account/account-page';
 import { DashboardPage } from './pages/account/dashboard-page';
 import { LoginPage } from './pages/public/login-page';
 import { SignupPage } from './pages/public/signup-page';
@@ -38,21 +37,16 @@ export function createAppRouter() {
       errorElement: <AccountErrorPage />,
       children: [
         {
-          element: <AccountPage />,
-          children: [
-            {
-              index: true,
-              element: <Navigate replace to="/account/dashboard-page" />,
-            },
-            {
-              path: 'dashboard-page',
-              element: <DashboardPage />,
-            },
-            {
-              path: '*',
-              element: <AccountNotFoundPage />,
-            },
-          ],
+          index: true,
+          element: <Navigate replace to="/account/dashboard-page" />,
+        },
+        {
+          path: 'dashboard-page',
+          element: <DashboardPage />,
+        },
+        {
+          path: '*',
+          element: <AccountNotFoundPage />,
         },
       ],
     },
