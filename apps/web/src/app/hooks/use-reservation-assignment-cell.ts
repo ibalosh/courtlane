@@ -3,7 +3,7 @@ import { useCustomerSearchSuggestions } from './use-customer-search-suggestions'
 import type {
   CustomerSearchResult,
   ReservationAssignmentCellProps,
-} from '../components/account/reservation-cell/reservation-assignment-cell.types';
+} from '@/app/components/account/dashboard/reservation-cell/reservation-assignment-cell.types';
 
 type UseReservationAssignmentCellOptions = Pick<ReservationAssignmentCellProps, 'customerName' | 'onSubmit'>;
 

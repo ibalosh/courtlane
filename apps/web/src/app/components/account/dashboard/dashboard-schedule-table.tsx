@@ -1,4 +1,4 @@
-import { ReservationAssignmentCell } from '../reservation-cell/reservation-assignment-cell';
+import { ReservationAssignmentCell } from '@/app/components/account/dashboard/reservation-cell/reservation-assignment-cell';
 import { formatSlotRange } from '../../../pages/account/dashboard-page.utils';
 import type {
   DashboardReservationMap,
