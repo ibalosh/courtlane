@@ -1,4 +1,4 @@
-import { ErrorPageShell } from '../../../components/error/error-page-shell';
+import { ErrorPageShell } from '../../../components/error-page-shell';
 
 export function NotFoundPage() {
   return (
