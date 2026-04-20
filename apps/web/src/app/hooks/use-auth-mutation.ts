@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import type { AuthResponse, MeResponse } from '../api/auth';
@@ -13,7 +12,6 @@ export function useAuthMutation<TInput>({ mutationFn, submitErrorMessage }: Auth
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const queryClient = useQueryClient();
-  const [error, setError] = useState('');
   const redirectPath = getSafeRedirectPath(searchParams.get('redirect'));
 
   const mutation = useMutation({
@@ -24,25 +22,21 @@ export function useAuthMutation<TInput>({ mutationFn, submitErrorMessage }: Auth
       });
       await navigate(redirectPath, { replace: true });
     },
-    onError: (submissionError) => {
-      setError(submissionError instanceof Error ? submissionError.message : submitErrorMessage);
-    },
   });
 
-  function clearError() {
-    setError('');
+  async function submit(input: TInput) {
+    mutation.reset();
+
+    try {
+      await mutation.mutateAsync(input);
+    } catch {
+      // Expose request failures through the mutation state for the form.
+    }
   }
 
   return {
-    clearError,
-    error,
+    error: mutation.error instanceof Error ? mutation.error.message : mutation.error ? submitErrorMessage : '',
     isPending: mutation.isPending,
-    submit: async (input: TInput) => {
-      try {
-        await mutation.mutateAsync(input);
-      } catch {
-        // Keep the rejection local: onError already updates the UI state.
-      }
-    },
+    submit,
   };
 }

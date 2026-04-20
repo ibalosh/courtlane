@@ -10,14 +10,13 @@ export function SignupPage() {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
 
-  const { clearError, error, isPending, submit } = useAuthMutation({
+  const { error, isPending, submit } = useAuthMutation({
     mutationFn: signup,
     submitErrorMessage: 'Signup failed.',
   });
 
   const handleSubmit: SubmitEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
-    clearError();
     await submit({ email, name, password });
   };
 

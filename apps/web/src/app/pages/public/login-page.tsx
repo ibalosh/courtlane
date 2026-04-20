@@ -9,14 +9,13 @@ export function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const { clearError, error, isPending, submit } = useAuthMutation({
+  const { error, isPending, submit } = useAuthMutation({
     mutationFn: login,
     submitErrorMessage: 'Login failed.',
   });
 
   const handleSubmit: SubmitEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
-    clearError();
     await submit({ email, password });
   };
 
