@@ -32,7 +32,13 @@ export function CustomerCardView({
         {showDeleteError ? <p className="mt-2 text-sm text-destructive">{showDeleteError}</p> : null}
       </div>
       <div className="flex flex-wrap justify-start gap-2 sm:justify-end">
-        <Button disabled={isDeleting} onClick={() => void onDelete(customer.id)} size="sm" type="button" variant="outline">
+        <Button
+          disabled={isDeleting}
+          onClick={() => void onDelete(customer.id)}
+          size="sm"
+          type="button"
+          variant="outline"
+        >
           {isDeleting ? 'Deleting...' : 'Delete'}
         </Button>
         <Button onClick={onEdit} size="sm" type="button" variant="outline">

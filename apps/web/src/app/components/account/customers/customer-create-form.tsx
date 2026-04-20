@@ -79,7 +79,9 @@ export function CustomerCreateForm({ invalidateQueryKey, onCreated }: CustomerCr
         />
       </div>
 
-      {createCustomerMutation.isError ? <p className="text-sm text-destructive">{createCustomerMutation.error.message}</p> : null}
+      {createCustomerMutation.isError ? (
+        <p className="text-sm text-destructive">{createCustomerMutation.error.message}</p>
+      ) : null}
 
       <Button disabled={createCustomerMutation.isPending} type="submit">
         {createCustomerMutation.isPending ? 'Adding customer...' : 'Add customer'}
