@@ -5,24 +5,37 @@ import { AccountPage } from './pages/account/account-page';
 import { DashboardPage } from './pages/account/dashboard-page';
 import { LoginPage } from './pages/public/login-page';
 import { SignupPage } from './pages/public/signup-page';
+import { ErrorPage as AccountErrorPage, NotFoundPage as AccountNotFoundPage } from './pages/account/errors';
+import { ErrorPage as PublicErrorPage, NotFoundPage as PublicNotFoundPage } from './pages/public/errors';
 
 export function createAppRouter() {
   return createBrowserRouter([
     {
+      errorElement: <PublicErrorPage />,
       path: '/',
-      element: <HomePage />,
-    },
-    {
-      path: '/signup',
-      element: <SignupPage />,
-    },
-    {
-      path: '/login',
-      element: <LoginPage />,
+      children: [
+        {
+          index: true,
+          element: <HomePage />,
+        },
+        {
+          path: 'signup',
+          element: <SignupPage />,
+        },
+        {
+          path: 'login',
+          element: <LoginPage />,
+        },
+        {
+          path: '*',
+          element: <PublicNotFoundPage />,
+        },
+      ],
     },
     {
       path: '/account',
       element: <AccountLayout />,
+      errorElement: <AccountErrorPage />,
       children: [
         {
           element: <AccountPage />,
@@ -34,6 +47,10 @@ export function createAppRouter() {
             {
               path: 'dashboard-page',
               element: <DashboardPage />,
+            },
+            {
+              path: '*',
+              element: <AccountNotFoundPage />,
             },
           ],
         },
