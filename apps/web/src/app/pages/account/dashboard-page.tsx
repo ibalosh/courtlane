@@ -19,7 +19,7 @@ import {
 export function DashboardPage() {
   const queryClient = useQueryClient();
   const [weekStart, setWeekStart] = useState(getCurrentWeekStartDateString);
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [selectedDayIndex, setSelectedDayIndex] = useState(0);
 
   const scheduleQuery = useQuery({
     queryKey: getWeekScheduleQueryKey(weekStart),
@@ -42,7 +42,7 @@ export function DashboardPage() {
 
   const schedule = scheduleQuery.data;
   const reservationMap = createReservationMap(schedule);
-  const selectedDay = schedule?.week.days.find((day) => day.date === selectedDate) ?? null;
+  const selectedDay = schedule?.week.days[selectedDayIndex] ?? null;
   const reservedSlots = schedule?.reservations.length ?? 0;
   const availableSlots = schedule ? schedule.courts.length * schedule.week.days.length * schedule.slots.length : 0;
   const metrics = {
@@ -63,12 +63,10 @@ export function DashboardPage() {
       return;
     }
 
-    const selectedDateStillVisible = schedule.week.days.some((day) => day.date === selectedDate);
-
-    if (!selectedDateStillVisible) {
-      setSelectedDate(schedule.week.days[0]?.date ?? null);
+    if (!schedule.week.days[selectedDayIndex]) {
+      setSelectedDayIndex(0);
     }
-  }, [schedule, selectedDate]);
+  }, [schedule, selectedDayIndex]);
 
   async function refreshWeek() {
     await queryClient.invalidateQueries({
@@ -127,9 +125,15 @@ export function DashboardPage() {
           isWeekTransitioning={isWeekTransitioning}
           onNextWeek={() => setWeekStart((currentWeekStart) => shiftDateString(currentWeekStart, 7))}
           onPreviousWeek={() => setWeekStart((currentWeekStart) => shiftDateString(currentWeekStart, -7))}
-          onSelectDate={setSelectedDate}
+          onSelectDate={(date) => {
+            const nextSelectedDayIndex = schedule?.week.days.findIndex((day) => day.date === date) ?? -1;
+
+            if (nextSelectedDayIndex >= 0) {
+              setSelectedDayIndex(nextSelectedDayIndex);
+            }
+          }}
           schedule={schedule}
-          selectedDate={selectedDate}
+          selectedDate={selectedDay?.date ?? null}
           weekLabel={weekLabel}
         />
         <DashboardSchedulePanel
