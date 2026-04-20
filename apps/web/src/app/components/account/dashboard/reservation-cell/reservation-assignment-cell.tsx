@@ -1,4 +1,4 @@
-import { useReservationAssignmentCell } from '../../../../hooks/use-reservation-assignment-cell';
+import { useReservationAssignmentCell } from '@/app/hooks/use-reservation-assignment-cell';
 import { ReservationAssignmentCellDisplay } from './reservation-assignment-cell-display';
 import { ReservationAssignmentCellEditor } from './reservation-assignment-cell-editor';
 import type { ReservationAssignmentCellProps } from './reservation-assignment-cell.types';

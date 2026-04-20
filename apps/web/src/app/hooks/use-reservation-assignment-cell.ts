@@ -9,6 +9,7 @@ type UseReservationAssignmentCellOptions = Pick<ReservationAssignmentCellProps, 
 
 export function useReservationAssignmentCell({ customerName, onSubmit }: UseReservationAssignmentCellOptions) {
   const [isEditing, setIsEditing] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [value, setValue] = useState(customerName ?? '');
   const [error, setError] = useState('');
   const [selectedCustomer, setSelectedCustomer] = useState<CustomerSearchResult | null>(null);
@@ -70,7 +71,13 @@ export function useReservationAssignmentCell({ customerName, onSubmit }: UseRese
     customerValue: string | null,
     options?: { closeEditor?: boolean },
   ) {
+    if (isSubmitting) {
+      return;
+    }
+
+    clearPendingClear();
     setError('');
+    setIsSubmitting(true);
 
     try {
       await onSubmit(customer, customerValue);
@@ -80,6 +87,8 @@ export function useReservationAssignmentCell({ customerName, onSubmit }: UseRese
       }
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : 'Failed to save reservation.');
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -93,6 +102,7 @@ export function useReservationAssignmentCell({ customerName, onSubmit }: UseRese
   function resetEditor(nextCustomerName: string | null) {
     setValue(nextCustomerName ?? '');
     setError('');
+    setIsSubmitting(false);
     setSelectedCustomer(null);
     setIsSuggestionsOpen(false);
     setActiveSuggestionIndex(0);
@@ -108,6 +118,7 @@ export function useReservationAssignmentCell({ customerName, onSubmit }: UseRese
   }
 
   function closeEditor() {
+    clearPendingClear();
     closeSuggestions();
     setIsEditing(false);
   }
@@ -214,6 +225,7 @@ export function useReservationAssignmentCell({ customerName, onSubmit }: UseRese
     highlightSuggestion,
     inputRef,
     isEditing,
+    isSubmitting,
     isLoadingSuggestions: isLoading,
     isSuggestionsOpen,
     selectedCustomer,
