@@ -1,6 +1,7 @@
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 import { HomePage } from './pages/home-page';
 import { AccountLayout } from './pages/account/account-layout';
+import { CustomersPage } from './pages/account/customers-page';
 import { DashboardPage } from './pages/account/dashboard-page';
 import { LoginPage } from './pages/public/login-page';
 import { SignupPage } from './pages/public/signup-page';
@@ -38,11 +39,15 @@ export function createAppRouter() {
       children: [
         {
           index: true,
-          element: <Navigate replace to="/account/dashboard-page" />,
+          element: <Navigate replace to="/account/dashboard" />,
         },
         {
-          path: 'dashboard-page',
+          path: 'dashboard',
           element: <DashboardPage />,
+        },
+        {
+          path: 'customers',
+          element: <CustomersPage />,
         },
         {
           path: '*',

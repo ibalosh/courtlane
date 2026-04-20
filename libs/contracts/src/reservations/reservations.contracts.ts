@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { reservationCustomerSummarySchema } from '../customers';
 
 export const weekScheduleQuerySchema = z.object({
   start: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
@@ -8,12 +9,6 @@ export const reservationCourtSchema = z.object({
   id: z.number().int().positive(),
   name: z.string().min(1).max(100),
   sortOrder: z.number().int().nonnegative(),
-});
-
-export const reservationCustomerSummarySchema = z.object({
-  id: z.number().int().positive(),
-  name: z.string().min(1).max(255),
-  email: z.email().trim().min(1).max(255).nullable(),
 });
 
 export const reservationDaySchema = z.object({
@@ -50,28 +45,6 @@ export const reservationScheduleItemSchema = z.object({
   endsAt: z.iso.datetime(),
 });
 
-export const customerSchema = reservationCustomerSummarySchema.extend({
-  phone: z.string().trim().min(1).max(50).nullable(),
-});
-
-export const customerSearchQuerySchema = z.object({
-  query: z.string().trim().min(1).max(255),
-});
-
-export const customerSearchResponseSchema = z.object({
-  customers: z.array(customerSchema),
-});
-
-export const createCustomerRequestSchema = z.object({
-  name: z.string().trim().min(1).max(255),
-  email: z.email().trim().min(1).max(255).nullable().optional(),
-  phone: z.string().trim().min(1).max(50).nullable().optional(),
-});
-
-export const createCustomerResponseSchema = z.object({
-  customer: customerSchema,
-});
-
 export const weekScheduleResponseSchema = z.object({
   week: reservationWeekSchema,
   courts: z.array(reservationCourtSchema),
@@ -102,17 +75,11 @@ export const clearReservationResponseSchema = z.object({
 });
 
 export type WeekScheduleQueryDto = z.infer<typeof weekScheduleQuerySchema>;
-export type CustomerSearchQueryDto = z.infer<typeof customerSearchQuerySchema>;
 export type ReservationCourtDto = z.infer<typeof reservationCourtSchema>;
-export type ReservationCustomerSummaryDto = z.infer<typeof reservationCustomerSummarySchema>;
-export type CustomerDto = z.infer<typeof customerSchema>;
 export type ReservationDayDto = z.infer<typeof reservationDaySchema>;
 export type ReservationWeekDto = z.infer<typeof reservationWeekSchema>;
 export type ReservationSlotDto = z.infer<typeof reservationSlotSchema>;
 export type ReservationScheduleItemDto = z.infer<typeof reservationScheduleItemSchema>;
-export type CustomerSearchResponseDto = z.infer<typeof customerSearchResponseSchema>;
-export type CreateCustomerRequestDto = z.infer<typeof createCustomerRequestSchema>;
-export type CreateCustomerResponseDto = z.infer<typeof createCustomerResponseSchema>;
 export type WeekScheduleResponseDto = z.infer<typeof weekScheduleResponseSchema>;
 export type CreateReservationRequestDto = z.infer<typeof createReservationRequestSchema>;
 export type ReservationIdParamsDto = z.infer<typeof reservationIdParamsSchema>;
