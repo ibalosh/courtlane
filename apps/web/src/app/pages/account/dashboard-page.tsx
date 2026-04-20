@@ -1,121 +1,25 @@
-import { useEffect, useState } from 'react';
-import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createCustomer } from '../../api/customers';
-import { clearReservation, createReservation, getWeekSchedule, updateReservation } from '../../api/reservations';
 import { DashboardHeader } from '../../components/account/dashboard/dashboard-header';
 import { DashboardSchedulePanel } from '../../components/account/dashboard/dashboard-schedule-panel';
-import type { DashboardSubmitReservationInput } from '../../components/account/dashboard/dashboard-types';
 import { DashboardWeekPicker } from '../../components/account/dashboard/dashboard-week-picker';
+import { useDashboardReservationSubmission } from '../../hooks/use-dashboard-reservation-submission';
+import { useDashboardSchedule } from '../../hooks/use-dashboard-schedule';
 import { Card, CardContent } from '@/components/ui/card';
-import {
-  createReservationMap,
-  createSlotDateTime,
-  formatWeekLabel,
-  getCurrentWeekStartDateString,
-  getWeekScheduleQueryKey,
-  shiftDateString,
-} from '@/app/pages/account/dashboard-page.utils';
 
 export function DashboardPage() {
-  const queryClient = useQueryClient();
-  const [weekStart, setWeekStart] = useState(getCurrentWeekStartDateString);
-  const [selectedDayIndex, setSelectedDayIndex] = useState(0);
-
-  const scheduleQuery = useQuery({
-    queryKey: getWeekScheduleQueryKey(weekStart),
-    queryFn: () => getWeekSchedule({ start: weekStart }),
-    placeholderData: keepPreviousData,
-  });
-
-  const createCustomerMutation = useMutation({
-    mutationFn: createCustomer,
-  });
-  const createReservationMutation = useMutation({
-    mutationFn: createReservation,
-  });
-  const updateReservationMutation = useMutation({
-    mutationFn: ({ customerId, id }: { customerId: number; id: number }) => updateReservation(id, { customerId }),
-  });
-  const clearReservationMutation = useMutation({
-    mutationFn: clearReservation,
-  });
-
-  const schedule = scheduleQuery.data;
-  const reservationMap = createReservationMap(schedule);
-  const selectedDay = schedule?.week.days[selectedDayIndex] ?? null;
-  const reservedSlots = schedule?.reservations.length ?? 0;
-  const availableSlots = schedule ? schedule.courts.length * schedule.week.days.length * schedule.slots.length : 0;
-  const metrics = {
-    activeCourts: schedule?.courts.length ?? 0,
-    freeSlots: availableSlots - reservedSlots,
-    reservedSlots,
-  };
-  const isSaving =
-    createCustomerMutation.isPending ||
-    createReservationMutation.isPending ||
-    updateReservationMutation.isPending ||
-    clearReservationMutation.isPending;
-  const isWeekTransitioning = scheduleQuery.isFetching && !scheduleQuery.isLoading;
-  const weekLabel = schedule ? formatWeekLabel(schedule.week.start, schedule.week.end) : null;
-
-  useEffect(() => {
-    if (!schedule) {
-      return;
-    }
-
-    if (!schedule.week.days[selectedDayIndex]) {
-      setSelectedDayIndex(0);
-    }
-  }, [schedule, selectedDayIndex]);
-
-  async function refreshWeek() {
-    await queryClient.invalidateQueries({
-      queryKey: getWeekScheduleQueryKey(weekStart),
-    });
-  }
-
-  async function submitReservation({
-    courtId,
-    customer,
-    customerName,
-    date,
-    reservationId,
-    startTime,
-  }: DashboardSubmitReservationInput) {
-    const normalizedCustomerName = customerName?.trim() ?? '';
-
-    if (!normalizedCustomerName) {
-      if (reservationId) {
-        await clearReservationMutation.mutateAsync(reservationId);
-        await refreshWeek();
-      }
-
-      return;
-    }
-
-    const customerId =
-      customer?.id ??
-      (
-        await createCustomerMutation.mutateAsync({
-          name: normalizedCustomerName,
-        })
-      ).customer.id;
-
-    if (reservationId) {
-      await updateReservationMutation.mutateAsync({
-        customerId,
-        id: reservationId,
-      });
-    } else {
-      await createReservationMutation.mutateAsync({
-        courtId,
-        customerId,
-        startsAt: createSlotDateTime(date, startTime),
-      });
-    }
-
-    await refreshWeek();
-  }
+  const {
+    isWeekTransitioning,
+    metrics,
+    reservationMap,
+    schedule,
+    scheduleQuery,
+    selectedDay,
+    selectDate,
+    weekLabel,
+    weekStart,
+    goToNextWeek,
+    goToPreviousWeek,
+  } = useDashboardSchedule();
+  const { isSaving, submitReservation } = useDashboardReservationSubmission({ weekStart });
 
   return (
     <Card className="border-border/70 bg-background/90 py-0 shadow-[0_16px_40px_rgba(15,23,42,0.08)]">
@@ -123,15 +27,9 @@ export function DashboardPage() {
       <CardContent className="grid gap-6 py-6">
         <DashboardWeekPicker
           isWeekTransitioning={isWeekTransitioning}
-          onNextWeek={() => setWeekStart((currentWeekStart) => shiftDateString(currentWeekStart, 7))}
-          onPreviousWeek={() => setWeekStart((currentWeekStart) => shiftDateString(currentWeekStart, -7))}
-          onSelectDate={(date) => {
-            const nextSelectedDayIndex = schedule?.week.days.findIndex((day) => day.date === date) ?? -1;
-
-            if (nextSelectedDayIndex >= 0) {
-              setSelectedDayIndex(nextSelectedDayIndex);
-            }
-          }}
+          onNextWeek={goToNextWeek}
+          onPreviousWeek={goToPreviousWeek}
+          onSelectDate={selectDate}
           schedule={schedule}
           selectedDate={selectedDay?.date ?? null}
           weekLabel={weekLabel}
