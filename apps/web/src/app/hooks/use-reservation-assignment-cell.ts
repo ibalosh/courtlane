@@ -5,32 +5,23 @@ import type {
   ReservationAssignmentCellProps,
 } from '../components/account/reservation-cell/reservation-assignment-cell.types';
 
-type UseReservationAssignmentCellOptions = Pick<
-  ReservationAssignmentCellProps,
-  'customerName' | 'onSubmit'
->;
+type UseReservationAssignmentCellOptions = Pick<ReservationAssignmentCellProps, 'customerName' | 'onSubmit'>;
 
-export function useReservationAssignmentCell({
-  customerName,
-  onSubmit,
-}: UseReservationAssignmentCellOptions) {
+export function useReservationAssignmentCell({ customerName, onSubmit }: UseReservationAssignmentCellOptions) {
   const [isEditing, setIsEditing] = useState(false);
   const [value, setValue] = useState(customerName ?? '');
   const [error, setError] = useState('');
-  const [selectedCustomer, setSelectedCustomer] =
-    useState<CustomerSearchResult | null>(null);
+  const [selectedCustomer, setSelectedCustomer] = useState<CustomerSearchResult | null>(null);
   const [isSuggestionsOpen, setIsSuggestionsOpen] = useState(false);
   const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const editorRef = useRef<HTMLDivElement | null>(null);
   const clearTimeoutRef = useRef<number | null>(null);
 
-  const { isLoading, suggestions, trimmedValue } = useCustomerSearchSuggestions(
-    {
-      enabled: isEditing,
-      value,
-    },
-  );
+  const { isLoading, suggestions, trimmedValue } = useCustomerSearchSuggestions({
+    enabled: isEditing,
+    value,
+  });
 
   useEffect(() => {
     if (!isEditing) {
@@ -88,11 +79,7 @@ export function useReservationAssignmentCell({
         setIsEditing(false);
       }
     } catch (submitError) {
-      setError(
-        submitError instanceof Error
-          ? submitError.message
-          : 'Failed to save reservation.',
-      );
+      setError(submitError instanceof Error ? submitError.message : 'Failed to save reservation.');
     }
   }
 
@@ -147,10 +134,7 @@ export function useReservationAssignmentCell({
   }
 
   async function submitCurrentValue() {
-    await save(
-      selectedCustomer,
-      trimmedValue || selectedCustomer?.name || null,
-    );
+    await save(selectedCustomer, trimmedValue || selectedCustomer?.name || null);
   }
 
   function selectCustomer(customer: CustomerSearchResult) {
@@ -167,9 +151,7 @@ export function useReservationAssignmentCell({
 
     setIsSuggestionsOpen(true);
     setActiveSuggestionIndex((current) =>
-      direction === 'next'
-        ? Math.min(current + 1, suggestions.length - 1)
-        : Math.max(current - 1, 0),
+      direction === 'next' ? Math.min(current + 1, suggestions.length - 1) : Math.max(current - 1, 0),
     );
   }
 
@@ -185,9 +167,7 @@ export function useReservationAssignmentCell({
   }
 
   function highlightSuggestion(customerId: number) {
-    const index = suggestions.findIndex(
-      (suggestion) => suggestion.id === customerId,
-    );
+    const index = suggestions.findIndex((suggestion) => suggestion.id === customerId);
 
     if (index >= 0) {
       setActiveSuggestionIndex(index);

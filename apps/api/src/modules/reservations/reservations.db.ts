@@ -52,10 +52,7 @@ export function createReservation(input: {
       },
     })
     .catch((error) => {
-      if (
-        error instanceof Prisma.PrismaClientKnownRequestError &&
-        error.code === 'P2002'
-      ) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
         throw new ConflictException('That court slot is already reserved.');
       }
 
@@ -63,10 +60,7 @@ export function createReservation(input: {
     });
 }
 
-export function updateReservationCustomer(
-  reservationId: number,
-  customerId: number,
-) {
+export function updateReservationCustomer(reservationId: number, customerId: number) {
   return prisma.reservation.update({
     where: {
       id: reservationId,
@@ -90,10 +84,7 @@ export function updateReservationCustomer(
   });
 }
 
-export function findReservationForAccount(
-  accountId: number,
-  reservationId: number,
-) {
+export function findReservationForAccount(accountId: number, reservationId: number) {
   return prisma.reservation.findFirst({
     where: {
       id: reservationId,
@@ -105,10 +96,7 @@ export function findReservationForAccount(
   });
 }
 
-export function deleteReservationForAccount(
-  accountId: number,
-  reservationId: number,
-) {
+export function deleteReservationForAccount(accountId: number, reservationId: number) {
   return prisma.reservation.deleteMany({
     where: {
       id: reservationId,
@@ -134,11 +122,7 @@ export function listCourtsForWeek(accountId: number) {
   });
 }
 
-export function listReservationsForWeek(
-  accountId: number,
-  weekStart: Date,
-  nextWeekStart: Date,
-) {
+export function listReservationsForWeek(accountId: number, weekStart: Date, nextWeekStart: Date) {
   return prisma.reservation.findMany({
     where: {
       accountId,

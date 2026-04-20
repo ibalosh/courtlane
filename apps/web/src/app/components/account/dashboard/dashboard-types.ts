@@ -6,19 +6,10 @@ export type DashboardMetrics = ReturnType<typeof useDashboardPage>['metrics'];
 
 export type DashboardSchedule = WeekScheduleResponse | undefined;
 
-export type DashboardReservationMap = ReturnType<
-  typeof useDashboardPage
->['reservationMap'];
+export type DashboardReservationMap = ReturnType<typeof useDashboardPage>['reservationMap'];
 
-export type DashboardSelectedDay = ReturnType<
-  typeof useDashboardPage
->['selectedDay'];
+export type DashboardSelectedDay = ReturnType<typeof useDashboardPage>['selectedDay'];
 
-export type DashboardSubmitReservation = ReturnType<
-  typeof useDashboardPage
->['submitReservation'];
+export type DashboardSubmitReservation = ReturnType<typeof useDashboardPage>['submitReservation'];
 
-export type DashboardScheduleQuery = UseQueryResult<
-  WeekScheduleResponse,
-  Error
->;
+export type DashboardScheduleQuery = UseQueryResult<WeekScheduleResponse, Error>;

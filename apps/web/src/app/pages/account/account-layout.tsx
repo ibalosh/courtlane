@@ -1,10 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import {
-  Navigate,
-  Outlet,
-  useLocation,
-  useOutletContext,
-} from 'react-router-dom';
+import { Navigate, Outlet, useLocation, useOutletContext } from 'react-router-dom';
 import { me, type AuthUser } from '../../api/auth';
 import { getRedirectSearch } from '../../utils/auth-redirect';
 
@@ -41,11 +36,7 @@ export function AccountLayout() {
         replace
         to={{
           pathname: '/login',
-          search: getRedirectSearch(
-            location.pathname,
-            location.search,
-            location.hash,
-          ),
+          search: getRedirectSearch(location.pathname, location.search, location.hash),
         }}
       />
     );

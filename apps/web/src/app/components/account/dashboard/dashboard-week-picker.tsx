@@ -23,24 +23,12 @@ export function DashboardWeekPicker({
   return (
     <div className="grid gap-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-muted-foreground text-sm">
-          {weekLabel ?? 'Loading weekly schedule...'}
-        </p>
+        <p className="text-muted-foreground text-sm">{weekLabel ?? 'Loading weekly schedule...'}</p>
         <div className="flex gap-2">
-          <Button
-            disabled={isWeekTransitioning}
-            onClick={onPreviousWeek}
-            type="button"
-            variant="outline"
-          >
+          <Button disabled={isWeekTransitioning} onClick={onPreviousWeek} type="button" variant="outline">
             Previous week
           </Button>
-          <Button
-            disabled={isWeekTransitioning}
-            onClick={onNextWeek}
-            type="button"
-            variant="outline"
-          >
+          <Button disabled={isWeekTransitioning} onClick={onNextWeek} type="button" variant="outline">
             Next week
           </Button>
         </div>

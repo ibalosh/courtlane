@@ -104,36 +104,18 @@ export const clearReservationResponseSchema = z.object({
 export type WeekScheduleQueryDto = z.infer<typeof weekScheduleQuerySchema>;
 export type CustomerSearchQueryDto = z.infer<typeof customerSearchQuerySchema>;
 export type ReservationCourtDto = z.infer<typeof reservationCourtSchema>;
-export type ReservationCustomerSummaryDto = z.infer<
-  typeof reservationCustomerSummarySchema
->;
+export type ReservationCustomerSummaryDto = z.infer<typeof reservationCustomerSummarySchema>;
 export type CustomerDto = z.infer<typeof customerSchema>;
 export type ReservationDayDto = z.infer<typeof reservationDaySchema>;
 export type ReservationWeekDto = z.infer<typeof reservationWeekSchema>;
 export type ReservationSlotDto = z.infer<typeof reservationSlotSchema>;
-export type ReservationScheduleItemDto = z.infer<
-  typeof reservationScheduleItemSchema
->;
-export type CustomerSearchResponseDto = z.infer<
-  typeof customerSearchResponseSchema
->;
-export type CreateCustomerRequestDto = z.infer<
-  typeof createCustomerRequestSchema
->;
-export type CreateCustomerResponseDto = z.infer<
-  typeof createCustomerResponseSchema
->;
-export type WeekScheduleResponseDto = z.infer<
-  typeof weekScheduleResponseSchema
->;
-export type CreateReservationRequestDto = z.infer<
-  typeof createReservationRequestSchema
->;
+export type ReservationScheduleItemDto = z.infer<typeof reservationScheduleItemSchema>;
+export type CustomerSearchResponseDto = z.infer<typeof customerSearchResponseSchema>;
+export type CreateCustomerRequestDto = z.infer<typeof createCustomerRequestSchema>;
+export type CreateCustomerResponseDto = z.infer<typeof createCustomerResponseSchema>;
+export type WeekScheduleResponseDto = z.infer<typeof weekScheduleResponseSchema>;
+export type CreateReservationRequestDto = z.infer<typeof createReservationRequestSchema>;
 export type ReservationIdParamsDto = z.infer<typeof reservationIdParamsSchema>;
-export type UpdateReservationRequestDto = z.infer<
-  typeof updateReservationRequestSchema
->;
+export type UpdateReservationRequestDto = z.infer<typeof updateReservationRequestSchema>;
 export type ReservationResponseDto = z.infer<typeof reservationResponseSchema>;
-export type ClearReservationResponseDto = z.infer<
-  typeof clearReservationResponseSchema
->;
+export type ClearReservationResponseDto = z.infer<typeof clearReservationResponseSchema>;

@@ -11,9 +11,6 @@ export type ReservationAssignmentCellProps = {
   customerName: string | null;
   dayLabel: string;
   isSaving?: boolean;
-  onSubmit: (
-    customer: CustomerSearchResult | null,
-    customerName: string | null,
-  ) => Promise<void> | void;
+  onSubmit: (customer: CustomerSearchResult | null, customerName: string | null) => Promise<void> | void;
   status: ReservationStatus;
 };

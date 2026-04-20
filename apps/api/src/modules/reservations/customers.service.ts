@@ -8,19 +8,13 @@ import { createCustomer, searchCustomers } from './customers.db';
 
 @Injectable()
 export class CustomersService {
-  async searchCustomers(
-    accountId: number,
-    query: string,
-  ): Promise<CustomerSearchResponseDto> {
+  async searchCustomers(accountId: number, query: string): Promise<CustomerSearchResponseDto> {
     const customers = await searchCustomers(accountId, query);
 
     return { customers };
   }
 
-  async createCustomer(
-    accountId: number,
-    input: CreateCustomerRequestDto,
-  ): Promise<CreateCustomerResponseDto> {
+  async createCustomer(accountId: number, input: CreateCustomerRequestDto): Promise<CreateCustomerResponseDto> {
     const customer = await createCustomer(accountId, input);
 
     return { customer };

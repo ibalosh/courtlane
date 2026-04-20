@@ -19,9 +19,7 @@ export function createSlotDateTime(date: string, startTime: string) {
 
 export function getCurrentWeekStartDateString() {
   const today = new Date();
-  const utcDate = new Date(
-    Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()),
-  );
+  const utcDate = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()));
   const utcDay = utcDate.getUTCDay();
   const diff = utcDay === 0 ? -6 : 1 - utcDay;
 

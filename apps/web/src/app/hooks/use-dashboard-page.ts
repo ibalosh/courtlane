@@ -1,17 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
-import {
-  keepPreviousData,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query';
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createCustomer } from '../api/customers';
-import {
-  clearReservation,
-  createReservation,
-  getWeekSchedule,
-  updateReservation,
-} from '../api/reservations';
+import { clearReservation, createReservation, getWeekSchedule, updateReservation } from '../api/reservations';
 import {
   createReservationMap,
   createSlotDateTime,
@@ -54,29 +44,22 @@ export function useDashboardPage() {
     mutationFn: createReservation,
   });
   const updateReservationMutation = useMutation({
-    mutationFn: ({ customerId, id }: { customerId: number; id: number }) =>
-      updateReservation(id, { customerId }),
+    mutationFn: ({ customerId, id }: { customerId: number; id: number }) => updateReservation(id, { customerId }),
   });
   const clearReservationMutation = useMutation({
     mutationFn: clearReservation,
   });
 
   const schedule = scheduleQuery.data;
-  const reservationMap = useMemo(
-    () => createReservationMap(schedule),
-    [schedule],
-  );
-  const selectedDay =
-    schedule?.week.days.find((day) => day.date === selectedDate) ?? null;
+  const reservationMap = useMemo(() => createReservationMap(schedule), [schedule]);
+  const selectedDay = schedule?.week.days.find((day) => day.date === selectedDate) ?? null;
 
   useEffect(() => {
     if (!schedule) {
       return;
     }
 
-    const selectedDateStillVisible = schedule.week.days.some(
-      (day) => day.date === selectedDate,
-    );
+    const selectedDateStillVisible = schedule.week.days.some((day) => day.date === selectedDate);
 
     if (!selectedDateStillVisible) {
       setSelectedDate(schedule.week.days[0]?.date ?? null);
@@ -85,11 +68,7 @@ export function useDashboardPage() {
 
   const metrics = useMemo(() => {
     const reservedSlots = schedule?.reservations.length ?? 0;
-    const availableSlots = schedule
-      ? schedule.courts.length *
-        schedule.week.days.length *
-        schedule.slots.length
-      : 0;
+    const availableSlots = schedule ? schedule.courts.length * schedule.week.days.length * schedule.slots.length : 0;
 
     return {
       activeCourts: schedule?.courts.length ?? 0,
@@ -103,8 +82,7 @@ export function useDashboardPage() {
     createReservationMutation.isPending ||
     updateReservationMutation.isPending ||
     clearReservationMutation.isPending;
-  const isWeekTransitioning =
-    scheduleQuery.isFetching && !scheduleQuery.isLoading;
+  const isWeekTransitioning = scheduleQuery.isFetching && !scheduleQuery.isLoading;
 
   async function refreshWeek() {
     await queryClient.invalidateQueries({
@@ -156,10 +134,8 @@ export function useDashboardPage() {
   }
 
   return {
-    goToNextWeek: () =>
-      setWeekStart((currentWeekStart) => shiftDateString(currentWeekStart, 7)),
-    goToPreviousWeek: () =>
-      setWeekStart((currentWeekStart) => shiftDateString(currentWeekStart, -7)),
+    goToNextWeek: () => setWeekStart((currentWeekStart) => shiftDateString(currentWeekStart, 7)),
+    goToPreviousWeek: () => setWeekStart((currentWeekStart) => shiftDateString(currentWeekStart, -7)),
     isSaving,
     isWeekTransitioning,
     metrics,
@@ -170,8 +146,6 @@ export function useDashboardPage() {
     selectedDate,
     selectedDay,
     submitReservation,
-    weekLabel: schedule
-      ? formatWeekLabel(schedule.week.start, schedule.week.end)
-      : null,
+    weekLabel: schedule ? formatWeekLabel(schedule.week.start, schedule.week.end) : null,
   };
 }

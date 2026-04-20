@@ -6,11 +6,6 @@ type AppProvidersProps = {
   queryClient?: QueryClient;
 };
 
-export function AppProviders({
-  children,
-  queryClient = new QueryClient(),
-}: AppProvidersProps) {
-  return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-  );
+export function AppProviders({ children, queryClient = new QueryClient() }: AppProvidersProps) {
+  return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
 }

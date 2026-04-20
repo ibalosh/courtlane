@@ -1,3 +1,4 @@
+import React, { ReactNode } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { SquashBallMark } from '../squash-ball-mark';
 import { cn } from '@/lib/utils';
@@ -8,35 +9,50 @@ type AccountHeaderProps = {
   userName: string;
 };
 
-export function AccountHeader({
-  isLoggingOut,
-  onLogout,
-  userName,
-}: AccountHeaderProps) {
+function BrandSection() {
   return (
-    <header className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-      <div className="flex items-center gap-3">
-        <SquashBallMark />
-        <span>
-          <p className="font-heading text-2xl font-bold tracking-[-0.04em] text-slate-950">
-            Courtlane
-          </p>
-          <p className="text-sm text-slate-700">Court reservations</p>
-        </span>
+    <div className="flex items-center gap-3">
+      <SquashBallMark />
+      <div>
+        <p className="font-heading text-2xl font-bold tracking-[-0.04em] text-slate-950">Courtlane</p>
+        <p className="text-sm text-slate-700">Court reservations</p>
       </div>
-      <nav
-        aria-label="Account navigation"
-        className="flex flex-wrap items-center gap-2 text-sm font-medium"
-      >
-        <Link
-          className="rounded-full px-3 py-2 text-slate-700 transition-colors hover:bg-white/45 hover:text-slate-950"
-          onClick={(event) => {
-            event.preventDefault();
-          }}
-          to="/account/dashboard-page"
-        >
+    </div>
+  );
+}
+
+type NavItemProps = {
+  children: ReactNode;
+  className?: string;
+  'aria-disabled'?: boolean;
+  onClick?: React.MouseEventHandler<HTMLAnchorElement>;
+  to: string;
+};
+
+function NavItem({ children, className, onClick, to, ...rest }: NavItemProps) {
+  const defaultStyle = 'rounded-full px-3 py-2 text-slate-700 transition-colors hover:bg-white/45 hover:text-slate-950';
+  return (
+    <Link {...rest} className={cn(defaultStyle, className)} onClick={onClick} to={to}>
+      {children}
+    </Link>
+  );
+}
+
+export function AccountHeader({ isLoggingOut, onLogout, userName }: AccountHeaderProps) {
+  async function handleLogoutClick(event: React.MouseEvent<HTMLAnchorElement>) {
+    event.preventDefault();
+    await onLogout();
+  }
+
+  const logoutMessage = isLoggingOut ? 'Logging out...' : 'Log out';
+
+  return (
+    <header className="flex flex-col lg:flex-row lg:justify-between">
+      <BrandSection />
+      <nav aria-label="Account navigation" className="flex flex-wrap items-center gap-2 text-sm font-medium">
+        <NavItem to="/account/dashboard-page">
           Signed in: <span className="font-semibold">{userName}</span>
-        </Link>
+        </NavItem>
         <NavLink
           className={({ isActive }) =>
             cn(
@@ -50,31 +66,15 @@ export function AccountHeader({
         >
           Dashboard
         </NavLink>
-        <Link
-          className="rounded-full px-3 py-2 text-slate-700 transition-colors hover:bg-white/45 hover:text-slate-950"
-          onClick={(event) => {
-            event.preventDefault();
-          }}
-          to="/account/dashboard-page"
-        >
-          Courts
-        </Link>
-        <Link
+        <NavItem to="/account/dashboard-page">Courts</NavItem>
+        <NavItem
           aria-disabled={isLoggingOut}
-          className={cn(
-            'rounded-full px-3 py-2 transition-colors',
-            isLoggingOut
-              ? 'pointer-events-none text-slate-400'
-              : 'text-slate-700 hover:bg-white/45 hover:text-slate-950',
-          )}
-          onClick={async (event) => {
-            event.preventDefault();
-            await onLogout();
-          }}
+          className={cn(isLoggingOut ? 'pointer-events-none text-slate-400' : undefined)}
+          onClick={handleLogoutClick}
           to="/login"
         >
-          {isLoggingOut ? 'Logging out...' : 'Log out'}
-        </Link>
+          {logoutMessage}
+        </NavItem>
       </nav>
     </header>
   );

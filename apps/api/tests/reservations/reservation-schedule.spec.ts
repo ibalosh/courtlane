@@ -11,8 +11,7 @@ import { createReservationSlots } from '../../src/modules/reservations/reservati
 
 describe('reservation schedule utils', () => {
   it('normalizes a date to the monday week range', () => {
-    const { weekStart, weekEnd, nextWeekStart } =
-      createReservationWeekRange('2026-04-22');
+    const { weekStart, weekEnd, nextWeekStart } = createReservationWeekRange('2026-04-22');
 
     expect(weekStart.toISOString()).toBe('2026-04-20T00:00:00.000Z');
     expect(weekEnd.toISOString()).toBe('2026-04-26T00:00:00.000Z');
@@ -20,9 +19,7 @@ describe('reservation schedule utils', () => {
   });
 
   it('creates monday to sunday labels', () => {
-    expect(
-      createReservationWeekDays(new Date('2026-04-20T00:00:00.000Z')),
-    ).toEqual([
+    expect(createReservationWeekDays(new Date('2026-04-20T00:00:00.000Z'))).toEqual([
       { date: '2026-04-20', label: 'Monday' },
       { date: '2026-04-21', label: 'Tuesday' },
       { date: '2026-04-22', label: 'Wednesday' },

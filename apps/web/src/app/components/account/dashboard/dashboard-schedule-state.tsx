@@ -34,23 +34,16 @@ export function DashboardScheduleState({
   if (scheduleQuery.isError) {
     return (
       <p className="text-sm text-destructive">
-        {scheduleQuery.error instanceof Error
-          ? scheduleQuery.error.message
-          : 'Failed to load weekly schedule.'}
+        {scheduleQuery.error instanceof Error ? scheduleQuery.error.message : 'Failed to load weekly schedule.'}
       </p>
     );
   }
 
   return (
-    <div
-      className={cn(
-        'grid gap-3 transition-all duration-200',
-        isWeekTransitioning && 'translate-y-1 opacity-70',
-      )}
-    >
+    <div className={cn('grid gap-3 transition-all duration-200', isWeekTransitioning && 'translate-y-1 opacity-70')}>
       <p className="text-muted-foreground text-sm">
-        Click a slot to edit it in place. Press Enter to save, Escape to cancel,
-        and clear the field to remove an existing reservation.
+        Click a slot to edit it in place. Press Enter to save, Escape to cancel, and clear the field to remove an
+        existing reservation.
       </p>
       <DashboardScheduleTable
         isSaving={isSaving}

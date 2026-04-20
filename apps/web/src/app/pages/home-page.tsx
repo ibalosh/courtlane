@@ -16,12 +16,8 @@ export function HomePage() {
           <div className="flex items-center gap-3">
             <SquashBallMark />
             <div>
-              <p className="font-heading text-2xl font-bold tracking-[-0.04em] text-slate-950">
-                Courtlane
-              </p>
-              <p className="text-sm text-slate-700">
-                Squash court reservations
-              </p>
+              <p className="font-heading text-2xl font-bold tracking-[-0.04em] text-slate-950">Courtlane</p>
+              <p className="text-sm text-slate-700">Squash court reservations</p>
             </div>
           </div>
 
@@ -56,9 +52,8 @@ export function HomePage() {
                 Reserve the right court before the rally starts.
               </h1>
               <p className="mt-6 max-w-xl text-lg leading-8 text-slate-700 sm:text-xl">
-                Courtlane keeps weekly squash bookings clear, quick, and
-                competitive. Scan open slots, lock in your court, and keep your
-                club calendar moving.
+                Courtlane keeps weekly squash bookings clear, quick, and competitive. Scan open slots, lock in your
+                court, and keep your club calendar moving.
               </p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -82,28 +77,16 @@ export function HomePage() {
 
               <div className="mt-10 grid gap-3 sm:grid-cols-3">
                 <div className="rounded-3xl border border-white/65 bg-white/65 p-4 backdrop-blur-sm">
-                  <p className="text-3xl font-bold tracking-[-0.05em] text-slate-950">
-                    24/7
-                  </p>
-                  <p className="mt-1 text-sm text-slate-600">
-                    Booking visibility across the full week
-                  </p>
+                  <p className="text-3xl font-bold tracking-[-0.05em] text-slate-950">24/7</p>
+                  <p className="mt-1 text-sm text-slate-600">Booking visibility across the full week</p>
                 </div>
                 <div className="rounded-3xl border border-white/65 bg-white/65 p-4 backdrop-blur-sm">
-                  <p className="text-3xl font-bold tracking-[-0.05em] text-slate-950">
-                    4
-                  </p>
-                  <p className="mt-1 text-sm text-slate-600">
-                    Courts tracked side by side in one view
-                  </p>
+                  <p className="text-3xl font-bold tracking-[-0.05em] text-slate-950">4</p>
+                  <p className="mt-1 text-sm text-slate-600">Courts tracked side by side in one view</p>
                 </div>
                 <div className="rounded-3xl border border-white/65 bg-white/65 p-4 backdrop-blur-sm">
-                  <p className="text-3xl font-bold tracking-[-0.05em] text-slate-950">
-                    1 tap
-                  </p>
-                  <p className="mt-1 text-sm text-slate-600">
-                    From open slot to confirmed reservation
-                  </p>
+                  <p className="text-3xl font-bold tracking-[-0.05em] text-slate-950">1 tap</p>
+                  <p className="mt-1 text-sm text-slate-600">From open slot to confirmed reservation</p>
                 </div>
               </div>
             </div>
@@ -118,9 +101,7 @@ export function HomePage() {
                     <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber-300/80">
                       Tonight at the club
                     </p>
-                    <h2 className="mt-2 font-heading text-3xl font-bold tracking-[-0.05em]">
-                      Squash board
-                    </h2>
+                    <h2 className="mt-2 font-heading text-3xl font-bold tracking-[-0.05em]">Squash board</h2>
                   </div>
                   <div className="rounded-full border border-lime-300/30 bg-lime-300/12 px-3 py-1 text-xs font-semibold text-lime-200">
                     Live availability
@@ -138,15 +119,10 @@ export function HomePage() {
 
                   <div className="mt-3 space-y-2">
                     {courtSlots.map((slot, index) => (
-                      <div
-                        key={slot.time}
-                        className="grid grid-cols-[88px_repeat(4,minmax(0,1fr))] gap-2"
-                      >
+                      <div key={slot.time} className="grid grid-cols-[88px_repeat(4,minmax(0,1fr))] gap-2">
                         <div className="rounded-2xl bg-slate-900 px-3 py-3 text-left text-white">
                           <p className="text-sm font-bold">{slot.time}</p>
-                          <p className="mt-1 text-[0.68rem] uppercase tracking-[0.15em] text-white/65">
-                            {slot.label}
-                          </p>
+                          <p className="mt-1 text-[0.68rem] uppercase tracking-[0.15em] text-white/65">{slot.label}</p>
                         </div>
                         {Array.from({ length: 4 }).map((_, courtIndex) => {
                           const isOpen = (index + courtIndex) % 3 !== 0;
@@ -160,9 +136,7 @@ export function HomePage() {
                                   : 'rounded-2xl border border-amber-900/10 bg-amber-100 px-3 py-3'
                               }
                             >
-                              <p className="text-sm font-semibold">
-                                {isOpen ? 'Open' : 'Booked'}
-                              </p>
+                              <p className="text-sm font-semibold">{isOpen ? 'Open' : 'Booked'}</p>
                               <p className="mt-1 text-[0.68rem] uppercase tracking-[0.14em] text-slate-600">
                                 {isOpen ? slot.status : 'Club match'}
                               </p>
@@ -176,21 +150,16 @@ export function HomePage() {
 
                 <div className="mt-5 grid gap-3 sm:grid-cols-2">
                   <div className="rounded-[1.4rem] border border-white/10 bg-white/6 p-4">
-                    <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber-300/80">
-                      Weekly rhythm
-                    </p>
+                    <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber-300/80">Weekly rhythm</p>
                     <p className="mt-2 text-sm leading-6 text-white/72">
-                      Peak evening windows stand out immediately, so players can
-                      book before league nights compress the board.
+                      Peak evening windows stand out immediately, so players can book before league nights compress the
+                      board.
                     </p>
                   </div>
                   <div className="rounded-[1.4rem] border border-white/10 bg-white/6 p-4">
-                    <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber-300/80">
-                      Court control
-                    </p>
+                    <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber-300/80">Court control</p>
                     <p className="mt-2 text-sm leading-6 text-white/72">
-                      Keep reservations readable for members, coaches, and front
-                      desk staff without spreadsheet drift.
+                      Keep reservations readable for members, coaches, and front desk staff without spreadsheet drift.
                     </p>
                   </div>
                 </div>

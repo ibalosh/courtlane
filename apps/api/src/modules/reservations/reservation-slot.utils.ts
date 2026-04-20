@@ -1,8 +1,4 @@
-import {
-  DAY_END_MINUTES,
-  DAY_START_MINUTES,
-  SLOT_DURATION_MINUTES,
-} from './reservation-schedule.config';
+import { DAY_END_MINUTES, DAY_START_MINUTES, SLOT_DURATION_MINUTES } from './reservation-schedule.config';
 
 function createReservationSlotStartTime(totalMinutes: number) {
   const hours = Math.floor(totalMinutes / 60) % 24;
@@ -36,15 +32,8 @@ export function createReservationSlots() {
     endMinutes: number;
   }> = [];
 
-  for (
-    let startMinutes = DAY_START_MINUTES;
-    startMinutes < DAY_END_MINUTES;
-    startMinutes += SLOT_DURATION_MINUTES
-  ) {
-    const endMinutes = Math.min(
-      startMinutes + SLOT_DURATION_MINUTES,
-      DAY_END_MINUTES,
-    );
+  for (let startMinutes = DAY_START_MINUTES; startMinutes < DAY_END_MINUTES; startMinutes += SLOT_DURATION_MINUTES) {
+    const endMinutes = Math.min(startMinutes + SLOT_DURATION_MINUTES, DAY_END_MINUTES);
 
     slots.push({
       startTime: createReservationSlotStartTime(startMinutes),

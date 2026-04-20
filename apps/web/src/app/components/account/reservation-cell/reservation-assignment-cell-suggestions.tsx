@@ -54,12 +54,8 @@ export function ReservationAssignmentCellSuggestions({
                     }}
                     type="button"
                   >
-                    <span className="text-sm font-medium text-slate-900">
-                      {customer.name}
-                    </span>
-                    <span className="text-xs text-slate-600">
-                      {customer.email ?? 'No email on file'}
-                    </span>
+                    <span className="text-sm font-medium text-slate-900">{customer.name}</span>
+                    <span className="text-xs text-slate-600">{customer.email ?? 'No email on file'}</span>
                   </button>
                 </li>
               );
@@ -69,8 +65,7 @@ export function ReservationAssignmentCellSuggestions({
           <p className="px-4 py-3 text-sm text-slate-600">Searching...</p>
         ) : (
           <p className="px-4 py-3 text-sm text-slate-600">
-            No existing customers match "{trimmedValue}". Keep typing to create
-            a new name.
+            No existing customers match "{trimmedValue}". Keep typing to create a new name.
           </p>
         )}
       </div>

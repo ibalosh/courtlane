@@ -7,10 +7,7 @@ type UseCustomerSearchSuggestionsOptions = {
   value: string;
 };
 
-export function useCustomerSearchSuggestions({
-  enabled,
-  value,
-}: UseCustomerSearchSuggestionsOptions) {
+export function useCustomerSearchSuggestions({ enabled, value }: UseCustomerSearchSuggestionsOptions) {
   const [debouncedValue, setDebouncedValue] = useState('');
   const trimmedValue = value.trim();
 
@@ -40,10 +37,7 @@ export function useCustomerSearchSuggestions({
   });
 
   const suggestions = useMemo(
-    () =>
-      query.data?.filter((customer) =>
-        customer.name.toLowerCase().includes(trimmedValue.toLowerCase()),
-      ) ?? [],
+    () => query.data?.filter((customer) => customer.name.toLowerCase().includes(trimmedValue.toLowerCase())) ?? [],
     [query.data, trimmedValue],
   );
 

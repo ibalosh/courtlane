@@ -1,19 +1,11 @@
-import {
-  ConflictException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import type {
   CreateReservationRequestDto,
   ReservationResponseDto,
   UpdateReservationRequestDto,
   WeekScheduleResponseDto,
 } from '@courtlane/contracts';
-import {
-  createReservationWeekDays,
-  createReservationWeekRange,
-  formatReservationDate,
-} from './reservation-week.utils';
+import { createReservationWeekDays, createReservationWeekRange, formatReservationDate } from './reservation-week.utils';
 import {
   createReservationSlots,
   getReservationSlotEndDate,
@@ -84,18 +76,12 @@ export class ReservationsService {
       throw new NotFoundException('Customer not found.');
     }
 
-    const updatedReservation = await updateReservationCustomer(
-      reservationId,
-      input.customerId,
-    );
+    const updatedReservation = await updateReservationCustomer(reservationId, input.customerId);
 
     return this.toReservationResponse(updatedReservation);
   }
 
-  async clearReservation(
-    accountId: number,
-    reservationId: number,
-  ): Promise<void> {
+  async clearReservation(accountId: number, reservationId: number): Promise<void> {
     const deleted = await deleteReservationForAccount(accountId, reservationId);
 
     if (deleted.count === 0) {
@@ -103,12 +89,8 @@ export class ReservationsService {
     }
   }
 
-  async getWeekSchedule(
-    accountId: number,
-    startDate: string,
-  ): Promise<WeekScheduleResponseDto> {
-    const { weekStart, weekEnd, nextWeekStart } =
-      createReservationWeekRange(startDate);
+  async getWeekSchedule(accountId: number, startDate: string): Promise<WeekScheduleResponseDto> {
+    const { weekStart, weekEnd, nextWeekStart } = createReservationWeekRange(startDate);
 
     const [courts, reservations] = await Promise.all([
       listCourtsForWeek(accountId),
@@ -123,9 +105,7 @@ export class ReservationsService {
       },
       courts,
       slots: createReservationSlots(),
-      reservations: reservations.map((reservation) =>
-        this.toReservationResponse(reservation),
-      ),
+      reservations: reservations.map((reservation) => this.toReservationResponse(reservation)),
     };
   }
 

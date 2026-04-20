@@ -17,9 +17,7 @@ async function bootstrap() {
   });
   app.use(cookieParser());
   await app.listen(env.apiPort);
-  Logger.log(
-    `🚀 Application is running on: http://localhost:${env.apiPort}/${globalPrefix}`,
-  );
+  Logger.log(`🚀 Application is running on: http://localhost:${env.apiPort}/${globalPrefix}`);
 }
 
 bootstrap();

@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Post,
-  Req,
-  Res,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import type { AuthUserDto, LoginDto, SignupDto } from '@courtlane/contracts';
 import { AuthService } from './auth.service';
 import { loginRequestSchema, signupRequestSchema } from '@courtlane/contracts';
@@ -27,11 +19,7 @@ export class AuthController {
   ) {
     const signupResult = await this.authService.signup(signupDto);
 
-    this.setSessionCookie(
-      response,
-      signupResult.sessionId,
-      signupResult.sessionExpiresAt,
-    );
+    this.setSessionCookie(response, signupResult.sessionId, signupResult.sessionExpiresAt);
 
     return { user: signupResult.user };
   }
@@ -43,23 +31,14 @@ export class AuthController {
   ) {
     const loginResult = await this.authService.login(loginDto);
 
-    this.setSessionCookie(
-      response,
-      loginResult.sessionId,
-      loginResult.sessionExpiresAt,
-    );
+    this.setSessionCookie(response, loginResult.sessionId, loginResult.sessionExpiresAt);
 
     return { user: loginResult.user };
   }
 
   @Post('logout')
-  async logout(
-    @Req() request: Request,
-    @Res({ passthrough: true }) response: Response,
-  ) {
-    const logoutResponse = await this.authService.logout(
-      this.getSessionId(request),
-    );
+  async logout(@Req() request: Request, @Res({ passthrough: true }) response: Response) {
+    const logoutResponse = await this.authService.logout(this.getSessionId(request));
     this.clearSessionCookie(response);
 
     return logoutResponse;
@@ -75,16 +54,8 @@ export class AuthController {
     response.clearCookie(SESSION_COOKIE_NAME, getSessionCookieOptions());
   }
 
-  private setSessionCookie(
-    response: Response,
-    sessionId: string,
-    expiresAt: Date,
-  ) {
-    response.cookie(
-      SESSION_COOKIE_NAME,
-      sessionId,
-      getSessionCookieOptions({ expires: expiresAt }),
-    );
+  private setSessionCookie(response: Response, sessionId: string, expiresAt: Date) {
+    response.cookie(SESSION_COOKIE_NAME, sessionId, getSessionCookieOptions({ expires: expiresAt }));
   }
 
   private getSessionId(request: Request): string | null {

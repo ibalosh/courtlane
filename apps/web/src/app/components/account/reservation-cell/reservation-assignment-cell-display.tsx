@@ -15,17 +15,16 @@ const statusStyles: Record<ReservationStatus, string> = {
     'border-rose-800/25 bg-red-50 text-rose-950 shadow-[inset_0_0_0_1px_rgba(244,63,94,0.14)] hover:border-rose-800/35 hover:bg-rose-200',
 };
 
-const statusMeta: Record<ReservationStatus, { badge: string; label: string }> =
-  {
-    free: {
-      badge: 'border-emerald-800/20 bg-emerald-100 text-emerald-900',
-      label: 'Open',
-    },
-    reserved: {
-      badge: 'border-rose-800/20 bg-orange-50 text-rose-900',
-      label: 'Taken',
-    },
-  };
+const statusMeta: Record<ReservationStatus, { badge: string; label: string }> = {
+  free: {
+    badge: 'border-emerald-800/20 bg-emerald-100 text-emerald-900',
+    label: 'Open',
+  },
+  reserved: {
+    badge: 'border-rose-800/20 bg-orange-50 text-rose-900',
+    label: 'Taken',
+  },
+};
 
 export function ReservationAssignmentCellDisplay({
   customerEmail,
@@ -46,9 +45,7 @@ export function ReservationAssignmentCellDisplay({
         type="button"
       >
         <span className="min-w-0">
-          <span className="block text-sm font-medium">
-            {statusMeta[status].label}
-          </span>
+          <span className="block text-sm font-medium">{statusMeta[status].label}</span>
         </span>
         <span className="min-w-0 text-right text-sm font-medium">
           {status === 'free' ? (
@@ -67,16 +64,12 @@ export function ReservationAssignmentCellDisplay({
                 statusMeta[status].badge,
               )}
             >
-              <span className="min-w-0 whitespace-normal break-words">
-                {customerName}
-              </span>
+              <span className="min-w-0 whitespace-normal break-words">{customerName}</span>
             </span>
           )}
         </span>
       </button>
-      {customerEmail ? (
-        <p className="truncate text-xs text-slate-900/55">{customerEmail}</p>
-      ) : null}
+      {customerEmail ? <p className="truncate text-xs text-slate-900/55">{customerEmail}</p> : null}
     </div>
   );
 }

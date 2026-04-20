@@ -6,14 +6,7 @@ import type {
   DashboardSelectedDay,
   DashboardSubmitReservation,
 } from './dashboard-types';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 type DashboardScheduleTableProps = {
   isSaving: boolean;
@@ -41,10 +34,7 @@ export function DashboardScheduleTable({
           <TableRow className="bg-muted/50 hover:bg-muted/50">
             <TableHead className="w-36 border-r bg-muted/70">Time</TableHead>
             {schedule.courts.map((court) => (
-              <TableHead
-                className="border-r text-center last:border-r-0"
-                key={court.id}
-              >
+              <TableHead className="border-r text-center last:border-r-0" key={court.id}>
                 {court.name}
               </TableHead>
             ))}
@@ -60,9 +50,7 @@ export function DashboardScheduleTable({
                 </div>
               </TableCell>
               {schedule.courts.map((court) => {
-                const reservation = reservationMap.get(
-                  `${selectedDay.date}:${slot.startTime}:${court.id}`,
-                );
+                const reservation = reservationMap.get(`${selectedDay.date}:${slot.startTime}:${court.id}`);
 
                 return (
                   <TableCell

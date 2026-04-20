@@ -1,15 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-  Query,
-  UseGuards,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards, UseInterceptors } from '@nestjs/common';
 
 import {
   clearReservationResponseSchema,
@@ -41,41 +30,29 @@ export class ReservationsController {
   constructor(private readonly reservationsService: ReservationsService) {}
 
   @Get('week')
-  @UseInterceptors(
-    new ValidateResponseBySchemaInterceptor(weekScheduleResponseSchema),
-  )
+  @UseInterceptors(new ValidateResponseBySchemaInterceptor(weekScheduleResponseSchema))
   getWeekSchedule(
     @Query(new ValidateBySchemaPipe(weekScheduleQuerySchema))
     weekScheduleQuery: WeekScheduleQueryDto,
     @CurrentUser() user: AuthUserDto,
   ): Promise<WeekScheduleResponseDto> {
-    return this.reservationsService.getWeekSchedule(
-      user.accountId,
-      weekScheduleQuery.start,
-    );
+    return this.reservationsService.getWeekSchedule(user.accountId, weekScheduleQuery.start);
   }
 
   @Post()
-  @UseInterceptors(
-    new ValidateResponseBySchemaInterceptor(reservationResponseSchema),
-  )
+  @UseInterceptors(new ValidateResponseBySchemaInterceptor(reservationResponseSchema))
   async createReservation(
     @Body(new ValidateBySchemaPipe(createReservationRequestSchema))
     createReservationDto: CreateReservationRequestDto,
     @CurrentUser() user: AuthUserDto,
   ): Promise<ReservationResponseDto> {
     return {
-      reservation: await this.reservationsService.createReservation(
-        user.accountId,
-        createReservationDto,
-      ),
+      reservation: await this.reservationsService.createReservation(user.accountId, createReservationDto),
     };
   }
 
   @Patch(':id')
-  @UseInterceptors(
-    new ValidateResponseBySchemaInterceptor(reservationResponseSchema),
-  )
+  @UseInterceptors(new ValidateResponseBySchemaInterceptor(reservationResponseSchema))
   async updateReservation(
     @Param(new ValidateBySchemaPipe(reservationIdParamsSchema))
     reservationParams: ReservationIdParamsDto,
@@ -93,18 +70,13 @@ export class ReservationsController {
   }
 
   @Delete(':id')
-  @UseInterceptors(
-    new ValidateResponseBySchemaInterceptor(clearReservationResponseSchema),
-  )
+  @UseInterceptors(new ValidateResponseBySchemaInterceptor(clearReservationResponseSchema))
   async clearReservation(
     @Param(new ValidateBySchemaPipe(reservationIdParamsSchema))
     reservationParams: ReservationIdParamsDto,
     @CurrentUser() user: AuthUserDto,
   ): Promise<ClearReservationResponseDto> {
-    await this.reservationsService.clearReservation(
-      user.accountId,
-      reservationParams.id,
-    );
+    await this.reservationsService.clearReservation(user.accountId, reservationParams.id);
 
     return { ok: true };
   }

@@ -9,10 +9,7 @@ type AuthMutationOptions<TInput> = {
   submitErrorMessage: string;
 };
 
-export function useAuthMutation<TInput>({
-  mutationFn,
-  submitErrorMessage,
-}: AuthMutationOptions<TInput>) {
+export function useAuthMutation<TInput>({ mutationFn, submitErrorMessage }: AuthMutationOptions<TInput>) {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const queryClient = useQueryClient();
@@ -28,11 +25,7 @@ export function useAuthMutation<TInput>({
       await navigate(redirectPath, { replace: true });
     },
     onError: (submissionError) => {
-      setError(
-        submissionError instanceof Error
-          ? submissionError.message
-          : submitErrorMessage,
-      );
+      setError(submissionError instanceof Error ? submissionError.message : submitErrorMessage);
     },
   });
 
