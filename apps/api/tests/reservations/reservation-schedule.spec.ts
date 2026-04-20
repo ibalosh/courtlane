@@ -1,11 +1,9 @@
 import {
+  createReservationWeekDays,
+  createReservationWeekRange,
   DAY_END_MINUTES,
   DAY_START_MINUTES,
   SLOT_DURATION_MINUTES,
-} from '../../src/modules/reservations/reservation-schedule.config';
-import {
-  createReservationWeekDays,
-  createReservationWeekRange,
 } from '../../src/modules/reservations/reservation-week.utils';
 import { createReservationSlots } from '../../src/modules/reservations/reservation-slot.utils';
 

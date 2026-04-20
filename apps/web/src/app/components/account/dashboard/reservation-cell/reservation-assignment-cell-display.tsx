@@ -17,11 +17,13 @@ const statusStyles: Record<ReservationStatus, string> = {
 
 const statusMeta: Record<ReservationStatus, { badge: string; label: string }> = {
   free: {
-    badge: 'border-emerald-800/20 bg-emerald-100 text-emerald-900',
+    badge:
+      'inline-flex min-w-0 items-center rounded-full border px-2.5 py-1 text-[0.7rem] font-bold uppercase tracking-[0.14em] text-slate-950 border-emerald-800/20 bg-emerald-200 text-emerald-900',
     label: 'Open',
   },
   reserved: {
-    badge: 'border-rose-800/20 bg-orange-50 text-rose-900',
+    badge:
+      'inline-flex min-w-0 items-center rounded-full border px-2.5 py-1 text-[0.7rem] font-bold uppercase tracking-[0.14em] text-slate-950 border-rose-800/20 bg-orange-50 text-rose-900',
     label: 'Taken',
   },
 };
@@ -49,22 +51,10 @@ export function ReservationAssignmentCellDisplay({
         </span>
         <span className="min-w-0 text-right text-sm font-medium">
           {status === 'free' ? (
-            <span
-              className={cn(
-                'inline-flex items-center rounded-full border px-2.5 py-1 text-[0.7rem] font-semibold uppercase tracking-[0.14em]',
-                statusMeta[status].badge,
-              )}
-            >
-              Assign
-            </span>
+            <span className={statusMeta[status].badge}>Assign</span>
           ) : (
-            <span
-              className={cn(
-                'inline-flex min-w-0 items-center rounded-full border px-2.5 py-1 text-[0.7rem] font-bold uppercase tracking-[0.14em] text-slate-950',
-                statusMeta[status].badge,
-              )}
-            >
-              <span className="min-w-0 whitespace-normal break-words">{customerName}</span>
+            <span className={statusMeta[status].badge}>
+              <span className="min-w-0 whitespace-normal wrap-break-word">{customerName}</span>
             </span>
           )}
         </span>

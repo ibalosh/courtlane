@@ -1,4 +1,4 @@
-import { DAY_END_MINUTES, DAY_START_MINUTES, SLOT_DURATION_MINUTES } from './reservation-schedule.config';
+import { DAY_END_MINUTES, DAY_START_MINUTES, SLOT_DURATION_MINUTES } from './reservation-week.utils';
 
 function createReservationSlotStartTime(totalMinutes: number) {
   const hours = Math.floor(totalMinutes / 60) % 24;
