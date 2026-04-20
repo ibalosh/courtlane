@@ -105,7 +105,7 @@ describe('App', () => {
 
       return Promise.reject(new Error(`Unhandled fetch request: ${url}`));
     });
-    setLocation('/account/dashboard-page');
+    setLocation('/account/dashboard');
 
     renderApp();
 
