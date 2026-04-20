@@ -2,7 +2,7 @@ import { type SubmitEventHandler, useState } from 'react';
 import { login } from '../../api/auth';
 import { AuthForm } from '../../components/public/auth-form';
 import { AuthField } from '../../components/public/auth-field';
-import { useAuthMutation } from '../../hooks/use-auth-mutation';
+import { useAuthMutation } from '../../hooks/use-auth';
 import { AuthPage } from './auth-page';
 
 export function LoginPage() {
