@@ -12,7 +12,7 @@ type AuthFieldProps = {
   minLength?: number;
 };
 
-export function AuthField({ autoComplete, id, label, minLength, onChange, type = 'text', value }: AuthFieldProps) {
+export function Field({ autoComplete, id, label, minLength, onChange, type = 'text', value }: AuthFieldProps) {
   return (
     <div className="flex flex-col gap-2">
       <Label htmlFor={id}>{label}</Label>
