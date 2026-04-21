@@ -11,7 +11,7 @@ type AccountHeaderProps = {
 
 function BrandSection() {
   return (
-    <div className="flex items-center gap-3 p-2">
+    <div className="flex items-center gap-3 p-2 justify-center">
       <SquashBallMark />
       <div>
         <p className="font-heading text-2xl font-bold tracking-[-0.04em] text-slate-950">Courtlane</p>
@@ -40,7 +40,7 @@ type NavButtonProps = {
 };
 
 const navItemStyle =
-  'cursor-pointer rounded-full px-3 py-2 text-slate-700 transition-colors hover:bg-white/45 hover:text-slate-950';
+  'inline-flex items-center rounded-full px-3 py-2 text-slate-700 transition-colors hover:bg-white/45 hover:text-slate-950';
 
 function getAccountNavLinkClassName({ isActive }: { isActive: boolean }) {
   return cn(
@@ -53,7 +53,10 @@ function getAccountNavLinkClassName({ isActive }: { isActive: boolean }) {
 
 function Nav({ children }: { children: ReactNode }) {
   return (
-    <nav aria-label="Account navigation" className="flex flex-wrap items-center gap-2 text-sm font-medium">
+    <nav
+      aria-label="Account navigation"
+      className="flex flex-wrap items-center gap-2 text-sm font-medium lg:justify-end"
+    >
       {children}
     </nav>
   );
@@ -87,22 +90,24 @@ export function AccountHeader({ isLoggingOut, onLogout, userName }: AccountHeade
   const logoutMessage = isLoggingOut ? 'Logging out...' : 'Log out';
 
   return (
-    <header className="flex flex-col lg:flex-row lg:justify-between mb-4">
+    <header className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
       <BrandSection />
       <Nav>
-        <NavItem to="/account/dashboard">
+        <NavItem className="w-full justify-center text-center sm:w-auto hidden sm:block" to="/account/dashboard">
           Signed in: <span className="font-semibold">{userName}</span>
         </NavItem>
-        <NavLinkItem to="/account/dashboard">Dashboard</NavLinkItem>
-        <NavLinkItem to="/account/customers">Customers</NavLinkItem>
-        <NavLinkItem to="/account/profile">Profile</NavLinkItem>
-        <NavButton
-          className={cn(navItemStyle, isLoggingOut ? 'pointer-events-none text-slate-400' : undefined)}
-          disabled={isLoggingOut}
-          onClick={onLogout}
-        >
-          {logoutMessage}
-        </NavButton>
+        <div className="flex flex-wrap justify-center w-full lg:w-auto gap-2">
+          <NavLinkItem to="/account/dashboard">Dashboard</NavLinkItem>
+          <NavLinkItem to="/account/customers">Customers</NavLinkItem>
+          <NavLinkItem to="/account/profile">Profile</NavLinkItem>
+          <NavButton
+            className={cn(navItemStyle, isLoggingOut ? 'pointer-events-none text-slate-400' : undefined)}
+            disabled={isLoggingOut}
+            onClick={onLogout}
+          >
+            {logoutMessage}
+          </NavButton>
+        </div>
       </Nav>
     </header>
   );
