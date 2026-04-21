@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { logout, me, type AuthResponse, type MeResponse } from '../api/auth';
 import { getSafeRedirectPath } from '../utils/auth-redirect';
 
-const authMeQueryKey = ['auth', 'me'] as const;
+export const authMeQueryKey = ['auth', 'me'] as const;
 
 type AuthMutationOptions<TInput> = {
   mutationFn: (input: TInput) => Promise<AuthResponse>;

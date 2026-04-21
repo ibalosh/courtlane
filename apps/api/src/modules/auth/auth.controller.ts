@@ -1,11 +1,11 @@
-import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
-import type { AuthUserDto, LoginDto, SignupDto } from '@courtlane/contracts';
+import { Body, Controller, Get, Patch, Post, Req, Res, UseGuards } from '@nestjs/common';
+import type { AuthUserDto, LoginDto, SignupDto, UpdateProfileDto } from '@courtlane/contracts';
 import { AuthService } from './auth.service';
-import { loginRequestSchema, signupRequestSchema } from '@courtlane/contracts';
+import { loginRequestSchema, signupRequestSchema, updateProfileRequestSchema } from '@courtlane/contracts';
 import { Request, Response } from 'express';
 import { getSessionCookieOptions, SESSION_COOKIE_NAME } from './auth.cookies';
 import { CurrentUser } from './current-user.decorator';
-import { OptionalAuthGuard } from './auth.guard';
+import { AuthGuard, OptionalAuthGuard } from './auth.guard';
 import { ValidateBySchemaPipe } from '../../common/pipes';
 
 @Controller('auth')
@@ -48,6 +48,17 @@ export class AuthController {
   @Get('me')
   me(@CurrentUser() user: AuthUserDto | null) {
     return { user };
+  }
+
+  @UseGuards(AuthGuard)
+  @Patch('me')
+  async updateProfile(
+    @Body(new ValidateBySchemaPipe(updateProfileRequestSchema)) updateProfileDto: UpdateProfileDto,
+    @CurrentUser() user: AuthUserDto,
+  ) {
+    return {
+      user: await this.authService.updateProfile(user.id, updateProfileDto),
+    };
   }
 
   private clearSessionCookie(response: Response) {

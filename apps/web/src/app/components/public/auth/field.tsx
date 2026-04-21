@@ -2,7 +2,7 @@ import type { ChangeEventHandler } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
-type AuthFieldProps = {
+type FieldProps = {
   autoComplete?: string;
   id: string;
   label: string;
@@ -12,7 +12,7 @@ type AuthFieldProps = {
   minLength?: number;
 };
 
-export function Field({ autoComplete, id, label, minLength, onChange, type = 'text', value }: AuthFieldProps) {
+export function Field({ autoComplete, id, label, minLength, onChange, type = 'text', value }: FieldProps) {
   return (
     <div className="flex flex-col gap-2">
       <Label htmlFor={id}>{label}</Label>
