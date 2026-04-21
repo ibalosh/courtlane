@@ -6,35 +6,28 @@
 [![NestJS](https://img.shields.io/badge/NestJS-E0234E?logo=nestjs&logoColor=white)](https://nestjs.com/)
 [![Zod](https://img.shields.io/badge/Zod-3E67B1?logo=zod&logoColor=white)](https://zod.dev/)
 
-Courtlane is a small full-stack booking app for clubs and sports centers that need a simple way to manage customers and reserve courts on a weekly schedule.
+Courtlane is a full-stack court booking app for clubs and sports centers. It combines customer management, account-based access, and weekly court scheduling in a single TypeScript monorepo.
 
-It combines a React frontend, a NestJS API, shared Zod contracts, and a Prisma/PostgreSQL data layer in one TypeScript monorepo.
-
-## What It Includes
-
-- user authentication and account-based access
-- customer management for recurring players and contacts
-- court and weekly reservation scheduling
-- shared request and response contracts between frontend and backend
+Shared Zod contracts keep the frontend and backend aligned, while Prisma handles the PostgreSQL data layer.
 
 ## Tech Stack
 
 - frontend: React 19, Vite, TanStack Query
 - backend: NestJS
-- validation/contracts: Zod
+- contracts and validation: Zod
 - database: Prisma + PostgreSQL
-- workspace tooling: Nx + Yarn workspaces
+- workspace: Nx + Yarn workspaces
 
 ## Repository Structure
 
-- `apps/web`: React + Vite frontend for login, customer management, and reservation scheduling
-- `apps/api`: NestJS backend API for auth, users, customers, and reservations
-- `libs/contracts`: shared Zod schemas and typed contracts between the frontend and backend
-- `libs/db`: Prisma database layer and seed/migration tooling
+- `apps/web`: frontend for authentication, customer management, and reservation scheduling
+- `apps/api`: API for auth, users, customers, and reservations
+- `libs/contracts`: shared Zod schemas and typed API contracts
+- `libs/db`: Prisma schema, migrations, and database utilities
 
 ## Getting Started
 
-Install dependencies, configure the environment, prepare the database, and start the workspace:
+Install dependencies, copy the environment file, prepare the database, and start the app:
 
 ```bash
 yarn install
@@ -43,16 +36,15 @@ yarn db:prepare
 yarn start
 ```
 
-The API currently expects at least:
+The default local environment is:
 
 ```env
-API_PORT=4400
-WEB_APP_URL=http://localhost:4200
-DATABASE_URL=postgresql://courtlane:courtlane@localhost:5432/courtlane
+DATABASE_URL=postgresql://test:test@localhost:5432/test
+API_PORT=1111
+API_BASE_URL=http://localhost:3333/api
+WEB_APP_URL=http://localhost:2222
 ```
 
 ## Preview
-
-Landing page preview of the Courtlane booking experience.
 
 ![Courtlane preview](./screenshot.png)
