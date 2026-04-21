@@ -21,6 +21,7 @@ function normalizeDraft(draft: CustomerDraft) {
 export function CustomerCard({ customer, invalidateQueryKey }: CustomerCardProps) {
   const queryClient = useQueryClient();
   const [isEditing, setIsEditing] = useState(false);
+
   const updateCustomerMutation = useMutation({
     mutationFn: (draft: CustomerDraft) => updateCustomer(customer.id, normalizeDraft(draft)),
     onSuccess: async () => {

@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 
 export function CustomersPage() {
   return (
-    <Card className="w-full border-border/70 bg-background/90 py-0 shadow-[0_16px_40px_rgba(15,23,42,0.08)]">
+    <Card className="w-full border-border/70 bg-background/90 shadow-[0_16px_40px_rgba(15,23,42,0.08)]">
       <CardHeader className="m-5 gap-3 border-b">
         <p className="text-muted-foreground text-xs font-semibold uppercase tracking-[0.16em]">Customers</p>
         <div className="max-w-2xl">
@@ -18,21 +18,20 @@ export function CustomersPage() {
       <CardContent className="grid gap-6 py-6 lg:grid-cols-[1.1fr_0.9fr]">
         <Card className="border border-border/70 bg-background shadow-none" size="sm">
           <CardHeader>
-            <CardTitle>Customers</CardTitle>
-            <CardDescription>Current customer records for this account.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <CustomersList />
-          </CardContent>
-        </Card>
-
-        <Card className="border border-border/70 bg-background shadow-none" size="sm">
-          <CardHeader>
             <CardTitle>Add Customer</CardTitle>
             <CardDescription>Add a customer and refresh the directory immediately.</CardDescription>
           </CardHeader>
           <CardContent>
             <CustomerCreateForm invalidateQueryKey={customersListQueryKey} />
+          </CardContent>
+        </Card>
+        <Card className="border border-border/70 bg-background shadow-none" size="sm">
+          <CardHeader>
+            <CardTitle>Customers</CardTitle>
+            <CardDescription>Current customer records for this account.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <CustomersList />
           </CardContent>
         </Card>
       </CardContent>

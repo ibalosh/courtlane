@@ -2,7 +2,7 @@ import type { CustomerDraft, DeleteCustomer, UpdateCustomer } from './customers-
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useState, type FormEvent } from 'react';
+import { useState, SubmitEvent } from 'react';
 
 type CustomerCardEditFormProps = {
   customer: {
@@ -38,7 +38,7 @@ export function CustomerCardEditForm({
     phone: customer.phone ?? '',
   });
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: SubmitEvent) {
     event.preventDefault();
     await onSubmit(customerId, draft);
   }
@@ -48,6 +48,7 @@ export function CustomerCardEditForm({
       <div className="grid gap-2">
         <Label htmlFor={`edit-customer-name-${customerId}`}>Name</Label>
         <Input
+          aria-label={`edit-customer-name-${customerId}`}
           id={`edit-customer-name-${customerId}`}
           onChange={(event) => setDraft({ ...draft, name: event.target.value })}
           required
@@ -57,6 +58,7 @@ export function CustomerCardEditForm({
       <div className="grid gap-2">
         <Label htmlFor={`edit-customer-email-${customerId}`}>Email</Label>
         <Input
+          aria-label={`edit-customer-email-${customerId}`}
           id={`edit-customer-email-${customerId}`}
           onChange={(event) => setDraft({ ...draft, email: event.target.value })}
           type="email"
@@ -66,6 +68,7 @@ export function CustomerCardEditForm({
       <div className="grid gap-2">
         <Label htmlFor={`edit-customer-phone-${customerId}`}>Phone</Label>
         <Input
+          aria-label={`edit-customer-phone-${customerId}`}
           id={`edit-customer-phone-${customerId}`}
           onChange={(event) => setDraft({ ...draft, phone: event.target.value })}
           value={draft.phone}
