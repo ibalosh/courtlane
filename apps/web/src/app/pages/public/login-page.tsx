@@ -1,7 +1,7 @@
 import { type SubmitEventHandler, useState } from 'react';
 import { login } from '../../api/auth';
-import { AuthForm } from '../../components/public/auth-form';
-import { AuthField } from '../../components/public/auth-field';
+import { Form } from '../../components/public/auth/form';
+import { Field } from '../../components/public/auth/field';
 import { useAuthMutation } from '../../hooks/use-auth';
 import { AuthPage } from './auth-page';
 
@@ -21,20 +21,18 @@ export function LoginPage() {
 
   return (
     <AuthPage
-      altAction="Sign up"
-      altLabel="Need an account?"
-      altPath="/signup"
+      alt={{ action: 'Sign up', label: 'Need an account?', path: '/signup' }}
       description="Log in to manage your bookings and account."
       title="Welcome back"
     >
-      <AuthForm
+      <Form
         error={error}
         isSubmitting={isPending}
         onSubmit={handleSubmit}
         submitLabel="Log in"
         submittingLabel="Logging in..."
       >
-        <AuthField
+        <Field
           autoComplete="email"
           id="email"
           label="Email"
@@ -42,7 +40,7 @@ export function LoginPage() {
           type="email"
           value={email}
         />
-        <AuthField
+        <Field
           autoComplete="current-password"
           id="password"
           label="Password"
@@ -50,7 +48,7 @@ export function LoginPage() {
           type="password"
           value={password}
         />
-      </AuthForm>
+      </Form>
     </AuthPage>
   );
 }

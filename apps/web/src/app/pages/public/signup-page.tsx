@@ -1,7 +1,7 @@
 import { type SubmitEventHandler, useState } from 'react';
 import { signup } from '../../api/auth';
-import { AuthForm } from '../../components/public/auth-form';
-import { AuthField } from '../../components/public/auth-field';
+import { Form } from '../../components/public/auth/form';
+import { Field } from '../../components/public/auth/field';
 import { useAuthMutation } from '../../hooks/use-auth';
 import { AuthPage } from './auth-page';
 
@@ -22,27 +22,25 @@ export function SignupPage() {
 
   return (
     <AuthPage
-      altAction="Log in"
-      altLabel="Already have an account?"
-      altPath="/login"
+      alt={{ action: 'Log in', label: 'Already have an account?', path: '/login' }}
       description="Start with email and password. Court reservations come next."
       title="Create your account"
     >
-      <AuthForm
+      <Form
         error={error}
         isSubmitting={isPending}
         onSubmit={handleSubmit}
         submitLabel="Create account"
         submittingLabel="Creating account..."
       >
-        <AuthField
+        <Field
           autoComplete="name"
           id="name"
           onChange={(event) => setName(event.target.value)}
           label="Name"
           value={name}
         />
-        <AuthField
+        <Field
           autoComplete="email"
           id="email"
           onChange={(event) => setEmail(event.target.value)}
@@ -50,7 +48,7 @@ export function SignupPage() {
           type="email"
           value={email}
         />
-        <AuthField
+        <Field
           autoComplete="new-password"
           id="password"
           minLength={8}
@@ -59,7 +57,7 @@ export function SignupPage() {
           type="password"
           value={password}
         />
-      </AuthForm>
+      </Form>
     </AuthPage>
   );
 }
