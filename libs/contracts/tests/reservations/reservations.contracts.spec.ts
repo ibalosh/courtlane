@@ -6,13 +6,13 @@ import {
   updateReservationRequestSchema,
   weekScheduleQuerySchema,
   weekScheduleResponseSchema,
-} from '../../src/reservations/reservations.contracts';
+} from '../../src/reservations.contracts';
 import {
   createCustomerRequestSchema,
   createCustomerResponseSchema,
   customerSearchQuerySchema,
   customerSearchResponseSchema,
-} from '../../src/customers/customers.contracts';
+} from '../../src/customers.contracts';
 
 describe('reservation contracts', () => {
   it('validates the week schedule query shape', () => {

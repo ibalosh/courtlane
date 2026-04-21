@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { reservationCustomerSummarySchema } from '../customers';
+import { reservationCustomerSummarySchema } from './customers.contracts';
 
 export const weekScheduleQuerySchema = z.object({
   start: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
