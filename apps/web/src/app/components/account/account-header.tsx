@@ -93,7 +93,7 @@ export function AccountHeader({ isLoggingOut, onLogout, userName }: AccountHeade
     <header className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
       <BrandSection />
       <Nav>
-        <NavItem className="w-full justify-center text-center sm:w-auto hidden sm:block" to="/account/dashboard">
+        <NavItem className="w-full justify-center text-center sm:w-auto hidden lg:block" to="/account/dashboard">
           Signed in: <span className="font-semibold">{userName}</span>
         </NavItem>
         <div className="flex flex-wrap justify-center w-full lg:w-auto gap-2">
