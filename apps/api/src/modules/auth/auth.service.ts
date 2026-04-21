@@ -1,5 +1,5 @@
 import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
-import { LoginDto, LogoutResponseDto, SignupDto, UpdateProfileDto } from '@courtlane/contracts';
+import { LoginDto, LogoutResponseDto, SignupDto } from '@courtlane/contracts';
 import { prisma } from '@courtlane/db';
 import argon2 from 'argon2';
 import { SessionService } from './session.service';
@@ -113,68 +113,6 @@ export class AuthService {
     }
 
     return { ok: true };
-  }
-
-  async updateProfile(userId: number, input: UpdateProfileDto) {
-    const currentUser = await prisma.user.findUnique({
-      where: {
-        id: userId,
-      },
-      select: {
-        id: true,
-        accountId: true,
-        email: true,
-        passwordHash: true,
-      },
-    });
-
-    if (!currentUser) {
-      throw new UnauthorizedException('Authentication required.');
-    }
-
-    if (input.email !== currentUser.email) {
-      const existingUser = await prisma.user.findUnique({
-        where: {
-          email: input.email,
-        },
-        select: {
-          id: true,
-        },
-      });
-
-      if (existingUser) {
-        throw new ConflictException('Email is already registered.');
-      }
-    }
-
-    let passwordHash: string | undefined;
-
-    if (input.currentPassword && input.newPassword) {
-      const isPasswordValid = await argon2.verify(currentUser.passwordHash, input.currentPassword);
-
-      if (!isPasswordValid) {
-        throw new UnauthorizedException('Current password is incorrect.');
-      }
-
-      passwordHash = await argon2.hash(input.newPassword);
-    }
-
-    return prisma.user.update({
-      where: {
-        id: currentUser.id,
-      },
-      data: {
-        email: input.email,
-        name: input.name,
-        passwordHash,
-      },
-      select: {
-        id: true,
-        accountId: true,
-        email: true,
-        name: true,
-      },
-    });
   }
 
   private createDefaultAccountName(name: string) {

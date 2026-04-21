@@ -5,7 +5,6 @@ import type {
   LogoutResponseDto,
   MeResponseDto,
   SignupDto,
-  UpdateProfileDto,
 } from '@courtlane/contracts';
 import { request } from './client';
 
@@ -15,7 +14,6 @@ export type {
   LoginDto as LoginInput,
   MeResponseDto as MeResponse,
   SignupDto as SignupInput,
-  UpdateProfileDto as UpdateProfileInput,
 };
 
 export function signup(input: SignupDto): Promise<AuthResponseDto> {
@@ -40,11 +38,4 @@ export function logout(): Promise<LogoutResponseDto> {
 
 export function me(): Promise<MeResponseDto> {
   return request<MeResponseDto>('/auth/me');
-}
-
-export function updateProfile(input: UpdateProfileDto): Promise<AuthResponseDto> {
-  return request<AuthResponseDto>('/auth/me', {
-    method: 'PATCH',
-    body: JSON.stringify(input),
-  });
 }
