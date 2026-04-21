@@ -40,7 +40,7 @@
     "booking"
   ],
   "author": "Igor Balos",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ibalosh/courtlane/issues"
   },
