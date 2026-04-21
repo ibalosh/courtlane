@@ -2,7 +2,7 @@ import { SubmitEvent, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { updateProfile } from '../../api/users';
 import { authMeQueryKey, useCurrentUserQuery } from '../../hooks/use-auth';
-import { Field } from '../../components/public/auth/field';
+import { Field } from '../../components/ui/field';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 

@@ -1,7 +1,7 @@
 import { type SubmitEventHandler, useState } from 'react';
 import { login } from '../../api/auth';
-import { Form } from '../../components/public/auth/form';
-import { Field } from '../../components/public/auth/field';
+import { Form } from '../../components/ui/form';
+import { Field } from '../../components/ui/field';
 import { useAuthMutation } from '../../hooks/use-auth';
 import { AuthPage } from './auth-page';
 
