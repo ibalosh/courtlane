@@ -87,7 +87,7 @@ export function AccountHeader({ isLoggingOut, onLogout, userName }: AccountHeade
   const logoutMessage = isLoggingOut ? 'Logging out...' : 'Log out';
 
   return (
-    <header className="flex flex-col lg:flex-row lg:justify-between">
+    <header className="flex flex-col lg:flex-row lg:justify-between mb-4">
       <BrandSection />
       <Nav>
         <NavItem to="/account/dashboard">

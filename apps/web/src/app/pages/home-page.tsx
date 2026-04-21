@@ -10,7 +10,7 @@ const courtSlots = [
 
 export function HomePage() {
   return (
-    <main className="min-h-screen overflow-hidden bg-[linear-gradient(180deg,_#f7f1e7_0%,_#efe5d1_52%,_#d7e0c8_100%)] text-slate-950">
+    <main className="min-h-screen overflow-hidden bg-[linear-gradient(180deg,#f7f1e7_0%,#efe5d1_52%,#d7e0c8_100%)] text-slate-950">
       <div className="mx-auto flex min-h-screen max-w-7xl flex-col px-5 py-5 sm:px-8 lg:px-10">
         <header className="flex items-center justify-between">
           <div className="flex items-center gap-3">
