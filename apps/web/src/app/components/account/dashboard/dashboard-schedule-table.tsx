@@ -21,6 +21,10 @@ function useIsMobile() {
   const [isMobile, setIsMobile] = React.useState(false);
 
   React.useEffect(() => {
+    if (typeof window.matchMedia !== 'function') {
+      return;
+    }
+
     const mediaQuery = window.matchMedia('(max-width: 639px)');
     const handleChange = (event: MediaQueryListEvent) => setIsMobile(event.matches);
 
