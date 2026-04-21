@@ -11,7 +11,7 @@ type AccountHeaderProps = {
 
 function BrandSection() {
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-3 p-2">
       <SquashBallMark />
       <div>
         <p className="font-heading text-2xl font-bold tracking-[-0.04em] text-slate-950">Courtlane</p>
