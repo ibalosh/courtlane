@@ -3,6 +3,7 @@ import { HomePage } from './pages/home-page';
 import { AccountLayout } from './pages/account/account-layout';
 import { CustomersPage } from './pages/account/customers-page';
 import { DashboardPage } from './pages/account/dashboard-page';
+import { ProfilePage } from './pages/account/profile-page';
 import { LoginPage } from './pages/public/login-page';
 import { SignupPage } from './pages/public/signup-page';
 import { ErrorPage as AccountErrorPage, NotFoundPage as AccountNotFoundPage } from './pages/account/errors';
@@ -48,6 +49,10 @@ export function createAppRouter() {
         {
           path: 'customers',
           element: <CustomersPage />,
+        },
+        {
+          path: 'profile',
+          element: <ProfilePage />,
         },
         {
           path: '*',

@@ -1,9 +1,4 @@
-import {
-  authUserSchema,
-  loginRequestSchema,
-  meResponseSchema,
-  signupRequestSchema,
-} from '../../src/auth/auth.contracts';
+import { authUserSchema, loginRequestSchema, meResponseSchema, signupRequestSchema } from '../../src/auth.contracts';
 
 describe('auth contracts', () => {
   it('validates and formats signup requests', () => {

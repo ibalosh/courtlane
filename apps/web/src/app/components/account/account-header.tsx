@@ -27,6 +27,11 @@ type NavItemProps = {
   to: string;
 };
 
+type NavLinkItemProps = {
+  children: ReactNode;
+  to: string;
+};
+
 type NavButtonProps = {
   children: ReactNode;
   className?: string;
@@ -36,6 +41,15 @@ type NavButtonProps = {
 
 const navItemStyle =
   'cursor-pointer rounded-full px-3 py-2 text-slate-700 transition-colors hover:bg-white/45 hover:text-slate-950';
+
+function getAccountNavLinkClassName({ isActive }: { isActive: boolean }) {
+  return cn(
+    'rounded-full px-4 py-2 transition-all',
+    isActive
+      ? 'bg-slate-900 text-[#fff8ea] shadow-[0_12px_24px_rgba(15,23,42,0.14)]'
+      : 'text-slate-700 hover:bg-white/45 hover:text-slate-950',
+  );
+}
 
 function Nav({ children }: { children: ReactNode }) {
   return (
@@ -53,6 +67,14 @@ function NavItem({ children, className, to }: NavItemProps) {
   );
 }
 
+function NavLinkItem({ children, to }: NavLinkItemProps) {
+  return (
+    <NavLink className={getAccountNavLinkClassName} to={to}>
+      {children}
+    </NavLink>
+  );
+}
+
 function NavButton({ children, className, disabled, onClick }: NavButtonProps) {
   return (
     <button className={cn(navItemStyle, className)} disabled={disabled} onClick={onClick} type="button">
@@ -65,38 +87,15 @@ export function AccountHeader({ isLoggingOut, onLogout, userName }: AccountHeade
   const logoutMessage = isLoggingOut ? 'Logging out...' : 'Log out';
 
   return (
-    <header className="flex flex-col lg:flex-row lg:justify-between">
+    <header className="flex flex-col lg:flex-row lg:justify-between mb-4">
       <BrandSection />
       <Nav>
         <NavItem to="/account/dashboard">
           Signed in: <span className="font-semibold">{userName}</span>
         </NavItem>
-        <NavLink
-          className={({ isActive }) =>
-            cn(
-              'rounded-full px-4 py-2 transition-all',
-              isActive
-                ? 'bg-slate-900 text-[#fff8ea] shadow-[0_12px_24px_rgba(15,23,42,0.14)]'
-                : 'text-slate-700 hover:bg-white/45 hover:text-slate-950',
-            )
-          }
-          to="/account/dashboard"
-        >
-          Dashboard
-        </NavLink>
-        <NavLink
-          className={({ isActive }) =>
-            cn(
-              'rounded-full px-4 py-2 transition-all',
-              isActive
-                ? 'bg-slate-900 text-[#fff8ea] shadow-[0_12px_24px_rgba(15,23,42,0.14)]'
-                : 'text-slate-700 hover:bg-white/45 hover:text-slate-950',
-            )
-          }
-          to="/account/customers"
-        >
-          Customers
-        </NavLink>
+        <NavLinkItem to="/account/dashboard">Dashboard</NavLinkItem>
+        <NavLinkItem to="/account/customers">Customers</NavLinkItem>
+        <NavLinkItem to="/account/profile">Profile</NavLinkItem>
         <NavButton
           className={cn(navItemStyle, isLoggingOut ? 'pointer-events-none text-slate-400' : undefined)}
           disabled={isLoggingOut}
