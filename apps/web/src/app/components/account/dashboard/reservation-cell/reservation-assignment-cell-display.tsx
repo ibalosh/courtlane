@@ -39,7 +39,7 @@ export function ReservationAssignmentCellDisplay({
     <div className="grid w-full min-w-0 gap-2">
       <button
         className={cn(
-          'grid h-14 w-full min-w-0 grid-cols-[minmax(0,0.85fr)_minmax(10rem,1.65fr)] items-center gap-3 rounded-4xl border px-3 py-2 text-left transition-colors',
+          'grid min-h-14 w-full min-w-0 grid-cols-1 gap-2 rounded-3xl border px-3 py-3 text-left transition-colors sm:h-14 sm:grid-cols-[minmax(0,0.85fr)_minmax(10rem,1.65fr)] sm:items-center sm:gap-3 sm:rounded-4xl sm:px-3 sm:py-2',
           statusStyles[status],
         )}
         disabled={isSaving}
@@ -49,7 +49,7 @@ export function ReservationAssignmentCellDisplay({
         <span className="min-w-0">
           <span className="block text-sm font-medium">{statusMeta[status].label}</span>
         </span>
-        <span className="min-w-0 text-right text-sm font-medium">
+        <span className="min-w-0 text-left text-sm font-medium sm:text-right">
           {status === 'free' ? (
             <span className={statusMeta[status].badge}>Assign</span>
           ) : (

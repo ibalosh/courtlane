@@ -29,34 +29,22 @@ export function DashboardScheduleTable({
 
   return (
     <div className="overflow-visible rounded-2xl border bg-background">
-      <Table className="table-fixed">
-        <TableHeader>
-          <TableRow className="bg-muted/50 hover:bg-muted/50">
-            <TableHead className="w-36 border-r bg-muted/70">Time</TableHead>
-            {schedule.courts.map((court) => (
-              <TableHead className="border-r text-center last:border-r-0" key={court.id}>
-                {court.name}
-              </TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {schedule.slots.map((slot) => (
-            <TableRow className="hover:bg-muted/30" key={slot.startTime}>
-              <TableCell className="border-r bg-muted/20 align-middle">
-                <div className="font-medium">{slot.label}</div>
-                <div className="text-muted-foreground mt-1 text-xs uppercase tracking-[0.08em]">
-                  {formatSlotRange(slot.startMinutes, slot.endMinutes)}
-                </div>
-              </TableCell>
+      <div className="grid gap-4 p-3 sm:hidden">
+        {schedule.slots.map((slot) => (
+          <section className="rounded-2xl border border-border/70 bg-stone-50/60 p-3" key={slot.startTime}>
+            <div className="mb-3">
+              <div className="font-medium text-slate-900">{slot.label}</div>
+              <div className="text-muted-foreground mt-1 text-xs uppercase tracking-[0.08em]">
+                {formatSlotRange(slot.startMinutes, slot.endMinutes)}
+              </div>
+            </div>
+            <div className="grid gap-3">
               {schedule.courts.map((court) => {
                 const reservation = reservationMap.get(`${selectedDay.date}:${slot.startTime}:${court.id}`);
 
                 return (
-                  <TableCell
-                    className="border-r last:border-r-0"
-                    key={`${selectedDay.date}-${slot.startTime}-${court.id}`}
-                  >
+                  <div className="grid gap-2" key={`${selectedDay.date}-${slot.startTime}-${court.id}`}>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">{court.name}</p>
                     <ReservationAssignmentCell
                       customerEmail={reservation?.customer.email ?? null}
                       customerName={reservation?.customer.name ?? null}
@@ -74,13 +62,67 @@ export function DashboardScheduleTable({
                       }
                       status={reservation ? 'reserved' : 'free'}
                     />
-                  </TableCell>
+                  </div>
                 );
               })}
+            </div>
+          </section>
+        ))}
+      </div>
+      <div className="hidden sm:block">
+        <Table className="table-fixed">
+          <TableHeader>
+            <TableRow className="bg-muted/50 hover:bg-muted/50">
+              <TableHead className="w-36 border-r bg-muted/70">Time</TableHead>
+              {schedule.courts.map((court) => (
+                <TableHead className="border-r text-center last:border-r-0" key={court.id}>
+                  {court.name}
+                </TableHead>
+              ))}
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {schedule.slots.map((slot) => (
+              <TableRow className="hover:bg-muted/30" key={slot.startTime}>
+                <TableCell className="border-r bg-muted/20 align-middle">
+                  <div className="font-medium">{slot.label}</div>
+                  <div className="text-muted-foreground mt-1 text-xs uppercase tracking-[0.08em]">
+                    {formatSlotRange(slot.startMinutes, slot.endMinutes)}
+                  </div>
+                </TableCell>
+                {schedule.courts.map((court) => {
+                  const reservation = reservationMap.get(`${selectedDay.date}:${slot.startTime}:${court.id}`);
+
+                  return (
+                    <TableCell
+                      className="border-r last:border-r-0"
+                      key={`${selectedDay.date}-${slot.startTime}-${court.id}`}
+                    >
+                      <ReservationAssignmentCell
+                        customerEmail={reservation?.customer.email ?? null}
+                        customerName={reservation?.customer.name ?? null}
+                        dayLabel={`${selectedDay.label} ${slot.label}`}
+                        isSaving={isSaving}
+                        onSubmit={(customer, customerName) =>
+                          submitReservation({
+                            courtId: court.id,
+                            customer,
+                            customerName,
+                            date: selectedDay.date,
+                            reservationId: reservation?.id ?? null,
+                            startTime: slot.startTime,
+                          })
+                        }
+                        status={reservation ? 'reserved' : 'free'}
+                      />
+                    </TableCell>
+                  );
+                })}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }

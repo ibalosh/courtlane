@@ -37,10 +37,16 @@ export function DashboardSchedulePanel({
 
   return (
     <div className={cn('grid gap-3 transition-all duration-200', isWeekTransitioning && 'translate-y-1 opacity-70')}>
-      <p className="text-muted-foreground text-sm">
-        Click a slot to edit it in place. Press Enter to save, Escape to cancel, and clear the field to remove an
-        existing reservation.
-      </p>
+      <div className="grid gap-2 rounded-2xl border border-border/70 bg-stone-50/70 p-3 text-sm text-slate-700 sm:p-4">
+        <p className="hidden sm:block">
+          Click a slot to edit it in place. Press Enter to save, Escape to cancel, and clear the field to remove an
+          existing reservation.
+        </p>
+        <p className="sm:hidden">
+          Tap a court to assign or free it. Use the action buttons in the editor to save, cancel, or clear the
+          reservation.
+        </p>
+      </div>
       <DashboardScheduleTable
         isSaving={isSaving}
         reservationMap={reservationMap}

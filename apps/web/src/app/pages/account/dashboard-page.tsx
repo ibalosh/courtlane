@@ -19,7 +19,7 @@ function formatSelectedDayLabel(dayLabel: string | null | undefined, weekLabel: 
 
 export function DashboardMetricCard({ label, value }: DashboardMetricCardProps) {
   return (
-    <Card className="gap-2 py-4 shadow-none bg-amber-50" size="sm">
+    <Card className="gap-2 bg-amber-50 py-4 shadow-none" size="sm">
       <CardContent className="space-y-1">
         <p className="text-muted-foreground text-xs font-semibold uppercase tracking-[0.16em]">{label}</p>
         <p className="font-heading text-2xl text-foreground">{value}</p>
@@ -47,17 +47,18 @@ export function DashboardPage() {
 
   return (
     <Card className="overflow-visible border-border/70 bg-background/90 py-0 shadow-[0_16px_40px_rgba(15,23,42,0.08)]">
-      <CardHeader className="gap-3 border-b m-5">
+      <CardHeader className="m-3 gap-4 border-b px-0 sm:m-5">
         <p className="text-muted-foreground text-xs font-semibold uppercase tracking-[0.16em]">Dashboard</p>
         <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
           <div className="min-w-0 flex-1">
-            <CardTitle className="text-[clamp(2rem,5vw,3.25rem)] leading-[0.94]">Weekly Court Planner</CardTitle>
+            <CardTitle className="text-[clamp(1.75rem,8vw,3.25rem)] leading-[0.94]">Weekly Court Planner</CardTitle>
             <CardDescription className="mt-2 max-w-2xl leading-6">
-              <p>View the live weekly schedule. Click a slot to edit it directly.</p>
+              <p className="hidden sm:block">View the live weekly schedule. Click a slot to edit it directly.</p>
+              <p className="sm:hidden">View the live weekly schedule. Tap a slot to take or free a court quickly.</p>
             </CardDescription>
           </div>
           <div className="shrink-0">
-            <div className="grid gap-3 sm:grid-cols-3">
+            <div className="grid grid-cols-1 gap-3 min-[440px]:grid-cols-2 sm:grid-cols-3">
               <DashboardMetricCard label="Reserved slots" value={String(metrics.reservedSlots)} />
               <DashboardMetricCard label="Free slots" value={String(metrics.freeSlots)} />
               <DashboardMetricCard label="Active courts" value={String(metrics.activeCourts)} />
@@ -65,7 +66,7 @@ export function DashboardPage() {
           </div>
         </div>
       </CardHeader>
-      <CardContent className="grid gap-2">
+      <CardContent className="grid gap-3 px-3 pb-4 sm:px-6 sm:pb-6">
         <DashboardWeekPicker
           isWeekTransitioning={isWeekTransitioning}
           onNextWeek={goToNextWeek}
@@ -86,7 +87,7 @@ export function DashboardPage() {
         />
       </CardContent>
       <CardFooter className="border-t bg-stone-50/80">
-        <div className="flex w-full flex-col gap-4 py-5 text-sm text-slate-700 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex w-full flex-col gap-4 py-4 text-sm text-slate-700 lg:flex-row lg:items-center lg:justify-between">
           <div className="space-y-1">
             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">Planner status</p>
             <p className="font-medium text-slate-900">{isSaving ? 'Saving reservation changes...' : footerSummary}</p>
@@ -96,17 +97,23 @@ export function DashboardPage() {
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
-            <span className="rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700">
+            <span className="rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 sm:hidden">
+              Tap a slot to edit
+            </span>
+            <span className="rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hidden sm:inline-flex">
               Click a slot to edit
             </span>
             <span className="rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700">
+              Save button confirms
+            </span>
+            <span className="rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hidden sm:inline-flex">
               Enter saves
             </span>
-            <span className="rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700">
+            <span className="rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700 hidden sm:inline-flex">
               Escape cancels
             </span>
             <span className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-800">
-              Clear to remove reservation
+              Free court clears reservation
             </span>
           </div>
         </div>

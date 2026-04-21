@@ -3,6 +3,7 @@ import { ReservationAssignmentCellDisplay } from './reservation-assignment-cell-
 import { ReservationAssignmentCellSuggestions } from './reservation-assignment-cell-suggestions';
 import type { CustomerSearchResult, ReservationAssignmentCellProps } from './reservation-assignment-cell.types';
 import { useCustomerSearchSuggestions } from '@/app/hooks/use-customer-search-suggestions';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 export function ReservationAssignmentCell({
@@ -127,6 +128,19 @@ export function ReservationAssignmentCell({
     cancelEditing();
   }
 
+  function handleSave() {
+    if (showSuggestions && suggestions[activeSuggestionIndex]) {
+      void submitAssignment(suggestions[activeSuggestionIndex], suggestions[activeSuggestionIndex].name);
+      return;
+    }
+
+    void submitAssignment(null, trimmedValue || null);
+  }
+
+  function handleClear() {
+    void submitAssignment(null, null);
+  }
+
   if (!isEditing) {
     return (
       <ReservationAssignmentCellDisplay
@@ -144,7 +158,7 @@ export function ReservationAssignmentCell({
       <div className="relative">
         <Input
           aria-label={customerEmail || ''}
-          className="h-14"
+          className="h-12 sm:h-14"
           onChange={(event) => handleInputChange(event.target.value)}
           onBlur={handleInputBlur}
           onKeyDown={handleInputKeyDown}
@@ -166,6 +180,39 @@ export function ReservationAssignmentCell({
             suggestions={suggestions}
             trimmedValue={trimmedValue}
           />
+        ) : null}
+      </div>
+      <div className="mt-2 flex flex-wrap gap-2">
+        <Button
+          disabled={isSubmitting}
+          onMouseDown={(event) => event.preventDefault()}
+          onClick={handleSave}
+          size="sm"
+          type="button"
+        >
+          Save
+        </Button>
+        <Button
+          disabled={isSubmitting}
+          onMouseDown={(event) => event.preventDefault()}
+          onClick={cancelEditing}
+          size="sm"
+          type="button"
+          variant="outline"
+        >
+          Cancel
+        </Button>
+        {status === 'reserved' ? (
+          <Button
+            disabled={isSubmitting}
+            onMouseDown={(event) => event.preventDefault()}
+            onClick={handleClear}
+            size="sm"
+            type="button"
+            variant="outline"
+          >
+            Free court
+          </Button>
         ) : null}
       </div>
       {error ? <p className="text-xs text-red-700">{error}</p> : null}
