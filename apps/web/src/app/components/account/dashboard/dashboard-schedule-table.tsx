@@ -46,7 +46,9 @@ function useMobileCourtNavigation(schedule: DashboardSchedule) {
     setActiveCourtIndex((currentIndex) => (currentIndex >= schedule.courts.length ? 0 : currentIndex));
   }, [schedule]);
 
-  const displayedCourts = isMobile ? schedule?.courts.slice(activeCourtIndex, activeCourtIndex + 1) ?? [] : schedule?.courts ?? [];
+  const displayedCourts = isMobile
+    ? (schedule?.courts.slice(activeCourtIndex, activeCourtIndex + 1) ?? [])
+    : (schedule?.courts ?? []);
 
   function goToNextCourt() {
     if (!schedule?.courts.length) {
