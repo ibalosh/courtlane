@@ -37,7 +37,7 @@ export function AccountLayout() {
   }
 
   return (
-    <main className="min-h-screen bg-[radial-gradient(circle_at_top,rgba(242,201,76,0.45),transparent_32%),linear-gradient(180deg,#f6f1e9_0%,#ece5d9_100%)] p-12 text-slate-900 [scrollbar-gutter:stable]">
+    <main className="min-h-screen bg-[radial-gradient(circle_at_top,rgba(242,201,76,0.45),transparent_32%),linear-gradient(180deg,#f6f1e9_0%,#ece5d9_100%)] p-0 text-slate-900 [scrollbar-gutter:stable] sm:p-12">
       <div className="mx-auto grid w-full max-w-448 gap-6">
         <AccountHeader isLoggingOut={isPending} onLogout={handleLogout} userName={user.name} />
         <AccountErrorMessage error={error} />

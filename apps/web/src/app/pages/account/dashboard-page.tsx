@@ -46,8 +46,8 @@ export function DashboardPage() {
   const footerSummary = formatSelectedDayLabel(selectedDay?.label, weekLabel);
 
   return (
-    <Card className="overflow-visible border-border/70 bg-background/90 py-0 shadow-[0_16px_40px_rgba(15,23,42,0.08)]">
-      <CardHeader className="gap-3 border-b m-5">
+    <Card className="overflow-visible rounded-none border-border/70 bg-background/90 py-0 shadow-[0_16px_40px_rgba(15,23,42,0.08)] sm:rounded-2xl">
+      <CardHeader className="m-5 gap-3 rounded-none border-b sm:rounded-t-xl">
         <p className="text-muted-foreground text-xs font-semibold uppercase tracking-[0.16em]">Dashboard</p>
         <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
           <div className="min-w-0 flex-1">
@@ -85,7 +85,7 @@ export function DashboardPage() {
           submitReservation={submitReservation}
         />
       </CardContent>
-      <CardFooter className="border-t bg-stone-50/80">
+      <CardFooter className="rounded-none border-t bg-stone-50/80 sm:rounded-b-xl">
         <div className="flex w-full flex-col gap-4 py-5 text-sm text-slate-700 lg:flex-row lg:items-center lg:justify-between">
           <div className="space-y-1">
             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">Planner status</p>
