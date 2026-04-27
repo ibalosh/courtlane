@@ -6,9 +6,11 @@
 [![NestJS](https://img.shields.io/badge/NestJS-E0234E?logo=nestjs&logoColor=white)](https://nestjs.com/)
 [![Zod](https://img.shields.io/badge/Zod-3E67B1?logo=zod&logoColor=white)](https://zod.dev/)
 
-Courtlane is a full-stack court booking app for clubs and sports centers. It combines customer management, account-based access, and weekly court scheduling in a single TypeScript monorepo.
+Courtlane is a court booking app for clubs and sports centers. It combines customer management, account-based access, and weekly court scheduling in a single TypeScript monorepo.
 
 Shared Zod contracts keep the frontend and backend aligned, while Prisma handles the PostgreSQL data layer.
+
+![Courtlane preview](./screenshot.png)
 
 ## Tech Stack
 
@@ -39,12 +41,8 @@ yarn start
 The default local environment is:
 
 ```env
-DATABASE_URL=postgresql://test:test@localhost:5432/test
-API_PORT=1111
-API_BASE_URL=http://localhost:3333/api
-WEB_APP_URL=http://localhost:2222
+DATABASE_URL=postgresql://courtlane:courtlane@localhost:5432/courtlane
+API_PORT=3000
+API_BASE_URL=http://localhost:3000/api
+WEB_APP_URL=http://localhost:4200
 ```
-
-## Preview
-
-![Courtlane preview](./screenshot.png)
